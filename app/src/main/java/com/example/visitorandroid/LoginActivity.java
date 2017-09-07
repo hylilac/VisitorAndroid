@@ -1,20 +1,21 @@
 package com.example.visitorandroid;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visitorandroid.Model.DialogMethod;
+import com.example.visitorandroid.Model.UserInfo;
 import com.example.visitorandroid.util.HttpUtil;
-import com.example.visitorandroid.util.Utility;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -23,19 +24,6 @@ import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static android.R.attr.gravity;
-import static android.R.attr.id;
-import static android.R.attr.layout_alignParentRight;
-import static android.R.attr.layout_gravity;
-import static android.R.attr.layout_height;
-import static android.R.attr.layout_marginTop;
-import static android.R.attr.layout_width;
-import static android.R.attr.orientation;
-import static android.R.attr.padding;
-import static android.R.attr.textColor;
-import static android.R.attr.textColorHint;
-import static android.R.attr.textSize;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,7 +34,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button btLogin;
     private Button btReg;
     private Button btForget;
-    private Boolean loginResult;
+    private UserInfo user;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +50,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btReg = (Button) findViewById(R.id.bt_login_reg);
         btForget = (Button) findViewById(R.id.bt_forget);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String account = prefs.getString("username",null);
+        String password = prefs.getString("password",null);
+        if (account !=null && password != null){
+            isAutoLogin();
+        }
+
         btLogin.setOnClickListener(this);
         btReg.setOnClickListener(this);
         btForget.setOnClickListener(this);
@@ -70,7 +66,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.bt_login:
-                isAutoLogin();
                 Boolean result = isLogin();
                 if (result){
                     String address_login="http://www.tytechkj.com/App/Permission/Login";
@@ -90,13 +85,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void isAutoLogin() {
-        String account = loginUsername.getText().toString();
-        String password = loginPassword.getText().toString();
-        if (!account.isEmpty() && !password.isEmpty()){
-            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
+
+        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private Boolean isLogin() {
@@ -114,6 +106,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void queryLogin(String address) {
+        DialogMethod.MyProgressDialog(this,"正在登录中...",true);
         String account = loginUsername.getText().toString();
         String password = loginPassword.getText().toString();
         RequestBody requestBody = new FormBody.Builder()
@@ -123,17 +116,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseText = response.body().toString();
-                loginResult = Utility.handleLoginResponse(responseText);
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                user = gson.fromJson(responseText,UserInfo.class);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (loginResult){
+                        if (!user.IsError){
+                            DialogMethod.MyProgressDialog(LoginActivity.this,"",false);
+                            SharedPreferences.Editor editor = PreferenceManager.
+                                    getDefaultSharedPreferences(LoginActivity.this).edit();
+                            editor.putString("username",loginUsername.getText().toString());
+                            editor.putString("password",loginPassword.getText().toString());
+                            editor.apply();
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
                             finish();
                         }else{
-                            Toast.makeText(LoginActivity.this,"注册失败",
+                            Toast.makeText(LoginActivity.this,"登录失败",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(LoginActivity.this,"获取验证码失败",
+                        Toast.makeText(LoginActivity.this,"登录请求失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

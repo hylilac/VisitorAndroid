@@ -16,8 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visitorandroid.Model.DialogMethod;
+import com.example.visitorandroid.Model.MobileModel;
+import com.example.visitorandroid.Model.UserInfo;
 import com.example.visitorandroid.util.HttpUtil;
-import com.example.visitorandroid.util.Utility;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -41,8 +43,9 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
     private EditText regNickname;
     private Button btReg;
     private CountDownTime mTime;
-    private String codeResult;
-    private Boolean regResult;
+
+    private  MobileModel mobile;
+    private UserInfo user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
         backButton = (Button) findViewById(R.id.back_button);
         regUsername = (EditText) findViewById(R.id.et_reg_username);
         regCode = (EditText) findViewById(R.id.et_reg_code);
-        btCode = (Button) findViewById(bt_code);
+        btCode = (Button) findViewById(R.id.bt_code);
         regPassword = (EditText) findViewById(R.id.et_reg_password);
         regPasswords = (EditText) findViewById(R.id.et_reg_passwords);
         regNickname = (EditText) findViewById(R.id.et_reg_nickname);
@@ -86,7 +89,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
                 startActivity(intent);
                 finish();
                 break;
-            case R.id.bt_code:
+            case bt_code:
                 isCode();
                 break;
             case R.id.bt_reg:
@@ -126,20 +129,9 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
         String password = regPassword.getText().toString();
         String passwords = regPasswords.getText().toString();
         String nickname = regNickname.getText().toString();
-        if (code.isEmpty()){
-            DialogMethod.MyDialog(RegActivity.this, "验证码不能为空");
-            return false;
-        }
-        if (!code.equals(codeResult)){
+
+        if (!code.equals(mobile.YZMCode)){
             DialogMethod.MyDialog(RegActivity.this, "验证码错误");
-            return false;
-        }
-        if (password.isEmpty()){
-            DialogMethod.MyDialog(RegActivity.this, "密码不能为空");
-            return false;
-        }
-        if (passwords.isEmpty()){
-            DialogMethod.MyDialog(RegActivity.this, "确认密码不能为空");
             return false;
         }
         if (!password.equals(passwords)){
@@ -161,8 +153,9 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseText = response.body().toString();
-                codeResult = Utility.handleMobileResponse(responseText);
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                mobile = gson.fromJson(responseText,MobileModel.class);
             }
 
             @Override
@@ -180,6 +173,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void queryReg(String address_reg) {
+        DialogMethod.MyProgressDialog(RegActivity.this,"正在注册中...",true);
         String account = regUsername.getText().toString();
         String password = regPassword.getText().toString();
         final String nickname = regNickname.getText().toString();
@@ -191,18 +185,19 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
         HttpUtil.sendOkHttpRequest(address_reg, requestBody, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseText = response.body().toString();
-                regResult = Utility.handleRegResponse(responseText);
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                user = gson.fromJson(responseText,UserInfo.class);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (regResult){
-                            Intent intent = new Intent(RegActivity.this,LoginActivity.class);
-                            startActivity(intent);
+                        if (!user.IsError){
+                            DialogMethod.MyProgressDialog(RegActivity.this,"",false);
+                            Intent intent_reg = new Intent(RegActivity.this,LoginActivity.class);
+                            startActivity(intent_reg);
                             finish();
                         }else{
-                            Toast.makeText(RegActivity.this,"注册失败",
-                                    Toast.LENGTH_SHORT).show();
+                            DialogMethod.MyDialog(RegActivity.this, user.Message);
                         }
                     }
                 });
@@ -214,7 +209,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(RegActivity.this,"注册失败",
+                        Toast.makeText(RegActivity.this,"注册请求失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

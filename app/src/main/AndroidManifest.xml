@@ -19,8 +19,11 @@
         </activity>
         <activity android:name=".MainActivity">
         </activity>
-        <activity
-            android:name=".RegActivity">
+        <activity android:name=".RegActivity">
+        </activity>
+        <activity android:name=".MyFragment.MyFragmentModel">
+        </activity>
+        <activity android:name=".MyFragment.MyFragmentManage">
         </activity>
     </application>
 

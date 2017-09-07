@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">一脸通</string>
+
+    <string name="tab_menu_model">模块功能</string>
+    <string name="tab_menu_message">站内信</string>
+    <string name="tab_menu_better">我</string>
 </resources>

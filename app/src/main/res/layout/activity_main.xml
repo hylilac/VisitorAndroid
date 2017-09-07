@@ -48,7 +48,6 @@
             style="@style/tab_menu_item"
             android:drawableTop="@drawable/tab_menu_better"
             android:text="@string/tab_menu_better" />
-
     </RadioGroup>
 
     <View

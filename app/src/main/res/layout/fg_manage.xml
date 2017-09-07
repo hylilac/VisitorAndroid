@@ -1,16 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical" android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/bg_white">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fb_company"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray">
 
-    <TextView
-        android:id="@+id/txt_content"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="呵呵"
-        android:textColor="@color/text_yellow"
-        android:textSize="20sp"/>
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/txt_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:gravity="center"
+            android:textColor="@color/bg_black"
+            android:textSize="20sp"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/join_company"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#007aff"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="35dp"
+            android:text="加入公司"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/create_company"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#007aff"
+            android:layout_margin="15dp"
+            android:text="创建公司"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:textSize="20sp"/>
+    </LinearLayout>
+</FrameLayout>

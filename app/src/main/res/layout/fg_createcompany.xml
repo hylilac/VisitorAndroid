@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray"
+    android:padding="5dp">
+
+    <EditText
+        android:id="@+id/et_reg_username"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/shapedrawable"
+        android:gravity="center_vertical"
+        android:layout_margin="15dp"
+        android:hint="请输入公司名字"
+        android:textColorHint="#c4c4c6"
+        android:textColor="#000000"
+        android:textSize="18sp"/>
+
+    <Button
+        android:id="@+id/bt_reg"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#007aff"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:text="创建"
+        android:textColor="#fff"
+        android:textSize="20sp"/>
+
+</LinearLayout>

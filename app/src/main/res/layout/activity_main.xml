@@ -3,14 +3,14 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/bg_gray"
+                android:background="#f0eff5"
                 tools:context=".MainActivity">
 
     <RelativeLayout
         android:id="@+id/ly_top_bar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/transparent">
+        android:layout_height="38dp"
+        android:background="@color/colorPrimary">
 
         <TextView
             android:id="@+id/txt_topbar"
@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:textColor="@color/text_topbar"
+            android:textColor="#fff"
             android:textSize="18sp" />
 
     </RelativeLayout>
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/bg_white"
+        android:background="#fff"
         android:orientation="horizontal">
 
         <RadioButton
@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="2px"
         android:layout_above="@id/rg_tab_bar"
-        android:background="@color/div_white" />
+        android:background="#E5E5E5" />
 
     <FrameLayout
         android:id="@+id/ly_content"

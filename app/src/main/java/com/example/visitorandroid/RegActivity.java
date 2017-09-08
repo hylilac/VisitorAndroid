@@ -1,10 +1,12 @@
 package com.example.visitorandroid;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -46,6 +48,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
 
     private  MobileModel mobile;
     private UserInfo user;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,8 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
         regPasswords = (EditText) findViewById(R.id.et_reg_passwords);
         regNickname = (EditText) findViewById(R.id.et_reg_nickname);
         btReg = (Button) findViewById(R.id.bt_reg);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         btCode.setEnabled(false);
 
@@ -193,6 +198,12 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
                     public void run() {
                         if (!user.IsError){
                             DialogMethod.MyProgressDialog(RegActivity.this,"",false);
+                            SharedPreferences.Editor editor = PreferenceManager.
+                                    getDefaultSharedPreferences(RegActivity.this).edit();
+                            editor.putString("regUsername",regUsername.getText().toString());
+                            editor.putString("regPassword",regPassword.getText().toString());
+                            editor.putString("regNickname",regNickname.getText().toString());
+                            editor.apply();
                             Intent intent_reg = new Intent(RegActivity.this,LoginActivity.class);
                             startActivity(intent_reg);
                             finish();

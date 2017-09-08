@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 txtTopbar.setVisibility(View.VISIBLE);
                 txtTopbar.setText("我");
                 if(fgBetter == null){
-                    fgBetter = new MyFragmentBetter("testhy");
+                    fgBetter = new MyFragmentBetter("第三个Fragment");
                     fTransaction.add(R.id.ly_content,fgBetter);
                 }else{
                     fTransaction.show(fgBetter);

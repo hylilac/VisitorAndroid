@@ -3,7 +3,7 @@
     android:id="@+id/fb_company"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_gray">
+    android:background="#f0eff5">
 
     <LinearLayout
         android:orientation="vertical"
@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:gravity="center"
-            android:textColor="@color/bg_black"
+            android:textColor="#000"
             android:textSize="20sp"/>
 
         <Button

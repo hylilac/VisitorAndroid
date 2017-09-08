@@ -4,11 +4,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_gray"
+    android:background="#f0eff5"
     android:padding="5dp">
 
     <EditText
-        android:id="@+id/et_reg_username"
+        android:id="@+id/et_createcompany"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@drawable/shapedrawable"
@@ -20,7 +20,7 @@
         android:textSize="18sp"/>
 
     <Button
-        android:id="@+id/bt_reg"
+        android:id="@+id/bt_createcompany"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="#007aff"

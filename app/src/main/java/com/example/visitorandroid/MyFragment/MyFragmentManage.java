@@ -29,8 +29,9 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_manage,container,false);
+
         TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
-        txt_content.setText(content);
+        txt_content.setText("您当前尚未加入企业");
 
         TextView txt_topbar = getActivity().findViewById(R.id.txt_topbar);
         txt_topbar.setText(content);
@@ -59,6 +60,8 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
                     fTransaction.add(R.id.fb_company,fgjoin);
                     fTransaction.addToBackStack(null);
                 }else{
+                    fTransaction.add(R.id.fb_company,fgjoin);
+                    fTransaction.addToBackStack(null);
                     fTransaction.show(fgjoin);
                 }
                 break;
@@ -68,6 +71,8 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
                     fTransaction.add(R.id.fb_company,fgcreate);
                     fTransaction.addToBackStack(null);
                 }else{
+                    fTransaction.add(R.id.fb_company,fgcreate);
+                    fTransaction.addToBackStack(null);
                     fTransaction.show(fgcreate);
                 }
                 break;

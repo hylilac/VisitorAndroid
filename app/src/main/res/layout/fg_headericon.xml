@@ -7,4 +7,9 @@
     android:background="#000"
     android:padding="5dp">
 
+    <ImageView
+        android:id="@+id/nav_headerphoto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </LinearLayout>

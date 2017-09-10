@@ -36,7 +36,7 @@ import static com.example.visitorandroid.R.id.bt_code;
 public class RegActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
     private TextView titleReg;
-    private Button backButton;
+    private Button regBackButton;
     private EditText regUsername;
     private EditText regCode;
     private Button btCode;
@@ -64,7 +64,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_reg);
 
         titleReg = (TextView) findViewById(R.id.title_reg_text);
-        backButton = (Button) findViewById(R.id.back_button);
+        regBackButton = (Button) findViewById(R.id.reg_back_button);
         regUsername = (EditText) findViewById(R.id.et_reg_username);
         regCode = (EditText) findViewById(R.id.et_reg_code);
         btCode = (Button) findViewById(R.id.bt_code);
@@ -77,7 +77,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
 
         btCode.setEnabled(false);
 
-        backButton.setOnClickListener(this);
+        regBackButton.setOnClickListener(this);
         btCode.setOnClickListener(this);
         btReg.setOnClickListener(this);
 
@@ -89,7 +89,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.back_button:
+            case R.id.reg_back_button:
                 Intent intent = new Intent(RegActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();

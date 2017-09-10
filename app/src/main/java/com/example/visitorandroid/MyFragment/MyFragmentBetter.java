@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.visitorandroid.R;
@@ -38,6 +40,17 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_better,container,false);
+
+        RadioGroup radios =  getActivity().findViewById(R.id.rg_tab_bar);
+        radios.setVisibility(View.VISIBLE);
+        View view1 = getActivity().findViewById(R.id.div_tab_bar);
+        view1.setVisibility(View.VISIBLE);
+        Button backButton = getActivity().findViewById(R.id.back_button);
+        Button backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
+        Button backBtSend = getActivity().findViewById(R.id.back_bt_send);
+        backButton.setVisibility(View.INVISIBLE);
+        backBtCancel.setVisibility(View.INVISIBLE);
+        backBtSend.setVisibility(View.INVISIBLE);
 
         icon_image = (CircleImageView) view.findViewById(R.id.icon_image);
 
@@ -106,7 +119,7 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
                     fTransaction.add(R.id.fb_content,fgSetting);
                     fTransaction.addToBackStack(null);
                 }else{
-                    fTransaction.add(R.id.fb_content,fgInManage);
+                    fTransaction.add(R.id.fb_content,fgSetting);
                     fTransaction.addToBackStack(null);
                     fTransaction.show(fgSetting);
                 }

@@ -81,53 +81,18 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-//        FragmentTransaction fTransaction = fManager.beginTransaction();
-//        hideAllFragment(fTransaction);
         switch (checkedId){
             case R.id.rb_model:
                 vpager.setCurrentItem(PAGE_ONE);
-//                txt_topbar.setVisibility(View.GONE);
-//                if(fgModel == null){
-//                    fgModel = new MyFragmentModel("第一个Fragment");
-//                    fTransaction.add(R.id.ly_content,fgModel);
-//                }else{
-//                    fTransaction.show(fgModel);
-//                }
                 break;
             case R.id.rb_message:
                 vpager.setCurrentItem(PAGE_TWO);
-//                txtTopbar.setVisibility(View.VISIBLE);
-//                txtTopbar.setText("站内信");
-//                if(fgMessage == null){
-//                    fgMessage = new MyFragmentMessage("第二个Fragment");
-//                    fTransaction.add(R.id.ly_content,fgMessage);
-//                }else{
-//                    fTransaction.show(fgMessage);
-//                }
                 break;
             case R.id.rb_better:
                 vpager.setCurrentItem(PAGE_THREE);
-//                txtTopbar.setVisibility(View.VISIBLE);
-//                txtTopbar.setText("我");
-//                if(fgBetter == null){
-//                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//                    String nickname = prefs.getString("regNickname",null);
-//                    fgBetter = new MyFragmentBetter(nickname);
-//                    fTransaction.replace(R.id.ly_content,fgBetter);
-//                }else{
-//                    fTransaction.show(fgBetter);
-//                }
                 break;
         }
-//        fTransaction.commit();
     }
-
-//    //隐藏所有Fragment
-//    private void hideAllFragment(FragmentTransaction fragmentTransaction){
-//        if(fgModel != null)fragmentTransaction.hide(fgModel);
-//        if(fgMessage != null)fragmentTransaction.hide(fgMessage);
-//        if(fgBetter != null)fragmentTransaction.hide(fgBetter);
-//    }
 
     //重写ViewPager页面切换的处理方法
     @Override
@@ -144,12 +109,17 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         if (state == 2) {
             switch (vpager.getCurrentItem()) {
                 case PAGE_ONE:
+                    txt_topbar.setVisibility(View.GONE);
                     rb_model.setChecked(true);
                     break;
                 case PAGE_TWO:
+                    txt_topbar.setVisibility(View.VISIBLE);
+                    txt_topbar.setText("站内信");
                     rb_message.setChecked(true);
                     break;
                 case PAGE_THREE:
+                    txt_topbar.setVisibility(View.VISIBLE);
+                    txt_topbar.setText("我");
                     rb_better.setChecked(true);
                     break;
             }

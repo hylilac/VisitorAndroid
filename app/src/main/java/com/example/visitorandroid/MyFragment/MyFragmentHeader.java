@@ -64,13 +64,6 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         radios.setVisibility(View.GONE);
         View view1 = activity.findViewById(R.id.div_tab_bar);
         view1.setVisibility(View.GONE);
-//        backButton = getActivity().findViewById(R.id.back_button);
-//        backButton.setText("我");
-//        backButton.setVisibility(View.VISIBLE);
-//        backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
-//        backBtCancel.setVisibility(View.GONE);
-//        backBtSend = getActivity().findViewById(R.id.back_bt_send);
-//        backBtSend.setVisibility(View.GONE);
 
         nav_headericon = (TextView) view.findViewById(R.id.nav_headericon);
         nav_nickname = (TextView) view.findViewById(R.id.nav_nickname);

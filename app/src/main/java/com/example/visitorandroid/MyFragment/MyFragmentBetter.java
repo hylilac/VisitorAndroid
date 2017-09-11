@@ -1,62 +1,44 @@
 package com.example.visitorandroid.MyFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.visitorandroid.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.R.attr.id;
-
 public class MyFragmentBetter extends Fragment implements View.OnClickListener {
 
     private String content;
+
+    //Fragment Object
+    private MyFragmentHeader fgHeader;
     private MyFragmentManage fgManage;
     private MyFragmentInMessage fgInManage;
     private MyFragmentSetting fgSetting;
-    private MyFragmentHeader fgHeader;
 
     private CircleImageView icon_image;
-
     private TextView nav_username;
     private TextView nav_manage;
     private TextView nav_message;
     private TextView nav_history;
     private TextView nav_setting;
-    private Button backButton;
-    private Button backBtCancel;
-    private Button backBtSend;
-    private View radios;
-    private View view1;
 
-    public MyFragmentBetter() {
-
+    public MyFragmentBetter(String content) {
+        this.content = content;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_better,container,false);
 
-//        radios =  getActivity().findViewById(R.id.rg_tab_bar);
-////        radios.setVisibility(View.VISIBLE);
-//        view1 = getActivity().findViewById(R.id.div_tab_bar);
-////        view1.setVisibility(View.VISIBLE);
-
         icon_image = (CircleImageView) view.findViewById(R.id.icon_image);
-
         nav_username = (TextView) view.findViewById(R.id.nav_username);
-        nav_username.setText(content);
-
+        nav_username.setText("lilachy");
         nav_manage = (TextView) view.findViewById(R.id.nav_manage);
         nav_message = (TextView) view.findViewById(R.id.nav_message);
         nav_history = (TextView) view.findViewById(R.id.nav_history);
@@ -73,7 +55,7 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fTransaction =  getFragmentManager().beginTransaction();
         hideAllFragment(fTransaction);
         switch (view.getId()){
             case R.id.icon_image:
@@ -92,12 +74,10 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
                     fgManage = new MyFragmentManage("公司管理");
                     fTransaction.add(R.id.fb_content,fgManage);
                     fTransaction.addToBackStack(null);
-                    Log.d("vtedf","grhhtrj");
                 }else{
                     fTransaction.add(R.id.fb_content,fgManage);
                     fTransaction.addToBackStack(null);
                     fTransaction.show(fgManage);
-                    Log.d("vtedf","7815646");
                 }
                 break;
             case R.id.nav_message:

@@ -2,6 +2,8 @@ package com.example.visitorandroid.Model;
 
 public class UserInfo {
 
+    // UserInfo user =new UserInfo()
+
     public Boolean IsError;
 
     public String Message;

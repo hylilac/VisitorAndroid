@@ -1,11 +1,10 @@
 package com.example.visitorandroid.MyFragment;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.app.Activity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -15,17 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.visitorandroid.LoginActivity;
 import com.example.visitorandroid.R;
-
-import static com.example.visitorandroid.R.id.nav_other;
-import static com.example.visitorandroid.R.id.nav_sub_account;
-import static com.example.visitorandroid.R.id.nav_sub_nickname;
-import static com.example.visitorandroid.R.id.nav_sub_sex;
-import static com.example.visitorandroid.R.id.nav_sub_tel;
-import static com.example.visitorandroid.R.id.txt_topbar;
 
 public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
@@ -51,7 +41,14 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
     private Button backBtSend;
     private RadioGroup radios;
 
+    private Activity activity;
+    private Button unserinfo_btback;
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
 
     public MyFragmentHeader(String content) {
         this.content = content;
@@ -61,18 +58,19 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_header,container,false);
 
-        txtTopbar = getActivity().findViewById(R.id.txt_topbar);
-        txtTopbar.setText(content);
-        radios =  getActivity().findViewById(R.id.rg_tab_bar);
-        radios.setVisibility(View.INVISIBLE);
-        View view1 = getActivity().findViewById(R.id.div_tab_bar);
-        view1.setVisibility(View.INVISIBLE);
-        backButton = getActivity().findViewById(R.id.back_button);
-        backButton.setVisibility(View.VISIBLE);
-        backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
-        backBtCancel.setVisibility(View.INVISIBLE);
-        backBtSend = getActivity().findViewById(R.id.back_bt_send);
-        backBtSend.setVisibility(View.INVISIBLE);
+        txtTopbar = activity.findViewById(R.id.txt_topbar);
+        txtTopbar.setVisibility(View.GONE);
+        radios =  activity.findViewById(R.id.rg_tab_bar);
+        radios.setVisibility(View.GONE);
+        View view1 = activity.findViewById(R.id.div_tab_bar);
+        view1.setVisibility(View.GONE);
+//        backButton = getActivity().findViewById(R.id.back_button);
+//        backButton.setText("我");
+//        backButton.setVisibility(View.VISIBLE);
+//        backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
+//        backBtCancel.setVisibility(View.GONE);
+//        backBtSend = getActivity().findViewById(R.id.back_bt_send);
+//        backBtSend.setVisibility(View.GONE);
 
         nav_headericon = (TextView) view.findViewById(R.id.nav_headericon);
         nav_nickname = (TextView) view.findViewById(R.id.nav_nickname);
@@ -90,7 +88,9 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         nav_sub_account.setText(prefs.getString("username",null));
         nav_sub_tel.setText(prefs.getString("username",null));
 
-        backButton.setOnClickListener(this);
+        unserinfo_btback = (Button) view.findViewById(R.id.unserinfo_btback);
+        unserinfo_btback.setOnClickListener(this);
+
         nav_headericon.setOnClickListener(this);
         nav_nickname.setOnClickListener(this);
         nav_tel.setOnClickListener(this);
@@ -105,20 +105,16 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         hideAllFragment(fTransaction);
         switch (view.getId()){
-            case R.id.back_button:
-                txtTopbar.setVisibility(View.VISIBLE);
-                txtTopbar.setText("我");
-                backButton.setVisibility(View.INVISIBLE);
-                radios.setVisibility(View.VISIBLE);
-                getActivity().onBackPressed();
+            case R.id.unserinfo_btback:
+                activity.onBackPressed();
                 break;
             case R.id.nav_headericon:
                 if(fgHeaderIcon == null){
                     fgHeaderIcon = new MyFragmentHeaderIcon("个人头像");
-                    fTransaction.add(R.id.fb_header,fgHeaderIcon);
+                    fTransaction.replace(R.id.fb_header,fgHeaderIcon);
                     fTransaction.addToBackStack(null);
                 }else{
-                    fTransaction.add(R.id.fb_header,fgHeaderIcon);
+                    fTransaction.replace(R.id.fb_header,fgHeaderIcon);
                     fTransaction.addToBackStack(null);
                     fTransaction.show(fgHeaderIcon);
                 }

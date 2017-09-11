@@ -1,6 +1,6 @@
 package com.example.visitorandroid.MyFragment;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -46,12 +46,12 @@ public class MyFragmentInMessage extends Fragment implements View.OnClickListene
         radios.setVisibility(View.INVISIBLE);
         View view1 = getActivity().findViewById(R.id.div_tab_bar);
         view1.setVisibility(View.INVISIBLE);
-        backButton = getActivity().findViewById(R.id.back_button);
-        backButton.setVisibility(View.INVISIBLE);
-        backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
-        backBtCancel.setVisibility(View.VISIBLE);
-        backBtSend = getActivity().findViewById(R.id.back_bt_send);
-        backBtSend.setVisibility(View.VISIBLE);
+//        backButton = getActivity().findViewById(R.id.back_button);
+//        backButton.setVisibility(View.INVISIBLE);
+//        backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
+//        backBtCancel.setVisibility(View.VISIBLE);
+//        backBtSend = getActivity().findViewById(R.id.back_bt_send);
+//        backBtSend.setVisibility(View.VISIBLE);
 
         etSender = (TextView) view.findViewById(R.id.et_sender);
         etMessageText = (EditText) view.findViewById(R.id.et_messageText);
@@ -68,13 +68,13 @@ public class MyFragmentInMessage extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.back_bt_cancel:
-                isCancel();
-                etMessageText.setText("这里填写消息");
-                break;
-            case R.id.back_bt_send:
-                isCancel();
-                break;
+//            case R.id.back_bt_cancel:
+//                isCancel();
+//                etMessageText.setText("这里填写消息");
+//                break;
+//            case R.id.back_bt_send:
+//                isCancel();
+//                break;
         }
     }
 

@@ -1,7 +1,7 @@
 package com.example.visitorandroid.MyFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.visitorandroid.R;
 
@@ -32,25 +33,24 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
     private TextView nav_message;
     private TextView nav_history;
     private TextView nav_setting;
+    private Button backButton;
+    private Button backBtCancel;
+    private Button backBtSend;
+    private View radios;
+    private View view1;
 
-    public MyFragmentBetter(String content) {
-        this.content = content;
+    public MyFragmentBetter() {
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_better,container,false);
 
-        RadioGroup radios =  getActivity().findViewById(R.id.rg_tab_bar);
-        radios.setVisibility(View.VISIBLE);
-        View view1 = getActivity().findViewById(R.id.div_tab_bar);
-        view1.setVisibility(View.VISIBLE);
-        Button backButton = getActivity().findViewById(R.id.back_button);
-        Button backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
-        Button backBtSend = getActivity().findViewById(R.id.back_bt_send);
-        backButton.setVisibility(View.INVISIBLE);
-        backBtCancel.setVisibility(View.INVISIBLE);
-        backBtSend.setVisibility(View.INVISIBLE);
+//        radios =  getActivity().findViewById(R.id.rg_tab_bar);
+////        radios.setVisibility(View.VISIBLE);
+//        view1 = getActivity().findViewById(R.id.div_tab_bar);
+////        view1.setVisibility(View.VISIBLE);
 
         icon_image = (CircleImageView) view.findViewById(R.id.icon_image);
 
@@ -79,10 +79,10 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
             case R.id.icon_image:
                 if(fgHeader == null){
                     fgHeader = new MyFragmentHeader("个人信息");
-                    fTransaction.add(R.id.fb_content,fgHeader);
+                    fTransaction.replace(R.id.fb_content,fgHeader);
                     fTransaction.addToBackStack(null);
                 }else{
-                    fTransaction.add(R.id.fb_content,fgHeader);
+                    fTransaction.replace(R.id.fb_content,fgHeader);
                     fTransaction.addToBackStack(null);
                     fTransaction.show(fgHeader);
                 }

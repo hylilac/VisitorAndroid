@@ -1,7 +1,7 @@
 package com.example.visitorandroid.MyFragment;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -51,12 +51,12 @@ public class MyFragmentSetting extends Fragment implements View.OnClickListener 
         radios.setVisibility(View.INVISIBLE);
         View view1 = getActivity().findViewById(R.id.div_tab_bar);
         view1.setVisibility(View.INVISIBLE);
-        backButton = getActivity().findViewById(R.id.back_button);
-        backButton.setVisibility(View.VISIBLE);
-        backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
-        backBtCancel.setVisibility(View.INVISIBLE);
-        backBtSend = getActivity().findViewById(R.id.back_bt_send);
-        backBtSend.setVisibility(View.INVISIBLE);
+//        backButton = getActivity().findViewById(R.id.back_button);
+//        backButton.setVisibility(View.VISIBLE);
+//        backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
+//        backBtCancel.setVisibility(View.INVISIBLE);
+//        backBtSend = getActivity().findViewById(R.id.back_bt_send);
+//        backBtSend.setVisibility(View.INVISIBLE);
 
         nav_fun = (TextView) view.findViewById(R.id.nav_fun);
         nav_password = (TextView) view.findViewById(R.id.nav_password);
@@ -74,13 +74,13 @@ public class MyFragmentSetting extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.back_button:
-                txtTopbar.setVisibility(View.VISIBLE);
-                txtTopbar.setText("我");
-                backButton.setVisibility(View.INVISIBLE);
-                radios.setVisibility(View.VISIBLE);
-                getActivity().onBackPressed();
-                break;
+//            case R.id.back_button:
+//                txtTopbar.setVisibility(View.VISIBLE);
+//                txtTopbar.setText("我");
+//                backButton.setVisibility(View.INVISIBLE);
+//                radios.setVisibility(View.VISIBLE);
+//                getActivity().onBackPressed();
+//                break;
             case R.id.nav_fun:
                 break;
             case R.id.nav_password:

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,11 +14,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visitorandroid.Model.DialogMethod;
+import com.example.visitorandroid.Model.MobileInfo;
+import com.example.visitorandroid.Model.ResultViewModel;
 import com.example.visitorandroid.Model.UserInfo;
+import com.example.visitorandroid.Model.UserViewModel;
 import com.example.visitorandroid.util.HttpUtil;
+import com.example.visitorandroid.util.SystemUtil;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,7 +43,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button btReg;
     private Button btForget;
     private UserInfo user;
+    private MobileInfo mobile;
     private SharedPreferences prefs;
+
+    private ResultViewModel viewmodel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.bt_forget:
+
                 break;
             default:
                 break;
@@ -119,6 +131,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText,UserInfo.class);
+
+                UserViewModel Model=UserViewModel.GetInstance();
+                Model.setGUID("1234");
+                Model.setUserName("456");
+                String s= new Gson().toJson(user.Data);
+              //  Model = new Gson().fromJson( s,UserViewModel.class);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -129,12 +147,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             editor.putString("username",loginUsername.getText().toString());
                             editor.putString("password",loginPassword.getText().toString());
                             editor.apply();
+//                            String address_mobile="http://www.tytechkj.com/App/Permission/UpdateUserMobile";
+//                            queryMobile(address_mobile);
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
                             finish();
                         }else{
                             Toast.makeText(LoginActivity.this,"登录失败",
                                     Toast.LENGTH_SHORT).show();
+                            DialogMethod.MyProgressDialog(LoginActivity.this,"",false);
                         }
                     }
                 });
@@ -147,6 +168,40 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void run() {
                         Toast.makeText(LoginActivity.this,"登录请求失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void queryMobile(String address) {
+        String UserID = viewmodel.data.GUID;
+        String mobileVersion = SystemUtil.getSystemVersion();
+        String mobilePlat = "Android";
+        String mobileModel = SystemUtil.getSystemModel();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("UserID",UserID)
+                .add("mobileVersion",mobileVersion)
+                .add("mobilePlat",mobilePlat)
+                .add("mobileModel",mobileModel)
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                mobile = gson.fromJson(responseText,MobileInfo.class);
+                String ss = null;
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LoginActivity.this,"获取信息请求失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

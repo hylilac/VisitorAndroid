@@ -1,16 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="#f0eff5"-->
+    <!--tools:context=".MainActivity"-->
+    <!--android:fitsSystemWindows="true">-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/txt_topbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="38dp"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:gravity="center"-->
+        <!--android:textColor="#fff"-->
+        <!--android:textSize="18sp" />-->
+
+    <!--<RadioGroup-->
+        <!--android:id="@+id/rg_tab_bar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="56dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="#fff"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<RadioButton-->
+            <!--android:id="@+id/rb_model"-->
+            <!--style="@style/tab_menu_item"-->
+            <!--android:drawableTop="@drawable/tab_menu_model"-->
+            <!--android:text="@string/tab_menu_model" />-->
+
+        <!--<RadioButton-->
+            <!--android:id="@+id/rb_message"-->
+            <!--style="@style/tab_menu_item"-->
+            <!--android:drawableTop="@drawable/tab_menu_message"-->
+            <!--android:text="@string/tab_menu_message" />-->
+
+        <!--<RadioButton-->
+            <!--android:id="@+id/rb_better"-->
+            <!--style="@style/tab_menu_item"-->
+            <!--android:drawableTop="@drawable/tab_menu_better"-->
+            <!--android:text="@string/tab_menu_better" />-->
+    <!--</RadioGroup>-->
+
+    <!--<View-->
+        <!--android:id="@+id/div_tab_bar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2px"-->
+        <!--android:layout_above="@id/rg_tab_bar"-->
+        <!--android:background="#E5E5E5" />-->
+
+    <!--<FrameLayout-->
+        <!--android:id="@+id/ly_content"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@id/txt_topbar"-->
+        <!--android:layout_above="@id/div_tab_bar">-->
+    <!--</FrameLayout>-->
+
+<!--</RelativeLayout>-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#f0eff5"
-    tools:context=".MainActivity"
-    android:fitsSystemWindows="true">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".MainActivity">
 
     <RelativeLayout
         android:id="@+id/ly_top_bar"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
+        android:layout_height="48dp"
         android:background="@color/colorPrimary">
 
         <TextView
@@ -19,88 +80,58 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
+            android:text="我"
             android:textColor="#fff"
             android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:drawableLeft="@drawable/ic_back"
-            android:text="一脸通"
-            android:textColor="#fff"
-            android:textSize="18dp" />
-
-        <Button
-            android:id="@+id/back_bt_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:text="取消"
-            android:textColor="#fff"
-            android:textSize="18dp" />
-
-        <Button
-            android:id="@+id/back_bt_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableRight="@drawable/icon_camera"
-            android:background="#00000000"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:text="发送"
-            android:textColor="#fff"
-            android:textSize="18dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_alignParentBottom="true"
+            android:background="#E5E5E5" />
 
     </RelativeLayout>
 
+
     <RadioGroup
-        android:id="@+id/rg_tab_bar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:background="#fff"
-        android:orientation="horizontal">
+    android:id="@+id/rg_tab_bar"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:layout_alignParentBottom="true"
+    android:background="#fff"
+    android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/rb_model"
-            style="@style/tab_menu_item"
-            android:drawableTop="@drawable/tab_menu_model"
-            android:text="@string/tab_menu_model" />
+    <RadioButton
+    android:id="@+id/rb_model"
+    style="@style/tab_menu_item"
+    android:drawableTop="@drawable/tab_menu_model"
+    android:text="@string/tab_menu_model" />
 
-        <RadioButton
-            android:id="@+id/rb_message"
-            style="@style/tab_menu_item"
-            android:drawableTop="@drawable/tab_menu_message"
-            android:text="@string/tab_menu_message" />
+    <RadioButton
+    android:id="@+id/rb_message"
+    style="@style/tab_menu_item"
+    android:drawableTop="@drawable/tab_menu_message"
+    android:text="@string/tab_menu_message" />
 
-        <RadioButton
-            android:id="@+id/rb_better"
-            style="@style/tab_menu_item"
-            android:drawableTop="@drawable/tab_menu_better"
-            android:text="@string/tab_menu_better" />
+    <RadioButton
+    android:id="@+id/rb_better"
+    style="@style/tab_menu_item"
+    android:drawableTop="@drawable/tab_menu_better"
+    android:text="@string/tab_menu_better" />
     </RadioGroup>
 
     <View
-        android:id="@+id/div_tab_bar"
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:layout_above="@id/rg_tab_bar"
-        android:background="#E5E5E5" />
+    android:id="@+id/div_tab_bar"
+    android:layout_width="match_parent"
+    android:layout_height="2px"
+    android:layout_above="@id/rg_tab_bar"
+    android:background="#E5E5E5" />
 
-    <FrameLayout
-        android:id="@+id/ly_content"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/div_tab_bar"
-        android:layout_below="@id/ly_top_bar">
-    </FrameLayout>
+        android:layout_below="@id/ly_top_bar" />
+
 </RelativeLayout>

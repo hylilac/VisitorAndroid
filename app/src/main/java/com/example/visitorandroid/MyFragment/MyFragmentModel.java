@@ -1,5 +1,5 @@
 package com.example.visitorandroid.MyFragment;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +12,8 @@ import com.example.visitorandroid.R;
 public class MyFragmentModel extends Fragment {
 
     private String content;
-    public MyFragmentModel(String content) {
-        this.content = content;
+    public MyFragmentModel() {
+
     }
 
     @Override

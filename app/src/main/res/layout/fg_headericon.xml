@@ -12,7 +12,7 @@
         android:background="@color/colorPrimary">
 
         <TextView
-            android:id="@+id/unsericon_topbar"
+            android:id="@+id/usericon_top_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
@@ -22,7 +22,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/unsericon_btback"
+            android:id="@+id/usericon_btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00000000"
@@ -32,10 +32,10 @@
             android:drawableLeft="@drawable/ic_back"
             android:text="个人信息"
             android:textColor="#fff"
-            android:textSize="16dp" />
+            android:textSize="14dp" />
 
         <Button
-            android:id="@+id/unsericon_btphoto"
+            android:id="@+id/usericon_btn_photo"
             android:layout_width="31dp"
             android:layout_height="24dp"
             android:background="@drawable/icon_camera"

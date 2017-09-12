@@ -1,28 +1,29 @@
 package com.example.visitorandroid.MyFragment;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-
+import android.widget.Button;
+import android.widget.EditText;
 import com.example.visitorandroid.R;
 
-public class MyFragmentNickname extends Fragment {
+public class MyFragmentNickname extends Fragment implements View.OnClickListener {
 
     private String content;
-    private MyFragmentManage fgManage;
-    private FragmentManager fManager;
-    private TextView nav_username;
-    private TextView nav_manage;
-    private TextView nav_message;
-    private TextView nav_history;
-    private TextView nav_setting;
+    private Activity activity;
+
+    private EditText et_nav_nickname;
+    private Button nickname_btnback;
+    private Button nickname_btnsave;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
 
     public MyFragmentNickname(String content) {
         this.content = content;
@@ -32,15 +33,40 @@ public class MyFragmentNickname extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_nickname,container,false);
 
-        TextView txt_topbar = getActivity().findViewById(R.id.txt_topbar);
-        txt_topbar.setText(content);
-        View view1 = getActivity().findViewById(R.id.div_tab_bar);
-        view1.setVisibility(View.INVISIBLE);
-
-        TextView et_nav_nickname = (TextView) view.findViewById(R.id.et_nav_nickname);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        et_nav_nickname.setText(prefs.getString("regNickname",null));
+        bindViews(view);
 
         return view;
+    }
+
+    private void bindViews(View view) {
+
+        et_nav_nickname = (EditText) view.findViewById(R.id.et_nav_nickname);
+        nickname_btnback = (Button) view.findViewById(R.id.nickname_btn_back);
+        nickname_btnsave = (Button) view.findViewById(R.id.nickname_btn_save);
+
+        et_nav_nickname.setText("lilachy");
+
+        nickname_btnback.setOnClickListener(this);
+        nickname_btnsave.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.nickname_btn_back:
+                activity.onBackPressed();
+                break;
+            case R.id.nickname_btn_save:
+                if (et_nav_nickname.getText().toString().equals("lilachy")){
+                    nickname_btnsave.setEnabled(false);
+                }else {
+                    nickname_btnsave.setEnabled(true);
+                    activity.onBackPressed();
+                }
+//                MainActivity.Model.setNickName(et_nav_nickname.getText().toString());
+
+                break;
+        }
     }
 }

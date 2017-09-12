@@ -1,6 +1,8 @@
 package com.example.visitorandroid.MyFragment;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -15,11 +17,20 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.visitorandroid.MainActivity;
+import com.example.visitorandroid.Model.BaseViewModel;
+import com.example.visitorandroid.Model.UserViewModel;
 import com.example.visitorandroid.R;
 
 public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
     private String content;
+    private Activity activity;
+
+    private TextView txtTopbar;
+    private View div_tabbar;
+    private RadioGroup radios;
+
     private MyFragmentHeaderIcon fgHeaderIcon;
     private MyFragmentNickname fgNickname;
     private MyFragmentTel fgTel;
@@ -35,12 +46,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
     private TextView nav_sub_tel;
     private TextView nav_sub_sex;
 
-    private TextView txtTopbar;
-    private View div_tabbar;
-    private RadioGroup radios;
-
-    private Activity activity;
-    private Button unserinfo_btback;
+    private Button user_btnback;
 
     @Override
     public void onAttach(Activity activity) {
@@ -67,19 +73,15 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
         bindViews(view);
 
-
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        nav_sub_nickname.setText(prefs.getString("regNickname",null));
-        nav_sub_account.setText(prefs.getString("username",null));
-        nav_sub_tel.setText(prefs.getString("username",null));
+//        nav_sub_nickname.setText(MainActivity.Model.getNickName());
+//        nav_sub_account.setText(MainActivity.Model.getUserName());
+//        nav_sub_tel.setText(MainActivity.Model.getMobile());
+//        nav_sub_sex.setText(MainActivity.Model.getSex());
 
         return view;
     }
 
     private void bindViews(View view) {
-
-        unserinfo_btback = (Button) view.findViewById(R.id.unserinfo_btback);
 
         nav_headericon = (TextView) view.findViewById(R.id.nav_headericon);
         nav_nickname = (TextView) view.findViewById(R.id.nav_nickname);
@@ -92,7 +94,9 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         nav_sub_tel = (TextView) view.findViewById(R.id.nav_sub_tel);
         nav_sub_sex = (TextView) view.findViewById(R.id.nav_sub_sex);
 
-        unserinfo_btback.setOnClickListener(this);
+        user_btnback = (Button) view.findViewById(R.id.user_btn_back);
+
+        user_btnback.setOnClickListener(this);
         nav_headericon.setOnClickListener(this);
         nav_nickname.setOnClickListener(this);
         nav_tel.setOnClickListener(this);
@@ -105,7 +109,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         hideAllFragment(fTransaction);
         switch (view.getId()){
-            case R.id.unserinfo_btback:
+            case R.id.user_btn_back:
                 txtTopbar.setVisibility(View.VISIBLE);
                 div_tabbar.setVisibility(View.VISIBLE);
                 radios.setVisibility(View.VISIBLE);
@@ -146,27 +150,32 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.nav_sex:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setCancelable(false);
-                builder.setPositiveButton("男", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog,int which){
-                        nav_sub_sex.setText("男");
-                    }
-                });
-                builder.setNegativeButton("女", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        nav_sub_sex.setText("女");
-                    }
-                });
-                builder.show();
+                isSex();
                 break;
             case R.id.nav_other:
                 break;
         }
         fTransaction.commit();
     }
+
+    private void isSex() {
+        final String[] choose = new String[]{"男", "女", "取消"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(false);
+        builder.setItems(choose, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (choose[which].equals("男")){
+                    nav_sub_sex.setText("男");
+                }else if (choose[which].equals("女")){
+                    nav_sub_sex.setText("女");
+                }
+            }
+        }).create();
+
+        builder.show();
+    }
+
     //隐藏所有Fragment
     private void hideAllFragment(FragmentTransaction fragmentTransaction){
         if(fgHeaderIcon != null)fragmentTransaction.hide(fgHeaderIcon);

@@ -1,5 +1,6 @@
 package com.example.visitorandroid.MyFragment;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,22 +21,26 @@ import static com.example.visitorandroid.R.id.txt_topbar;
 public class MyFragmentManage extends Fragment implements View.OnClickListener {
 
     private String content;
-    private View view;
-    private int Flag = 0;
+    private Activity activity;
 
     private TextView txtTopbar;
-    private Button backButton;
-    private Button backBtCancel;
-    private Button backBtSend;
+    private View div_tabbar;
     private RadioGroup radios;
 
+    private int Flag = 0;
     private MyFragmentJoinCompany fgjoin;
     private MyFragmentCreateCompany fgcreate;
 
+    private Button manage_btnback;
     private Button join_company;
     private Button create_company;
 
-    private ResultViewModel viewmodel;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
 
     public MyFragmentManage(String content) {
         this.content = content;
@@ -44,38 +49,34 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if (Flag == 0){
-            view = inflater.inflate(R.layout.fg_manage,container,false);
-        }else {
-            view = inflater.inflate(R.layout.fg_manage,container,false);
-        }
+        View view = inflater.inflate(R.layout.fg_manage,container,false);
 
+        txtTopbar = activity.findViewById(R.id.txt_topbar);
+        txtTopbar.setVisibility(View.GONE);
 
+        div_tabbar = activity.findViewById(R.id.div_tab_bar);
+        div_tabbar.setVisibility(View.GONE);
+
+        radios = activity.findViewById(R.id.rg_tab_bar);
+        radios.setVisibility(View.GONE);
+
+        bindViews(view);
+
+        return view;
+    }
+
+    private void bindViews(View view) {
 
         TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
         txt_content.setText("您当前尚未加入企业");
 
-        txtTopbar = getActivity().findViewById(txt_topbar);
-        txtTopbar.setText(content);
-        radios.setVisibility(View.INVISIBLE);
-        View view1 = getActivity().findViewById(R.id.div_tab_bar);
-        view1.setVisibility(View.INVISIBLE);
-//        backButton = getActivity().findViewById(R.id.back_button);
-//        backButton.setVisibility(View.VISIBLE);
-//        backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
-//        backBtCancel.setVisibility(View.INVISIBLE);
-//        backBtSend = getActivity().findViewById(R.id.back_bt_send);
-//        backBtSend.setVisibility(View.INVISIBLE);
-
+        manage_btnback = (Button) view.findViewById(R.id.manage_btn_back);
         join_company = (Button) view.findViewById(R.id.join_company);
         create_company = (Button) view.findViewById(R.id.create_company);
 
-//        backButton.setText("我");
-//        backButton.setOnClickListener(this);
+        manage_btnback.setOnClickListener(this);
         join_company.setOnClickListener(this);
         create_company.setOnClickListener(this);
-
-        return view;
     }
 
     @Override
@@ -83,13 +84,12 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         hideAllFragment(fTransaction);
         switch (view.getId()){
-//            case R.id.back_button:
-//                txtTopbar.setVisibility(View.VISIBLE);
-//                txtTopbar.setText("我");
-//                backButton.setVisibility(View.INVISIBLE);
-//                radios.setVisibility(View.VISIBLE);
-//                getActivity().onBackPressed();
-//                break;
+            case R.id.manage_btn_back:
+                txtTopbar.setVisibility(View.VISIBLE);
+                div_tabbar.setVisibility(View.VISIBLE);
+                radios.setVisibility(View.VISIBLE);
+                activity.onBackPressed();
+                break;
             case R.id.join_company:
                 if(fgjoin == null){
                     fgjoin = new MyFragmentJoinCompany("加入公司");

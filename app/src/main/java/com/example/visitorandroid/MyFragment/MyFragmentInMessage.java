@@ -1,5 +1,6 @@
 package com.example.visitorandroid.MyFragment;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,15 +23,22 @@ import static com.example.visitorandroid.R.id.txt_topbar;
 public class MyFragmentInMessage extends Fragment implements View.OnClickListener {
 
     private String content;
+    private Activity activity;
 
     private TextView txtTopbar;
-    private Button backButton;
-    private Button backBtCancel;
-    private Button backBtSend;
+    private View div_tabbar;
     private RadioGroup radios;
 
     private TextView etSender;
     private EditText etMessageText;
+    private Button btn_cancel;
+    private Button btn_send;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
 
     public MyFragmentInMessage(String content) {
         this.content = content;
@@ -40,49 +48,51 @@ public class MyFragmentInMessage extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_inmessage,container,false);
 
-        txtTopbar = getActivity().findViewById(txt_topbar);
-        txtTopbar.setText(content);
-        radios.setVisibility(View.INVISIBLE);
-        View view1 = getActivity().findViewById(R.id.div_tab_bar);
-        view1.setVisibility(View.INVISIBLE);
-//        backButton = getActivity().findViewById(R.id.back_button);
-//        backButton.setVisibility(View.INVISIBLE);
-//        backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
-//        backBtCancel.setVisibility(View.VISIBLE);
-//        backBtSend = getActivity().findViewById(R.id.back_bt_send);
-//        backBtSend.setVisibility(View.VISIBLE);
+        txtTopbar = activity.findViewById(R.id.txt_topbar);
+        txtTopbar.setVisibility(View.GONE);
 
-        etSender = (TextView) view.findViewById(R.id.et_sender);
-        etMessageText = (EditText) view.findViewById(R.id.et_messageText);
+        div_tabbar = activity.findViewById(R.id.div_tab_bar);
+        div_tabbar.setVisibility(View.GONE);
+
+        radios = activity.findViewById(R.id.rg_tab_bar);
+        radios.setVisibility(View.GONE);
+
+        bindViews(view);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         etSender.setText(prefs.getString("regNickname",null));
 
-        backBtCancel.setOnClickListener(this);
-        backBtSend.setOnClickListener(this);
-
         return view;
+    }
+
+    private void bindViews(View view) {
+        etSender = (TextView) view.findViewById(R.id.et_sender);
+        etMessageText = (EditText) view.findViewById(R.id.et_messageText);
+        btn_cancel = (Button) view.findViewById(R.id.btn_cancel);
+        btn_send = (Button) view.findViewById(R.id.btn_send);
+
+        btn_cancel.setOnClickListener(this);
+        btn_send.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-//            case R.id.back_bt_cancel:
-//                isCancel();
-//                etMessageText.setText("这里填写消息");
-//                break;
-//            case R.id.back_bt_send:
-//                isCancel();
-//                break;
+            case R.id.btn_cancel:
+                isCancel();
+                etMessageText.setText("这里填写消息");
+                break;
+            case R.id.btn_send:
+                isCancel();
+                break;
         }
     }
 
     private void isCancel(){
         txtTopbar.setVisibility(View.VISIBLE);
-        txtTopbar.setText("我");
-        backBtCancel.setVisibility(View.INVISIBLE);
-        backBtSend.setVisibility(View.INVISIBLE);
+        div_tabbar.setVisibility(View.VISIBLE);
         radios.setVisibility(View.VISIBLE);
+        activity.onBackPressed();
         getActivity().onBackPressed();
     }
 }

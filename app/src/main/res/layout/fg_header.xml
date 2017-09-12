@@ -14,9 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:background="@color/colorPrimary">
-
             <TextView
-                android:id="@+id/unserinfo_topbar"
+                android:id="@+id/user_top_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
@@ -26,7 +25,7 @@
                 android:textSize="18sp" />
 
             <Button
-                android:id="@+id/unserinfo_btback"
+                android:id="@+id/user_btn_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
@@ -36,7 +35,7 @@
                 android:drawableLeft="@drawable/ic_back"
                 android:text="我"
                 android:textColor="#fff"
-                android:textSize="16dp" />
+                android:textSize="14dp" />
 
         </RelativeLayout>
 

@@ -36,7 +36,8 @@ import okhttp3.Response;
 
 import static android.os.Build.VERSION_CODES.M;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class
+LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView titleIcon;
     private TextView titleLogin;
@@ -48,8 +49,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private UserInfo user;
     private MobileInfo mobile;
     private SharedPreferences prefs;
-
-    private ResultViewModel viewmodel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +66,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String account = prefs.getString("username",null);
         String password = prefs.getString("password",null);
-//        if (account !=null && password != null){
-//            isAutoLogin();
-//        }
+        if (account !=null && password != null){
+            isAutoLogin();
+        }
 
         btLogin.setOnClickListener(this);
         btReg.setOnClickListener(this);
@@ -134,8 +133,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText,UserInfo.class);
-
-
                 String s= new Gson().toJson(user.Data);
                 UserViewModel lll= new Gson().fromJson( s,UserViewModel.class);
                 BaseViewModel.GetInstance().setUser( lll);
@@ -194,7 +191,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 mobile = gson.fromJson(responseText,MobileInfo.class);
-                String ss = null;
             }
 
             @Override

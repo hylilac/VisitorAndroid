@@ -31,22 +31,12 @@ import static android.R.attr.data;
 public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListener {
 
     private String content;
-
-    private TextView txtTopbar;
-    private Button backButton;
-    private Button backBtCancel;
-    private Button backBtSend;
-    private RadioGroup radios;
+    private Activity activity;
 
     private ImageView navHeaderPhoto;
 
-    private Activity activity;
-    private Button unsericon_btback;
-    private Button unsericon_btphoto;
-
-    public MyFragmentHeaderIcon(String content) {
-        this.content = content;
-    }
+    private Button usericon_btback;
+    private Button usericon_btphoto;
 
     @Override
     public void onAttach(Activity activity) {
@@ -54,46 +44,35 @@ public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListen
         this.activity = activity;
     }
 
+    public MyFragmentHeaderIcon(String content) {
+        this.content = content;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_headericon,container,false);
 
-//        txtTopbar = getActivity().findViewById(R.id.txt_topbar);
-//        txtTopbar.setText(content);
-//        radios =  getActivity().findViewById(R.id.rg_tab_bar);
-//        radios.setVisibility(View.GONE);
-//        View view1 = getActivity().findViewById(R.id.div_tab_bar);
-//        view1.setVisibility(View.GONE);
-//        backButton = getActivity().findViewById(R.id.back_button);
-//        backButton.setText("个人信息");
-//        backButton.setVisibility(View.VISIBLE);
-//        backBtCancel = getActivity().findViewById(R.id.back_bt_cancel);
-//        backBtCancel.setVisibility(View.GONE);
-//        backBtSend = getActivity().findViewById(R.id.back_bt_send);
-//        backBtSend.setVisibility(View.VISIBLE);
-        //backBtSend.setText("");
-
-        unsericon_btback = (Button) view.findViewById(R.id.unsericon_btback);
-        unsericon_btphoto = (Button) view.findViewById(R.id.unsericon_btphoto);
-
-        unsericon_btback.setOnClickListener(this);
-        unsericon_btphoto.setOnClickListener(this);
+        bindViews(view);
 
         return view;
+    }
+
+    private void bindViews(View view) {
+
+        usericon_btback = (Button) view.findViewById(R.id.usericon_btn_back);
+        usericon_btphoto = (Button) view.findViewById(R.id.usericon_btn_photo);
+
+        usericon_btback.setOnClickListener(this);
+        usericon_btphoto.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.unsericon_btback:
-//                txtTopbar.setVisibility(View.VISIBLE);
-//                txtTopbar.setText("个人信息");
-//                backBtSend.setVisibility(View.GONE);
-//                backButton.setText("我");
-//                radios.setVisibility(View.GONE);
+            case R.id.usericon_btn_back:
                 activity.onBackPressed();
                 break;
-            case R.id.unsericon_btphoto:
+            case R.id.usericon_btn_photo:
                 isTakePhoto();
                 break;
         }

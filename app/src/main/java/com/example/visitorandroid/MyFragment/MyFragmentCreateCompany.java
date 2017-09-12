@@ -32,8 +32,6 @@ public class MyFragmentCreateCompany extends Fragment {
 
         TextView txt_topbar = getActivity().findViewById(R.id.txt_topbar);
         txt_topbar.setText(content);
-        RadioGroup radios =  getActivity().findViewById(R.id.rg_tab_bar);
-        radios.setVisibility(View.INVISIBLE);
         View view1 = getActivity().findViewById(R.id.div_tab_bar);
         view1.setVisibility(View.INVISIBLE);
 

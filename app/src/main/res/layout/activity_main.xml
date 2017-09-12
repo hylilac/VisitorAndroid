@@ -3,6 +3,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
                 tools:context=".MainActivity">
     <TextView
         android:id="@+id/txt_topbar"
@@ -18,38 +19,38 @@
         android:textSize="18sp" />
 
     <RadioGroup
-    android:id="@+id/rg_tab_bar"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:layout_alignParentBottom="true"
-    android:background="#fff"
-    android:orientation="horizontal">
+        android:id="@+id/rg_tab_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:background="#fff"
+        android:orientation="horizontal">
 
-    <RadioButton
-    android:id="@+id/rb_model"
-    style="@style/tab_menu_item"
-    android:drawableTop="@drawable/tab_menu_model"
-    android:text="@string/tab_menu_model" />
+        <RadioButton
+            android:id="@+id/rb_model"
+            style="@style/tab_menu_item"
+            android:drawableTop="@drawable/tab_menu_model"
+            android:text="@string/tab_menu_model" />
 
-    <RadioButton
-    android:id="@+id/rb_message"
-    style="@style/tab_menu_item"
-    android:drawableTop="@drawable/tab_menu_message"
-    android:text="@string/tab_menu_message" />
+        <RadioButton
+            android:id="@+id/rb_message"
+            style="@style/tab_menu_item"
+            android:drawableTop="@drawable/tab_menu_message"
+            android:text="@string/tab_menu_message" />
 
-    <RadioButton
-    android:id="@+id/rb_better"
-    style="@style/tab_menu_item"
-    android:drawableTop="@drawable/tab_menu_better"
-    android:text="@string/tab_menu_better" />
+        <RadioButton
+            android:id="@+id/rb_better"
+            style="@style/tab_menu_item"
+            android:drawableTop="@drawable/tab_menu_better"
+            android:text="@string/tab_menu_better" />
     </RadioGroup>
 
     <View
-    android:id="@+id/div_tab_bar"
-    android:layout_width="match_parent"
-    android:layout_height="2px"
-    android:layout_above="@id/rg_tab_bar"
-    android:background="#E5E5E5" />
+        android:id="@+id/div_tab_bar"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:layout_above="@id/rg_tab_bar"
+        android:background="#E5E5E5" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vpager"

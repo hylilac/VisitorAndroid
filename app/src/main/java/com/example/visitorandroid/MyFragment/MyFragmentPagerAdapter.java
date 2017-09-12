@@ -14,14 +14,12 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     private MyFragmentMessage myFragmentMessage = null;
     private MyFragmentBetter myFragmentBetter = null;
 
-
     public MyFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
         myFragmentModel = new MyFragmentModel("");
-        myFragmentMessage = new MyFragmentMessage("站内信");
-        myFragmentBetter = new MyFragmentBetter("我");
+        myFragmentMessage = new MyFragmentMessage("");
+        myFragmentBetter = new MyFragmentBetter("");
     }
-
 
     @Override
     public int getCount() {
@@ -35,6 +33,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
+        System.out.println("position Destory" + position);
         super.destroyItem(container, position, object);
     }
 
@@ -54,5 +53,4 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         }
         return fragment;
     }
-
 }

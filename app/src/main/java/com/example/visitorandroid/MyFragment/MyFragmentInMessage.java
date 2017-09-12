@@ -42,7 +42,6 @@ public class MyFragmentInMessage extends Fragment implements View.OnClickListene
 
         txtTopbar = getActivity().findViewById(txt_topbar);
         txtTopbar.setText(content);
-        radios =  getActivity().findViewById(R.id.rg_tab_bar);
         radios.setVisibility(View.INVISIBLE);
         View view1 = getActivity().findViewById(R.id.div_tab_bar);
         view1.setVisibility(View.INVISIBLE);

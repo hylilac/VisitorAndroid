@@ -36,9 +36,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
     private TextView nav_sub_sex;
 
     private TextView txtTopbar;
-    private Button backButton;
-    private Button backBtCancel;
-    private Button backBtSend;
+    private View div_tabbar;
     private RadioGroup radios;
 
     private Activity activity;
@@ -60,10 +58,28 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
         txtTopbar = activity.findViewById(R.id.txt_topbar);
         txtTopbar.setVisibility(View.GONE);
-        radios =  activity.findViewById(R.id.rg_tab_bar);
+
+        div_tabbar = activity.findViewById(R.id.div_tab_bar);
+        div_tabbar.setVisibility(View.GONE);
+
+        radios = activity.findViewById(R.id.rg_tab_bar);
         radios.setVisibility(View.GONE);
-        View view1 = activity.findViewById(R.id.div_tab_bar);
-        view1.setVisibility(View.GONE);
+
+        bindViews(view);
+
+
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        nav_sub_nickname.setText(prefs.getString("regNickname",null));
+        nav_sub_account.setText(prefs.getString("username",null));
+        nav_sub_tel.setText(prefs.getString("username",null));
+
+        return view;
+    }
+
+    private void bindViews(View view) {
+
+        unserinfo_btback = (Button) view.findViewById(R.id.unserinfo_btback);
 
         nav_headericon = (TextView) view.findViewById(R.id.nav_headericon);
         nav_nickname = (TextView) view.findViewById(R.id.nav_nickname);
@@ -76,21 +92,12 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         nav_sub_tel = (TextView) view.findViewById(R.id.nav_sub_tel);
         nav_sub_sex = (TextView) view.findViewById(R.id.nav_sub_sex);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        nav_sub_nickname.setText(prefs.getString("regNickname",null));
-        nav_sub_account.setText(prefs.getString("username",null));
-        nav_sub_tel.setText(prefs.getString("username",null));
-
-        unserinfo_btback = (Button) view.findViewById(R.id.unserinfo_btback);
         unserinfo_btback.setOnClickListener(this);
-
         nav_headericon.setOnClickListener(this);
         nav_nickname.setOnClickListener(this);
         nav_tel.setOnClickListener(this);
         nav_sex.setOnClickListener(this);
         nav_other.setOnClickListener(this);
-
-        return view;
     }
 
     @Override
@@ -99,15 +106,18 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         hideAllFragment(fTransaction);
         switch (view.getId()){
             case R.id.unserinfo_btback:
+                txtTopbar.setVisibility(View.VISIBLE);
+                div_tabbar.setVisibility(View.VISIBLE);
+                radios.setVisibility(View.VISIBLE);
                 activity.onBackPressed();
                 break;
             case R.id.nav_headericon:
                 if(fgHeaderIcon == null){
                     fgHeaderIcon = new MyFragmentHeaderIcon("个人头像");
-                    fTransaction.replace(R.id.fb_header,fgHeaderIcon);
+                    fTransaction.add(R.id.fb_header,fgHeaderIcon);
                     fTransaction.addToBackStack(null);
                 }else{
-                    fTransaction.replace(R.id.fb_header,fgHeaderIcon);
+                    fTransaction.add(R.id.fb_header,fgHeaderIcon);
                     fTransaction.addToBackStack(null);
                     fTransaction.show(fgHeaderIcon);
                 }

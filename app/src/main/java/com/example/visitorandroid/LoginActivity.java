@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.visitorandroid.Model.BaseViewModel;
 import com.example.visitorandroid.Model.DialogMethod;
 import com.example.visitorandroid.Model.MobileInfo;
 import com.example.visitorandroid.Model.ResultViewModel;
@@ -32,6 +33,8 @@ import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static android.os.Build.VERSION_CODES.M;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -64,9 +67,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String account = prefs.getString("username",null);
         String password = prefs.getString("password",null);
-        if (account !=null && password != null){
-            isAutoLogin();
-        }
+//        if (account !=null && password != null){
+//            isAutoLogin();
+//        }
 
         btLogin.setOnClickListener(this);
         btReg.setOnClickListener(this);
@@ -132,11 +135,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText,UserInfo.class);
 
-                UserViewModel Model=UserViewModel.GetInstance();
-                Model.setGUID("1234");
-                Model.setUserName("456");
+
                 String s= new Gson().toJson(user.Data);
-              //  Model = new Gson().fromJson( s,UserViewModel.class);
+                UserViewModel lll= new Gson().fromJson( s,UserViewModel.class);
+                BaseViewModel.GetInstance().setUser( lll);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -147,8 +149,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             editor.putString("username",loginUsername.getText().toString());
                             editor.putString("password",loginPassword.getText().toString());
                             editor.apply();
-//                            String address_mobile="http://www.tytechkj.com/App/Permission/UpdateUserMobile";
-//                            queryMobile(address_mobile);
+                            String address_mobile="http://www.tytechkj.com/App/Permission/UpdateUserMobile";
+                            queryMobile(address_mobile);
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -176,7 +178,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void queryMobile(String address) {
-        String UserID = viewmodel.data.GUID;
+        String UserID = BaseViewModel.GetInstance().getUser().getGUID();
         String mobileVersion = SystemUtil.getSystemVersion();
         String mobilePlat = "Android";
         String mobileModel = SystemUtil.getSystemModel();

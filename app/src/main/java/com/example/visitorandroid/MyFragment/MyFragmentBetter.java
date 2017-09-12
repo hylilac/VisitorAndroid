@@ -61,10 +61,10 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
             case R.id.icon_image:
                 if(fgHeader == null){
                     fgHeader = new MyFragmentHeader("个人信息");
-                    fTransaction.replace(R.id.fb_content,fgHeader);
+                    fTransaction.add(R.id.fb_content,fgHeader);
                     fTransaction.addToBackStack(null);
                 }else{
-                    fTransaction.replace(R.id.fb_content,fgHeader);
+                    fTransaction.add(R.id.fb_content,fgHeader);
                     fTransaction.addToBackStack(null);
                     fTransaction.show(fgHeader);
                 }

@@ -13,15 +13,7 @@ public class UserViewModel {
 
     }
 
-    public static UserViewModel uniqueStance;
 
-
-    public static UserViewModel GetInstance()
-    {
-        if(uniqueStance ==null)
-            uniqueStance=new UserViewModel();
-        return uniqueStance;
-    }
 
     public String GUID ;
 

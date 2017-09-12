@@ -1,26 +1,18 @@
 package com.example.visitorandroid;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.visitorandroid.Model.UserInfo;
+import com.example.visitorandroid.Model.BaseViewModel;
 import com.example.visitorandroid.Model.UserViewModel;
-import com.example.visitorandroid.MyFragment.MyFragmentBetter;
-import com.example.visitorandroid.MyFragment.MyFragmentMessage;
-import com.example.visitorandroid.MyFragment.MyFragmentModel;
 import com.example.visitorandroid.MyFragment.MyFragmentPagerAdapter;
 
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,
@@ -40,19 +32,15 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     public static final int PAGE_ONE = 0;
     public static final int PAGE_TWO = 1;
     public static final int PAGE_THREE = 2;
-
-    //Fragment Object
-    private MyFragmentModel fgModel;
-    private MyFragmentMessage fgMessage;
-    private MyFragmentBetter fgBetter;
-    private FragmentManager fManager;
-
+    public  static UserViewModel Model;
     private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserViewModel model =UserViewModel.GetInstance();
+
+         Model = BaseViewModel.GetInstance().getUser();
+
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
@@ -64,7 +52,11 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         setContentView(R.layout.activity_main);
 
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+        bindViews();
+        rb_model.setChecked(true);
+    }
 
+    private void bindViews() {
         txt_topbar = (TextView) findViewById(R.id.txt_topbar);
         rg_tab_bar = (RadioGroup) findViewById(R.id.rg_tab_bar);
         rb_model = (RadioButton) findViewById(R.id.rb_model);
@@ -129,11 +121,11 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     /**点击回退键的处理：判断Fragment栈中是否有Fragment
      * 没，双击退出程序，否则像是Toast提示
      * 有，popbackstack弹出栈
-    */
+     */
 
     @Override
     public void onBackPressed() {
-        if (fManager.getBackStackEntryCount() == 0) {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             if ((System.currentTimeMillis() - exitTime) > 2000) {
                 Toast.makeText(getApplicationContext(), "再按一次退出程序",
                         Toast.LENGTH_SHORT).show();
@@ -142,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 super.onBackPressed();
             }
         } else {
-            fManager.popBackStack();
+            getSupportFragmentManager().popBackStack();
         }
     }
 

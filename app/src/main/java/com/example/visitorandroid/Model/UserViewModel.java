@@ -1,5 +1,7 @@
 package com.example.visitorandroid.Model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by hy on 2017/9/11.
  */
@@ -123,5 +125,15 @@ public class UserViewModel {
 
     public String getUpdateDateTime() {
         return UpdateDateTime;
+    }
+
+    public Bitmap HeaderPic;
+
+    public void setHeaderPic(Bitmap headerPic) {
+        HeaderPic = headerPic;
+    }
+
+    public Bitmap getHeaderPic() {
+        return HeaderPic;
     }
 }

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.visitorandroid.Model.BaseViewModel;
+import com.example.visitorandroid.Model.UserViewModel;
 import com.example.visitorandroid.R;
 
 public class MyFragmentTel extends Fragment implements View.OnClickListener {
@@ -45,7 +47,7 @@ public class MyFragmentTel extends Fragment implements View.OnClickListener {
         tel_btnback = (Button) view.findViewById(R.id.tel_btn_back);
         tel_btnsave = (Button) view.findViewById(R.id.tel_btn_save);
 
-        et_navtel.setText("18052528856");
+        et_navtel.setText(BaseViewModel.GetInstance().User.getMobile());
 
         tel_btnback.setOnClickListener(this);
         tel_btnsave.setOnClickListener(this);
@@ -59,7 +61,7 @@ public class MyFragmentTel extends Fragment implements View.OnClickListener {
                 activity.onBackPressed();
                 break;
             case R.id.tel_btn_save:
-                if (et_navtel.getText().toString().equals("lilachy")){
+                if (et_navtel.getText().toString().equals(BaseViewModel.GetInstance().User.getMobile())){
                     tel_btnsave.setEnabled(false);
                 }else {
                     tel_btnsave.setEnabled(true);

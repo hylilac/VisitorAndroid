@@ -1,19 +1,26 @@
 package com.example.visitorandroid.MyFragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -21,6 +28,10 @@ import com.example.visitorandroid.MainActivity;
 import com.example.visitorandroid.Model.BaseViewModel;
 import com.example.visitorandroid.Model.UserViewModel;
 import com.example.visitorandroid.R;
+import com.squareup.picasso.Picasso;
+
+import static com.example.visitorandroid.R.id.icon_image;
+import static org.litepal.LitePalApplication.getContext;
 
 public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
@@ -41,12 +52,16 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
     private TextView nav_sex;
     private TextView nav_other;
 
+    private ImageView nav_sub_headericon;
     private TextView nav_sub_nickname;
     private TextView nav_sub_account;
     private TextView nav_sub_tel;
     private TextView nav_sub_sex;
 
     private Button user_btnback;
+
+    public static final String TAG = "RightFragment";
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -60,7 +75,10 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_header,container,false);
+
+        Log.d(TAG, "onCreateView");
+
+        View view = inflater.inflate(R.layout.fg_header, container, false);
 
         txtTopbar = activity.findViewById(R.id.txt_topbar);
         txtTopbar.setVisibility(View.GONE);
@@ -73,11 +91,6 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
         bindViews(view);
 
-//        nav_sub_nickname.setText(MainActivity.Model.getNickName());
-//        nav_sub_account.setText(MainActivity.Model.getUserName());
-//        nav_sub_tel.setText(MainActivity.Model.getMobile());
-//        nav_sub_sex.setText(MainActivity.Model.getSex());
-
         return view;
     }
 
@@ -89,10 +102,21 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         nav_sex = (TextView) view.findViewById(R.id.nav_sex);
         nav_other = (TextView) view.findViewById(R.id.nav_other);
 
+        nav_sub_headericon = (ImageView) view.findViewById(R.id.nav_sub_headericon);
         nav_sub_nickname = (TextView) view.findViewById(R.id.nav_sub_nickname);
         nav_sub_account = (TextView) view.findViewById(R.id.nav_sub_account);
         nav_sub_tel = (TextView) view.findViewById(R.id.nav_sub_tel);
         nav_sub_sex = (TextView) view.findViewById(R.id.nav_sub_sex);
+
+        String picstring = BaseViewModel.GetInstance().User.getHeadPicUrl();
+        Picasso.with(getContext())
+                .load("http://www.tytechkj.com/app/HeadPic/" + picstring)
+                .into(nav_sub_headericon);
+
+        nav_sub_nickname.setText(BaseViewModel.GetInstance().User.getNickName());
+        nav_sub_account.setText(BaseViewModel.GetInstance().User.getUserName());
+        nav_sub_tel.setText(BaseViewModel.GetInstance().User.getMobile());
+        nav_sub_sex.setText(BaseViewModel.GetInstance().User.getSex());
 
         user_btnback = (Button) view.findViewById(R.id.user_btn_back);
 
@@ -108,7 +132,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         hideAllFragment(fTransaction);
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.user_btn_back:
                 txtTopbar.setVisibility(View.VISIBLE);
                 div_tabbar.setVisibility(View.VISIBLE);
@@ -116,35 +140,35 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
                 activity.onBackPressed();
                 break;
             case R.id.nav_headericon:
-                if(fgHeaderIcon == null){
+                if (fgHeaderIcon == null) {
                     fgHeaderIcon = new MyFragmentHeaderIcon("个人头像");
-                    fTransaction.add(R.id.fb_header,fgHeaderIcon);
+                    fTransaction.add(R.id.fb_header, fgHeaderIcon);
                     fTransaction.addToBackStack(null);
-                }else{
-                    fTransaction.add(R.id.fb_header,fgHeaderIcon);
+                } else {
+                    fTransaction.add(R.id.fb_header, fgHeaderIcon);
                     fTransaction.addToBackStack(null);
                     fTransaction.show(fgHeaderIcon);
                 }
                 break;
 
             case R.id.nav_nickname:
-                if(fgNickname == null){
+                if (fgNickname == null) {
                     fgNickname = new MyFragmentNickname("昵称");
-                    fTransaction.add(R.id.fb_header,fgNickname);
+                    fTransaction.add(R.id.fb_header, fgNickname);
                     fTransaction.addToBackStack(null);
-                }else{
-                    fTransaction.add(R.id.fb_header,fgNickname);
+                } else {
+                    fTransaction.add(R.id.fb_header, fgNickname);
                     fTransaction.addToBackStack(null);
                     fTransaction.show(fgNickname);
                 }
                 break;
             case R.id.nav_tel:
-                if(fgTel == null){
+                if (fgTel == null) {
                     fgTel = new MyFragmentTel("手机号");
-                    fTransaction.add(R.id.fb_header,fgTel);
+                    fTransaction.add(R.id.fb_header, fgTel);
                     fTransaction.addToBackStack(null);
-                }else{
-                    fTransaction.add(R.id.fb_header,fgTel);
+                } else {
+                    fTransaction.add(R.id.fb_header, fgTel);
                     fTransaction.addToBackStack(null);
                     fTransaction.show(fgTel);
                 }
@@ -165,9 +189,9 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         builder.setItems(choose, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (choose[which].equals("男")){
+                if (choose[which].equals("男")) {
                     nav_sub_sex.setText("男");
-                }else if (choose[which].equals("女")){
+                } else if (choose[which].equals("女")) {
                     nav_sub_sex.setText("女");
                 }
             }
@@ -177,9 +201,29 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
     }
 
     //隐藏所有Fragment
-    private void hideAllFragment(FragmentTransaction fragmentTransaction){
-        if(fgHeaderIcon != null)fragmentTransaction.hide(fgHeaderIcon);
-        if(fgNickname != null)fragmentTransaction.hide(fgNickname);
-        if(fgTel != null)fragmentTransaction.hide(fgTel);
+    private void hideAllFragment(FragmentTransaction fragmentTransaction) {
+        if (fgHeaderIcon != null) fragmentTransaction.hide(fgHeaderIcon);
+        if (fgNickname != null) fragmentTransaction.hide(fgNickname);
+        if (fgTel != null) fragmentTransaction.hide(fgTel);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.CART_BROADCAST");
+        BroadcastReceiver mItemViewListClickReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent){
+                String msg = intent.getStringExtra("data");
+                if("refresh".equals(msg)){
+                    Picasso.with(getContext())
+                            .load("http://www.tytechkj.com/app/HeadPic/" + BaseViewModel.GetInstance().User.getHeadPicUrl())
+                            .into(nav_sub_headericon);
+                }
+            }
+        };
+        broadcastManager.registerReceiver(mItemViewListClickReceiver, intentFilter);
     }
 }

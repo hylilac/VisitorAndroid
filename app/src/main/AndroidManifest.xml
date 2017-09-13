@@ -22,9 +22,17 @@
         </activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".RegActivity"></activity>
-        <!--<activity android:name=".MyFragment.MyFragmentModel"></activity>-->
-        <!--<activity android:name=".MyFragment.MyFragmentManage"></activity>-->
-        <!--<activity android:name=".MyFragment.MyFragmentJoinCompany"></activity>-->
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.visitorandroid.MyFragment.MyFragmentHeaderIcon.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
+
 
 </manifest>

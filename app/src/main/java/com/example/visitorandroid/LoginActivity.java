@@ -65,8 +65,7 @@ LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String account = prefs.getString("username",null);
-        String password = prefs.getString("password",null);
-        if (account !=null && password != null){
+        if (account !=null){
             isAutoLogin();
         }
 
@@ -99,10 +98,48 @@ LoginActivity extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void isAutoLogin() {
+        String address_autologin="http://www.tytechkj.com/App/Permission/getcurrentloginuser";
+        queryAutoLogin(address_autologin);
+    }
 
-        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-        startActivity(intent);
-        finish();
+    private void queryAutoLogin(String address) {
+        DialogMethod.MyProgressDialog(this,"正在登录中...",true);
+        String account = prefs.getString("username",null);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("username",account)
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                BaseViewModel.GetInstance().setUser( gson.fromJson(responseText,UserViewModel.class));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(LoginActivity.this,"",false);
+                        String address_mobile="http://www.tytechkj.com/App/Permission/UpdateUserMobile";
+                        queryMobile(address_mobile);
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(LoginActivity.this,"",false);
+                        Toast.makeText(LoginActivity.this,"自动登录请求失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     private Boolean isLogin() {

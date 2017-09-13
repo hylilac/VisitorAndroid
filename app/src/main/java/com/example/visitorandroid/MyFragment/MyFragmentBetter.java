@@ -1,15 +1,39 @@
 package com.example.visitorandroid.MyFragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.visitorandroid.Model.BaseViewModel;
+import com.example.visitorandroid.Model.UserViewModel;
 import com.example.visitorandroid.R;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+import com.squareup.picasso.Transformation;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.example.visitorandroid.R.id.nav_sub_headericon;
+import static com.squareup.picasso.Picasso.with;
+import static java.lang.System.load;
 
 public class MyFragmentBetter extends Fragment implements View.OnClickListener {
 
@@ -36,21 +60,49 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_better,container,false);
 
+        bindViews(view);
+
+        return view;
+    }
+
+    private  void bindViews(View view){
+        final    Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                //加载成功后会得到一个bitmap,可以自定义操作
+                Log.d("abc","1");
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+                // 加载失败进行相应处理
+                Log.d("abc","2");
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                Log.d("abc","3");
+            }
+        };
         icon_image = (CircleImageView) view.findViewById(R.id.icon_image);
         nav_username = (TextView) view.findViewById(R.id.nav_username);
-        nav_username.setText("lilachy");
         nav_manage = (TextView) view.findViewById(R.id.nav_manage);
         nav_message = (TextView) view.findViewById(R.id.nav_message);
         nav_history = (TextView) view.findViewById(R.id.nav_history);
         nav_setting = (TextView) view.findViewById(R.id.nav_setting);
+
+        String picstring = BaseViewModel.GetInstance().User.getHeadPicUrl();
+        Picasso.with(getContext())
+                .load("http://www.tytechkj.com/app/HeadPic/"+ picstring)
+                .into(icon_image);
+
+        nav_username.setText(BaseViewModel.GetInstance().User.getNickName());
 
         icon_image.setOnClickListener(this);
         nav_manage.setOnClickListener(this);
         nav_message.setOnClickListener(this);
         nav_history.setOnClickListener(this);
         nav_setting.setOnClickListener(this);
-
-        return view;
     }
 
     @Override
@@ -114,5 +166,25 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
         if(fgManage != null)fragmentTransaction.hide(fgManage);
         if(fgInManage != null)fragmentTransaction.hide(fgInManage);
         if(fgSetting != null)fragmentTransaction.hide(fgSetting);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.CART_BROADCAST");
+        BroadcastReceiver mItemViewListClickReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent){
+                String msg = intent.getStringExtra("data");
+                if("refresh".equals(msg)){
+                    Picasso.with(getContext())
+                            .load("http://www.tytechkj.com/app/HeadPic/" + BaseViewModel.GetInstance().User.getHeadPicUrl())
+                            .into(icon_image);
+                }
+            }
+        };
+        broadcastManager.registerReceiver(mItemViewListClickReceiver, intentFilter);
     }
 }

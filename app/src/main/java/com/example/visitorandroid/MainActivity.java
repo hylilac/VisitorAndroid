@@ -1,19 +1,40 @@
 package com.example.visitorandroid;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visitorandroid.Model.BaseViewModel;
+import com.example.visitorandroid.Model.DialogMethod;
 import com.example.visitorandroid.Model.UserViewModel;
+import com.example.visitorandroid.MyFragment.MyFragmentHeader;
+import com.example.visitorandroid.MyFragment.MyFragmentHeaderIcon;
 import com.example.visitorandroid.MyFragment.MyFragmentPagerAdapter;
+import com.example.visitorandroid.util.HttpUtil;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static android.os.Build.VERSION_CODES.M;
+import static org.litepal.LitePalApplication.getContext;
 
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,
         ViewPager.OnPageChangeListener {
@@ -135,7 +156,30 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             }
         } else {
             getSupportFragmentManager().popBackStack();
+            String address_back="http://www.tytechkj.com/App/Permission/getcurrentloginuser";
+            queryBack(address_back);
         }
+    }
+
+    private void queryBack(String address) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String account = prefs.getString("username",null);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("username",account)
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                BaseViewModel.GetInstance().setUser( gson.fromJson(responseText,UserViewModel.class));
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }

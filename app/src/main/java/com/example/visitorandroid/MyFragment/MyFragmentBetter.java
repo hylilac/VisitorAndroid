@@ -66,24 +66,7 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
     }
 
     private  void bindViews(View view){
-        final    Target target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                //加载成功后会得到一个bitmap,可以自定义操作
-                Log.d("abc","1");
-            }
 
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                // 加载失败进行相应处理
-                Log.d("abc","2");
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                Log.d("abc","3");
-            }
-        };
         icon_image = (CircleImageView) view.findViewById(R.id.icon_image);
         nav_username = (TextView) view.findViewById(R.id.nav_username);
         nav_manage = (TextView) view.findViewById(R.id.nav_manage);
@@ -182,6 +165,7 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
                     Picasso.with(getContext())
                             .load("http://www.tytechkj.com/app/HeadPic/" + BaseViewModel.GetInstance().User.getHeadPicUrl())
                             .into(icon_image);
+                    nav_username.setText(BaseViewModel.GetInstance().User.getNickName());
                 }
             }
         };

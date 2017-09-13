@@ -85,10 +85,8 @@ public class MyFragmentNickname extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.nickname_btn_back:
-                activity.onBackPressed();
-                Intent intent = new Intent("android.intent.action.CART_BROADCAST");
-                intent.putExtra("data","refresh");
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                et_nav_nickname.setText(BaseViewModel.GetInstance().User.getNickName());
+                BackMethod();
                 break;
             case R.id.nickname_btn_save:
                 String nickname = et_nav_nickname.getText().toString();
@@ -110,16 +108,14 @@ public class MyFragmentNickname extends Fragment implements View.OnClickListener
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, UserInfo.class);
-                String s = new Gson().toJson(user.Data);
                 if (!user.IsError) {
-                    UserViewModel lll = new Gson().fromJson(s, UserViewModel.class);
-                    BaseViewModel.GetInstance().User.NickName = lll.NickName;
-
+                    BaseViewModel.GetInstance().User.NickName = nicknamestring;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             et_nav_nickname.setText(nicknamestring);
                             DialogMethod.MyProgressDialog(getContext(), "", false);
+                            BackMethod();
                         }
                     });
                 }
@@ -159,5 +155,12 @@ public class MyFragmentNickname extends Fragment implements View.OnClickListener
     @Override
     public void afterTextChanged(Editable editable) {
 
+    }
+
+    private void BackMethod() {
+        activity.onBackPressed();
+        Intent intent = new Intent("android.intent.action.CART_BROADCAST");
+        intent.putExtra("data","refresh");
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
     }
 }

@@ -46,7 +46,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
     private Button btReg;
     private CountDownTime mTime;
 
-    private  MobileModel mobile;
+    private MobileModel mobile;
     private UserInfo user;
     private SharedPreferences prefs;
 
@@ -120,13 +120,6 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
         } else if (account.length() != 11) {
             DialogMethod.MyDialog(RegActivity.this, "手机号格式错误");
         }
-
-//        Pattern p = Pattern.compile("^(13[0-9]|14[57]|15[0-35-9]|17[6-8]|18[0-9])[0-9]{8}$");
-//        Matcher m = p.matcher(account);
-//        if (m.matches()){
-//            mTime.start(); //开始计时
-//        }
-
     }
 
     private Boolean isReg() {

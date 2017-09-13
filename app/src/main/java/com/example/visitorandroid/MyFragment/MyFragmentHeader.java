@@ -23,13 +23,29 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.visitorandroid.MainActivity;
 import com.example.visitorandroid.Model.BaseViewModel;
+import com.example.visitorandroid.Model.DialogMethod;
+import com.example.visitorandroid.Model.UserInfo;
 import com.example.visitorandroid.Model.UserViewModel;
 import com.example.visitorandroid.R;
+import com.example.visitorandroid.util.HttpUtil;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static android.content.ContentValues.TAG;
+import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
+import static com.example.visitorandroid.R.id.et_nav_nickname;
 import static com.example.visitorandroid.R.id.icon_image;
 import static org.litepal.LitePalApplication.getContext;
 
@@ -60,7 +76,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
     private Button user_btnback;
 
-    public static final String TAG = "RightFragment";
+    private UserInfo user;
 
 
     @Override
@@ -108,15 +124,15 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         nav_sub_tel = (TextView) view.findViewById(R.id.nav_sub_tel);
         nav_sub_sex = (TextView) view.findViewById(R.id.nav_sub_sex);
 
-        String picstring = BaseViewModel.GetInstance().User.getHeadPicUrl();
+        String picstring = GetInstance().User.getHeadPicUrl();
         Picasso.with(getContext())
                 .load("http://www.tytechkj.com/app/HeadPic/" + picstring)
                 .into(nav_sub_headericon);
 
-        nav_sub_nickname.setText(BaseViewModel.GetInstance().User.getNickName());
-        nav_sub_account.setText(BaseViewModel.GetInstance().User.getUserName());
-        nav_sub_tel.setText(BaseViewModel.GetInstance().User.getMobile());
-        nav_sub_sex.setText(BaseViewModel.GetInstance().User.getSex());
+        nav_sub_nickname.setText(GetInstance().User.getNickName());
+        nav_sub_account.setText(GetInstance().User.getUserName());
+        nav_sub_tel.setText(GetInstance().User.getMobile());
+        nav_sub_sex.setText(GetInstance().User.getSex());
 
         user_btnback = (Button) view.findViewById(R.id.user_btn_back);
 
@@ -194,10 +210,52 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
                 } else if (choose[which].equals("女")) {
                     nav_sub_sex.setText("女");
                 }
+                String sex = nav_sub_sex.getText().toString();
+                String address_sex="http://www.tytechkj.com/App/Permission/ChangeSex";
+                querySex(address_sex,sex);
             }
         }).create();
 
         builder.show();
+    }
+
+    private void querySex(String address, final String sexstring) {
+        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("ID", GetInstance().User.getGUID())
+                .add("Sex",sexstring)
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                user = gson.fromJson(responseText, UserInfo.class);
+                if (!user.IsError) {
+                    GetInstance().User.Sex = sexstring;
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            nav_sub_sex.setText(sexstring);
+                            DialogMethod.MyProgressDialog(getContext(), "", false);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        Toast.makeText(getContext(),"上传性别失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     //隐藏所有Fragment
@@ -219,8 +277,10 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
                 String msg = intent.getStringExtra("data");
                 if("refresh".equals(msg)){
                     Picasso.with(getContext())
-                            .load("http://www.tytechkj.com/app/HeadPic/" + BaseViewModel.GetInstance().User.getHeadPicUrl())
+                            .load("http://www.tytechkj.com/app/HeadPic/" + GetInstance().User.getHeadPicUrl())
                             .into(nav_sub_headericon);
+                    nav_sub_nickname.setText(GetInstance().User.getNickName());
+                    nav_sub_tel.setText(GetInstance().User.getMobile());
                 }
             }
         };

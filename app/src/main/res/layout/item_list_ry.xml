@@ -18,7 +18,7 @@
             android:drawableRight="@drawable/ic_navend"
             android:text="testhy"
             android:textColor="#000"
-            android:textSize="18sp"/>
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/ry_sub_nickname"
@@ -29,7 +29,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="董事会"
-            android:textSize="18sp"/>
+            android:textSize="14sp"/>
     </RelativeLayout>
 
 </LinearLayout>

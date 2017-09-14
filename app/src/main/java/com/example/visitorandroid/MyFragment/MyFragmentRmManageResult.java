@@ -3,6 +3,7 @@ package com.example.visitorandroid.MyFragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ public class MyFragmentRmManageResult extends Fragment implements View.OnClickLi
     private Button ryresult_btnback;
     private TextView ryresult_username;
     private TextView ryresult_bm;
+
+    private MyFragmentSelectBm fgSelectBm;
 
     @Override
     public void onAttach(Activity activity) {
@@ -47,11 +50,13 @@ public class MyFragmentRmManageResult extends Fragment implements View.OnClickLi
         ryresult_btnback = (Button) view.findViewById(R.id.ry_result_btn_back);
         ryresult_username = (TextView) view.findViewById(R.id.ry_result_username);
         ryresult_bm = (TextView) view.findViewById(R.id.ry_result_bm);
-
-        ryresult_username.setText(content.substring(0,5));
-        ryresult_bm.setText(content.substring(6));
+        String account = ryresult_username.getText().toString() + content.substring(0,5);
+        String bm = ryresult_bm.getText().toString() + content.substring(6);
+        ryresult_username.setText(account);
+        ryresult_bm.setText(bm);
 
         ryresult_btnback.setOnClickListener(this);
+        ryresult_bm.setOnClickListener(this);
     }
 
     @Override
@@ -60,6 +65,25 @@ public class MyFragmentRmManageResult extends Fragment implements View.OnClickLi
             case R.id.ry_result_btn_back:
                 activity.onBackPressed();
                 break;
+            case R.id.ry_result_bm:
+                FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
+                hideAllFragment(fTransaction);
+                if (fgSelectBm == null) {
+                    fgSelectBm = new MyFragmentSelectBm("选择部门");
+                    fTransaction.add(R.id.fb_ry_result, fgSelectBm);
+                    fTransaction.addToBackStack(null);
+                } else {
+                    fTransaction.add(R.id.fb_ry_result, fgSelectBm);
+                    fTransaction.addToBackStack(null);
+                    fTransaction.show(fgSelectBm);
+                }
+                fTransaction.commit();
+                break;
         }
+    }
+
+    //隐藏所有Fragment
+    private void hideAllFragment(FragmentTransaction fragmentTransaction){
+        if(fgSelectBm != null)fragmentTransaction.hide(fgSelectBm);
     }
 }

@@ -92,8 +92,6 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Log.d(TAG, "onCreateView");
-
         View view = inflater.inflate(R.layout.fg_header, container, false);
 
         txtTopbar = activity.findViewById(R.id.txt_topbar);
@@ -112,6 +110,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
     private void bindViews(View view) {
 
+        user_btnback = (Button) view.findViewById(R.id.user_btn_back);
         nav_headericon = (TextView) view.findViewById(R.id.nav_headericon);
         nav_nickname = (TextView) view.findViewById(R.id.nav_nickname);
         nav_tel = (TextView) view.findViewById(R.id.nav_tel);
@@ -133,8 +132,6 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         nav_sub_account.setText(GetInstance().User.getUserName());
         nav_sub_tel.setText(GetInstance().User.getMobile());
         nav_sub_sex.setText(GetInstance().User.getSex());
-
-        user_btnback = (Button) view.findViewById(R.id.user_btn_back);
 
         user_btnback.setOnClickListener(this);
         nav_headericon.setOnClickListener(this);

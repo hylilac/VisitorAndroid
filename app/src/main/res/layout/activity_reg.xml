@@ -51,6 +51,7 @@
             android:layout_margin="15dp"
             android:hint="手机号"
             android:textColorHint="#c4c4c6"
+            android:inputType="phone"
             android:textColor="#000000"
             android:textSize="18sp"/>
 

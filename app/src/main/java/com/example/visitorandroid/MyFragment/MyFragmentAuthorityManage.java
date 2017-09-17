@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.visitorandroid.Adapter.MyRyAdapter;
+import com.example.visitorandroid.Model.Data;
+import com.example.visitorandroid.Model.RyData;
 import com.example.visitorandroid.Model.RyViewModel;
 import com.example.visitorandroid.R;
 
@@ -31,7 +33,7 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
     private Button authoritymanage_btnback;
     private ListView authoritymanage_list;
 
-    private List<RyViewModel> mData = null;
+    private List<Data> mData = null;
     private Context mContext;
     private MyRyAdapter mAdapter = null;
 
@@ -62,11 +64,11 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
         authoritymanage_list = (ListView) view.findViewById(R.id.authority_manage_list);
 
         mContext = getActivity();
-        mData = new LinkedList<RyViewModel>();
-        mData.add(new RyViewModel("testhy","普通员工"));
-        mData.add(new RyViewModel("","子管理员"));
-        mData.add(new RyViewModel("milou","管理员"));
-        mAdapter = new MyRyAdapter((LinkedList<RyViewModel>) mData, mContext);
+        mData = new LinkedList<Data>();
+//        mData.add(new RyViewModel("testhy","普通员工"));
+//        mData.add(new RyViewModel("","子管理员"));
+//        mData.add(new RyViewModel("milou","管理员"));
+        mAdapter = new MyRyAdapter((LinkedList<Data>) mData, mContext);
         authoritymanage_list.setAdapter(mAdapter);
 
         authoritymanage_btnback.setOnClickListener(this);

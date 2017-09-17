@@ -11,11 +11,30 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.visitorandroid.Model.BaseViewModel;
+import com.example.visitorandroid.Model.Data;
+import com.example.visitorandroid.Model.DialogMethod;
 import com.example.visitorandroid.Model.ResultViewModel;
+import com.example.visitorandroid.Model.UserInfo;
+import com.example.visitorandroid.Model.UserViewModel;
+import com.example.visitorandroid.Model.objData;
 import com.example.visitorandroid.R;
+import com.example.visitorandroid.util.HttpUtil;
+import com.google.gson.Gson;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 import static com.example.visitorandroid.R.id.backup;
+import static com.example.visitorandroid.R.id.nav_sub_sex;
 import static com.example.visitorandroid.R.id.txt_topbar;
 
 public class MyFragmentManage extends Fragment implements View.OnClickListener {
@@ -48,7 +67,7 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
     private MyFragmentCheckManage fgcheckmanage;
     private MyFragmentAuthorityManage fgauthoritymanage;
     private MyFragmentOrderManage fgordermanage;
-
+    private UserInfo user;
 
     @Override
     public void onAttach(Activity activity) {
@@ -92,6 +111,8 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
         authority_manage = (TextView) view.findViewById(R.id.authority_manage);
         order_manage = (TextView) view.findViewById(R.id.order_manage);
 
+        String address_company="http://www.tytechkj.com/App/Permission/GetCompanyInfo";
+        queryCompany(address_company);
 
         managekey_btnback.setOnClickListener(this);
         bm_manage.setOnClickListener(this);
@@ -192,6 +213,46 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
         if(fgauthoritymanage != null)fragmentTransaction.hide(fgauthoritymanage);
         if(fgordermanage != null)fragmentTransaction.hide(fgordermanage);
     }
+
+    private void queryCompany(String address) {
+        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("ID", GetInstance().User.getGUID())
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                user = gson.fromJson(responseText,UserInfo.class);
+                String s= new Gson().toJson(user.Data);
+                Data lll= new Gson().fromJson( s,Data.class);
+                objData.GetInstance2().setData(lll);
+                if (!user.IsError) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogMethod.MyProgressDialog(getContext(), "", false);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        Toast.makeText(getContext(),"上传性别失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
 
 //    private void bindViews(View view) {
 //

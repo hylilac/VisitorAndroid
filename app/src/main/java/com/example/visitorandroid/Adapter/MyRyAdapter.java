@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.visitorandroid.Model.BmViewModel;
+import com.example.visitorandroid.Model.Data;
+import com.example.visitorandroid.Model.RyData;
 import com.example.visitorandroid.Model.RyViewModel;
 import com.example.visitorandroid.R;
 
@@ -15,10 +17,10 @@ import java.util.LinkedList;
 
 public class MyRyAdapter extends BaseAdapter {
 
-    private LinkedList<RyViewModel> mData;
+    private LinkedList<Data> mData;
     private Context mContext;
 
-    public MyRyAdapter(LinkedList<RyViewModel> mData, Context mContext) {
+    public MyRyAdapter(LinkedList<Data> mData, Context mContext) {
         this.mData = mData;
         this.mContext = mContext;
     }
@@ -43,8 +45,8 @@ public class MyRyAdapter extends BaseAdapter {
         convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_ry,parent,false);
         TextView rynickname = (TextView) convertView.findViewById(R.id.ry_nickname);
         TextView rybm = (TextView) convertView.findViewById(R.id.ry_sub_nickname);
-        rynickname.setText(mData.get(position).getRynickname());
-        rybm.setText(mData.get(position).getRybm());
+        rynickname.setText(mData.get(position).getNickName());
+        rybm.setText(mData.get(position).getDepartmentName());
         return convertView;
     }
 }

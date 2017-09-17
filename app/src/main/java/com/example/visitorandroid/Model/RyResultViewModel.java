@@ -1,20 +1,18 @@
 package com.example.visitorandroid.Model;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 /**
  * Created by hy on 2017/9/11.
  */
 
-public class ResultViewModel {
+public class RyResultViewModel {
 
     public Boolean IsError;
 
     public String Message;
 
-    public List<Data> Data;
+    public List<RyData> RyData;
 
     public Boolean getIsError(){
         return IsError;
@@ -32,11 +30,11 @@ public class ResultViewModel {
         this.Message = Message;
     }
 
-    public List getData(){
-        return Data;
+    public List getRyData() {
+        return RyData;
     }
 
-    public void setData(List Data){
-        this.Data = Data;
+    public void setRyData(List RyData) {
+        RyData = RyData;
     }
 }

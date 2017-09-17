@@ -1,17 +1,27 @@
 package com.example.visitorandroid.Model;
 
-/**
- * Created by hy on 2017/9/11.
- */
-
 public class objData {
-    private UserViewModel UserModel;
 
-    public void setUserModel(UserViewModel userModel) {
-        UserModel = userModel;
+    public objData(){}
+
+    public static objData uniqueStance;
+
+
+    public static objData GetInstance2()
+    {
+        if(uniqueStance ==null)
+            uniqueStance=new objData();
+        return uniqueStance;
     }
 
-    public UserViewModel getUserModel() {
-        return UserModel;
+    public  Data data;
+
+    public void setData(Data data) {
+        this.data = data;
     }
+
+    public Data getData() {
+        return data;
+    }
+
 }

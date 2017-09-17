@@ -17,10 +17,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.visitorandroid.Model.BaseViewModel;
-import com.example.visitorandroid.Model.BmViewModel;
 import com.example.visitorandroid.Adapter.MyBmAdapter;
+import com.example.visitorandroid.Model.Data;
 import com.example.visitorandroid.Model.DialogMethod;
+import com.example.visitorandroid.Model.ResultViewModel;
 import com.example.visitorandroid.Model.UserInfo;
 import com.example.visitorandroid.R;
 import com.example.visitorandroid.util.HttpUtil;
@@ -37,7 +37,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
-import static com.example.visitorandroid.R.id.et_nav_nickname;
+import static com.example.visitorandroid.Model.objData.GetInstance2;
 
 public class MyFragmentBmManage extends Fragment implements View.OnClickListener, AdapterView
         .OnItemClickListener, TextWatcher {
@@ -49,19 +49,19 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
     private Button bmmanage_btnadd;
     private ListView bmmanage_list;
 
-    private List<BmViewModel> mData = null;
+    private List<Data> mData = null;
     private Context mContext;
     private MyBmAdapter mAdapter = null;
 
     private EditText bmname;
+    private ResultViewModel user;
+    private UserInfo users;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
     }
-
-
 
     public MyFragmentBmManage(String content) {
         this.content = content;
@@ -83,19 +83,14 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
 
         mContext = getActivity();
 
-        mData = new LinkedList<BmViewModel>();
-        mData.add(new BmViewModel("董事会"));
-        mData.add(new BmViewModel("技术部"));
-        mData.add(new BmViewModel("后勤"));
-        mAdapter = new MyBmAdapter((LinkedList<BmViewModel>) mData, mContext);
-        bmmanage_list.setAdapter(mAdapter);
+        mData = new LinkedList<Data>();
 
         bmmanage_btnback.setOnClickListener(this);
         bmmanage_btnadd.setOnClickListener(this);
         bmmanage_list.setOnItemClickListener(this);
 
-//        String address_bm="http://www.tytechkj.com/App/Permission/ChangeNickName";
-//        queryBm(address_bm,nickname);
+        String address_bm="http://www.tytechkj.com/App/Permission/GetCurrentDepartment";
+        queryBm(address_bm);
     }
 
     @Override
@@ -113,12 +108,12 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-        BmViewModel bm = mData.get(position);
-        String bmstring = bm.getaName();
+        Data bm = mData.get(position);
+        String bmstring = bm.getC_Name();
         MyDialog(bmstring,"取消","修改");
     }
 
-    private void MyDialog(String bmstring,String cancel,String save) {
+    private void MyDialog(final String bmstring, String cancel, String save) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("部门名称");
         View vv = LayoutInflater.from(getActivity()).inflate(R.layout.etdialog, null);
@@ -131,7 +126,13 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-
+                if (bmstring.equals("")){
+                    String address_addbm="http://www.tytechkj.com/App/Permission/AddCurrentDepartment";
+                    queryAddBm(address_addbm,bmname.getText().toString());
+                }else {
+                    String address_revisebm="http://www.tytechkj.com/App/Permission/UpdateCurrentDepartment";
+                    queryReviseBm(address_revisebm,bmstring,bmname.getText().toString());
+                }
             }
         });
         builder.setNegativeButton(cancel, new DialogInterface.OnClickListener()
@@ -145,46 +146,126 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
         builder.show();
     }
 
-//    private void queryBm(String address, final String nicknamestring) {
-//        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
-//        RequestBody requestBody = new FormBody.Builder()
-//                .add("ID", GetInstance().User.getGUID())
-//                .add("nickname",nicknamestring)
-//                .build();
-//        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                String responseText = response.body().string();
-//                Gson gson = new Gson();
-//                user = gson.fromJson(responseText, UserInfo.class);
-//                if (!user.IsError) {
-//                    GetInstance().User.NickName = nicknamestring;
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            et_nav_nickname.setText(nicknamestring);
-//                            DialogMethod.MyProgressDialog(getContext(), "", false);
-//                            BackMethod();
-//                        }
-//                    });
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        DialogMethod.MyProgressDialog(getContext(),"",false);
-//                        Toast.makeText(getContext(),"获取部门失败",
-//                                Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
-//        });
-//    }
+    private void queryBm(String address) {
+        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("ID", String.valueOf(GetInstance2().data.getID()))
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                user = gson.fromJson(responseText, ResultViewModel.class);
+                if (!user.IsError) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogMethod.MyProgressDialog(getContext(),"",false);
+                            mData.clear();
+                            for(Data data : user.Data){
+                                mData.add(new Data(data.getC_Name(),data.getEmployeeCount(),data.getNickName(),data.getDepartmentName()));
+                            }
+                            mAdapter = new MyBmAdapter((LinkedList<Data>) mData, mContext);
+                            bmmanage_list.setAdapter(mAdapter);
+                        }
+                    });
+                }
+            }
 
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        Toast.makeText(getContext(),"获取部门失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void queryAddBm(String address,String bmname) {
+        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("name",bmname)
+                .add("ID", String.valueOf(GetInstance2().data.getID()))
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                users = gson.fromJson(responseText, UserInfo.class);
+                if (!users.IsError) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogMethod.MyProgressDialog(getContext(),"",false);
+                            String address_bm="http://www.tytechkj.com/App/Permission/GetCurrentDepartment";
+                            queryBm(address_bm);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        Toast.makeText(getContext(),"获取部门失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void queryReviseBm(String address,String unchangename,String changename) {
+        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("UnChangeName",unchangename)
+                .add("ID", String.valueOf(GetInstance2().data.getID()))
+                .add("Changename",changename)
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                users = gson.fromJson(responseText, UserInfo.class);
+                if (!users.IsError) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogMethod.MyProgressDialog(getContext(),"",false);
+                            String address_bm="http://www.tytechkj.com/App/Permission/GetCurrentDepartment";
+                            queryBm(address_bm);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        Toast.makeText(getContext(),"获取部门失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

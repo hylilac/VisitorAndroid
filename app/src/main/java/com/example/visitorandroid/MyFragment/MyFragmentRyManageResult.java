@@ -14,7 +14,7 @@ import com.example.visitorandroid.R;
 
 import static com.example.visitorandroid.R.id.order_result_btn_back;
 
-public class MyFragmentRmManageResult extends Fragment implements View.OnClickListener {
+public class MyFragmentRyManageResult extends Fragment implements View.OnClickListener {
 
     private String content;
     private Activity activity;
@@ -31,7 +31,7 @@ public class MyFragmentRmManageResult extends Fragment implements View.OnClickLi
         this.activity = activity;
     }
 
-    public MyFragmentRmManageResult(String content) {
+    public MyFragmentRyManageResult(String content) {
         this.content = content;
     }
 

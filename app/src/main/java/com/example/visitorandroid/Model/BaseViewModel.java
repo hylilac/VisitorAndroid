@@ -17,8 +17,6 @@ public class BaseViewModel {
         return uniqueStance;
     }
 
-
-
     public  UserViewModel User;
 
     public void setUser(UserViewModel USER) {

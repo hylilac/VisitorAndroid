@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import com.example.visitorandroid.Adapter.MyBmAdapter;
 import com.example.visitorandroid.Model.BmViewModel;
+import com.example.visitorandroid.Model.Data;
 import com.example.visitorandroid.R;
 
 import java.util.LinkedList;
@@ -32,7 +33,7 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
     private Button selectbm_btnback;
     private ListView selectbm_list;
 
-    private List<BmViewModel> mData = null;
+    private List<Data> mData = null;
     private Context mContext;
     private MyBmAdapter mAdapter = null;
 
@@ -65,11 +66,11 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
 
         mContext = getActivity();
 
-        mData = new LinkedList<BmViewModel>();
-        mData.add(new BmViewModel("董事会"));
-        mData.add(new BmViewModel("技术部"));
-        mData.add(new BmViewModel("后勤"));
-        mAdapter = new MyBmAdapter((LinkedList<BmViewModel>) mData, mContext);
+        mData = new LinkedList<Data>();
+//        mData.add(new BmViewModel("董事会"));
+//        mData.add(new BmViewModel("技术部"));
+//        mData.add(new BmViewModel("后勤"));
+        mAdapter = new MyBmAdapter((LinkedList<Data>) mData, mContext);
         selectbm_list.setAdapter(mAdapter);
 
         selectbm_btnback.setOnClickListener(this);
@@ -91,8 +92,8 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-        BmViewModel bm = mData.get(position);
-        String bmstring = bm.getaName();
+        Data bm = mData.get(position);
+        String bmstring = bm.getC_Name();
         activity.onBackPressed();
     }
 

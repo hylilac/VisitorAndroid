@@ -156,30 +156,6 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             }
         } else {
             getSupportFragmentManager().popBackStack();
-            String address_back="http://www.tytechkj.com/App/Permission/getcurrentloginuser";
-            queryBack(address_back);
         }
     }
-
-    private void queryBack(String address) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String account = prefs.getString("username",null);
-        RequestBody requestBody = new FormBody.Builder()
-                .add("username",account)
-                .build();
-        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseText = response.body().string();
-                Gson gson = new Gson();
-                BaseViewModel.GetInstance().setUser( gson.fromJson(responseText,UserViewModel.class));
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
 }

@@ -98,7 +98,7 @@ public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListen
 
         String picstring = GetInstance().User.getHeadPicUrl();
         Picasso.with(getContext())
-                .load("http://www.tytechkj.com/app/HeadPic/"+ picstring)
+                .load(picstring)
                 .into(navHeaderPhoto);
 
         usericon_btback.setOnClickListener(this);
@@ -150,7 +150,6 @@ public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListen
                     try {
                         Bundle bundle = data.getExtras();
                         bitmap = (Bitmap) bundle.get("data");
-                     //   navHeaderPhoto.setImageBitmap(bitmap);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -168,7 +167,6 @@ public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListen
                         String picturePath = cursor.getString(columnIndex);  //获取照片路径
                         cursor.close();
                         bitmap= BitmapFactory.decodeFile(picturePath);
-                      //  navHeaderPhoto.setImageBitmap(bitmap);
                     }catch (Exception e){
                         e.printStackTrace();
                     }

@@ -1,10 +1,14 @@
 package com.example.visitorandroid.MyFragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,9 +84,6 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
 
         mContext = getActivity();
         mData = new LinkedList<Data>();
-//        mData.add(new RyViewModel("testhy","董事会"));
-//        mData.add(new RyViewModel("","董事会"));
-//        mData.add(new RyViewModel("milou","董事会"));
         mAdapter = new MyRyAdapter((LinkedList<Data>) mData, mContext);
         ry_manage_list.setAdapter(mAdapter);
 
@@ -108,16 +109,11 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
 
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         hideAllFragment(fTransaction);
-        if (fgRmManageResult == null) {
-            fgRmManageResult = new MyFragmentRyManageResult(ry.getNickName() +
-                    ry.getDepartmentName());
-            fTransaction.add(R.id.fb_ry_manage, fgRmManageResult);
-            fTransaction.addToBackStack(null);
-        } else {
-            fTransaction.add(R.id.fb_ry_manage, fgRmManageResult);
-            fTransaction.addToBackStack(null);
-            fTransaction.show(fgRmManageResult);
-        }
+
+        fgRmManageResult = new MyFragmentRyManageResult(ry.getNickName(),ry.getDepartmentName());
+        fTransaction.add(R.id.fb_ry_manage, fgRmManageResult);
+        fTransaction.addToBackStack(null);
+
         fTransaction.commit();
     }
 
@@ -167,5 +163,24 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
                 });
             }
         });
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.CART_BROADCAST");
+        BroadcastReceiver mItemViewListClickReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent){
+                String msg = intent.getStringExtra("data");
+                if("refresh".equals(msg)){
+                    String address_ry="http://www.tytechkj.com/App/Permission/GetDepartmentEmployee";
+                    queryRy(address_ry);
+                }
+            }
+        };
+        broadcastManager.registerReceiver(mItemViewListClickReceiver, intentFilter);
     }
 }

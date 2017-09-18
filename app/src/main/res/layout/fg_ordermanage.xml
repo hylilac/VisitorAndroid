@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/fb_order_manage"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="#f0eff5">
+    android:id="@+id/fb_order_manage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0eff5"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:orientation="vertical"
@@ -56,6 +57,18 @@
                 android:textColor="#000000"
                 android:textSize="18sp"/>
 
+            <EditText
+                android:id="@+id/order_manage_car"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/shapedrawable"
+                android:gravity="center_vertical"
+                android:hint="车牌号码"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:textColorHint="#c4c4c6"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
 
             <EditText
                 android:id="@+id/order_manage_interviewee"
@@ -63,8 +76,7 @@
                 android:layout_height="40dp"
                 android:background="@drawable/shapedrawable"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_margin="15dp"
                 android:hint="拜访对象"
                 android:textColorHint="#c4c4c6"
                 android:textColor="#000000"
@@ -76,8 +88,10 @@
                 android:layout_height="40dp"
                 android:background="@drawable/shapedrawable"
                 android:gravity="center_vertical"
-                android:layout_margin="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:hint="拜访公司"
+                android:focusable="false"
                 android:textColorHint="#c4c4c6"
                 android:textColor="#000000"
                 android:textSize="18sp"/>
@@ -88,11 +102,10 @@
                 android:layout_height="40dp"
                 android:background="@drawable/shapedrawable"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_margin="15dp"
                 android:hint="拜访时间"
+                android:focusableInTouchMode="false"
                 android:textColorHint="#c4c4c6"
-                android:inputType="datetime"
                 android:textColor="#000000"
                 android:textSize="18sp"/>
 
@@ -102,10 +115,23 @@
                 android:layout_height="40dp"
                 android:background="@drawable/shapedrawable"
                 android:gravity="center_vertical"
-                android:layout_margin="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:hint="手机号码"
                 android:textColorHint="#c4c4c6"
                 android:inputType="phone"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/order_manage_reason"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/shapedrawable"
+                android:gravity="center_vertical"
+                android:layout_margin="15dp"
+                android:hint="拜访事由"
+                android:textColorHint="#c4c4c6"
                 android:textColor="#000000"
                 android:textSize="18sp"/>
 

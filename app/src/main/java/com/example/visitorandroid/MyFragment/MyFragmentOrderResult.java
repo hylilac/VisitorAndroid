@@ -1,8 +1,10 @@
 package com.example.visitorandroid.MyFragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +13,24 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.visitorandroid.Model.DialogMethod;
+import com.example.visitorandroid.Model.UserInfo;
 import com.example.visitorandroid.R;
+import com.example.visitorandroid.util.HttpUtil;
+import com.google.gson.Gson;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
+import static com.example.visitorandroid.Model.objData.GetInstance2;
 import static com.example.visitorandroid.R.id.order_result_btn_accept;
 import static com.example.visitorandroid.R.id.order_result_btn_back;
 import static com.example.visitorandroid.R.id.order_result_btn_refuse;
@@ -80,11 +97,98 @@ public class MyFragmentOrderResult extends Fragment implements View.OnClickListe
                 activity.onBackPressed();
                 break;
             case R.id.order_result_btn_accept:
-
+                String address_acceptorder="http://www.tytechkj.com/App/Permission/";
+//                queryAcceptOrder(address_acceptorder);
                 break;
             case R.id.order_result_btn_refuse:
-
+                String address_refuseorder="http://www.tytechkj.com/App/Permission/";
+//                queryRefuseOrder(address_refuseorder);
                 break;
         }
+    }
+
+//    private void queryAcceptOrder(String address) {
+//        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+//        RequestBody requestBody = new FormBody.Builder()
+//                .add("CID",GetInstance().User.getGUID())
+//                .add("UID", String.valueOf(GetInstance2().data.getID()))
+//                .add("DID",String.valueOf(GetInstance2().data.getPID()))
+//                .build();
+//        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                String responseText = response.body().string();
+//                Gson gson = new Gson();
+//                users = gson.fromJson(responseText, UserInfo.class);
+//                if (!users.IsError) {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            DialogMethod.MyProgressDialog(getContext(),"",false);
+//                            BackMethod();
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        DialogMethod.MyProgressDialog(getContext(),"",false);
+//                        Toast.makeText(getContext(),"获取部门失败",
+//                                Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//        });
+//    }
+
+//    private void queryRefuseOrder(String address) {
+//        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+//        RequestBody requestBody = new FormBody.Builder()
+//                .add("CID",GetInstance().User.getGUID())
+//                .add("UID", String.valueOf(GetInstance2().data.getID()))
+//                .add("DID",String.valueOf(GetInstance2().data.getPID()))
+//                .build();
+//        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                String responseText = response.body().string();
+//                Gson gson = new Gson();
+//                users = gson.fromJson(responseText, UserInfo.class);
+//                if (!users.IsError) {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            DialogMethod.MyProgressDialog(getContext(),"",false);
+//                            BackMethod();
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        DialogMethod.MyProgressDialog(getContext(),"",false);
+//                        Toast.makeText(getContext(),"获取部门失败",
+//                                Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//        });
+//    }
+
+    private void BackMethod() {
+        activity.onBackPressed();
+        Intent intent = new Intent("android.intent.action.CART_BROADCAST");
+        intent.putExtra("data","refresh");
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
     }
 }

@@ -125,7 +125,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
         String picstring = GetInstance().User.getHeadPicUrl();
         Picasso.with(getContext())
-                .load("http://www.tytechkj.com/app/HeadPic/" + picstring)
+                .load(picstring)
                 .into(nav_sub_headericon);
 
         nav_sub_nickname.setText(GetInstance().User.getNickName());
@@ -274,7 +274,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
                 String msg = intent.getStringExtra("data");
                 if("refresh".equals(msg)){
                     Picasso.with(getContext())
-                            .load("http://www.tytechkj.com/app/HeadPic/" + GetInstance().User.getHeadPicUrl())
+                            .load(GetInstance().User.getHeadPicUrl())
                             .into(nav_sub_headericon);
                     nav_sub_nickname.setText(GetInstance().User.getNickName());
                     nav_sub_tel.setText(GetInstance().User.getMobile());

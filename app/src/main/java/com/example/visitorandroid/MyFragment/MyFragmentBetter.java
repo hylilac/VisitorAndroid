@@ -76,7 +76,7 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
 
         String picstring = BaseViewModel.GetInstance().User.getHeadPicUrl();
         Picasso.with(getContext())
-                .load("http://www.tytechkj.com/app/HeadPic/"+ picstring)
+                .load(picstring)
                 .into(icon_image);
 
         nav_username.setText(BaseViewModel.GetInstance().User.getNickName());
@@ -163,7 +163,7 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
                 String msg = intent.getStringExtra("data");
                 if("refresh".equals(msg)){
                     Picasso.with(getContext())
-                            .load("http://www.tytechkj.com/app/HeadPic/" + BaseViewModel.GetInstance().User.getHeadPicUrl())
+                            .load(BaseViewModel.GetInstance().User.getHeadPicUrl())
                             .into(icon_image);
                     nav_username.setText(BaseViewModel.GetInstance().User.getNickName());
                 }

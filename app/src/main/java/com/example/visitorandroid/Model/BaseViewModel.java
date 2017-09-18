@@ -26,4 +26,7 @@ public class BaseViewModel {
     public UserViewModel getUser() {
         return User;
     }
+
+
+
 }

@@ -157,6 +157,7 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, ResultViewModel.class);
+
                 if (!user.IsError) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override

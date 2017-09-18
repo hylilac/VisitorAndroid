@@ -2,7 +2,6 @@ package com.example.visitorandroid.MyFragment;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,12 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visitorandroid.Model.BaseViewModel;
-import com.example.visitorandroid.Model.Data;
+import com.example.visitorandroid.Model.CompanyViewModel;
 import com.example.visitorandroid.Model.DialogMethod;
-import com.example.visitorandroid.Model.ResultViewModel;
 import com.example.visitorandroid.Model.UserInfo;
-import com.example.visitorandroid.Model.UserViewModel;
-import com.example.visitorandroid.Model.objData;
 import com.example.visitorandroid.R;
 import com.example.visitorandroid.util.HttpUtil;
 import com.google.gson.Gson;
@@ -33,9 +29,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
-import static com.example.visitorandroid.R.id.backup;
-import static com.example.visitorandroid.R.id.nav_sub_sex;
-import static com.example.visitorandroid.R.id.txt_topbar;
 
 public class MyFragmentManage extends Fragment implements View.OnClickListener {
 
@@ -226,8 +219,8 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText,UserInfo.class);
                 String s= new Gson().toJson(user.Data);
-                Data lll= new Gson().fromJson( s,Data.class);
-                objData.GetInstance2().setData(lll);
+                CompanyViewModel lll= new Gson().fromJson( s,CompanyViewModel.class);
+                BaseViewModel.GetInstance().setCompanyView(lll);
                 if (!user.IsError) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override

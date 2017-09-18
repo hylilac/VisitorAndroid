@@ -17,14 +17,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.visitorandroid.Adapter.MyBmAdapter;
-import com.example.visitorandroid.Adapter.MyRyAdapter;
-import com.example.visitorandroid.Model.Data;
+import com.example.visitorandroid.Adapter.MyEmployeeAdapter;
 import com.example.visitorandroid.Model.DialogMethod;
-import com.example.visitorandroid.Model.ResultViewModel;
-import com.example.visitorandroid.Model.RyData;
-import com.example.visitorandroid.Model.RyResultViewModel;
-import com.example.visitorandroid.Model.RyViewModel;
+import com.example.visitorandroid.Model.DepartmentInfo;
+import com.example.visitorandroid.Model.EmployeeInfo;
+import com.example.visitorandroid.Model.EmployeeViewModel;
 import com.example.visitorandroid.R;
 import com.example.visitorandroid.util.HttpUtil;
 import com.google.gson.Gson;
@@ -39,9 +36,7 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.R.attr.data;
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
-import static com.example.visitorandroid.Model.objData.GetInstance2;
 
 public class MyFragmentRyManage extends Fragment implements View.OnClickListener, AdapterView
         .OnItemClickListener {
@@ -52,11 +47,11 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
     private Button rymanage_btnback;
     private ListView ry_manage_list;
 
-    private List<Data> mData = null;
+    private List<EmployeeViewModel> mData = null;
     private Context mContext;
-    private MyRyAdapter mAdapter = null;
+    private MyEmployeeAdapter mAdapter = null;
     private MyFragmentRyManageResult fgRmManageResult;
-    private ResultViewModel user;
+    private EmployeeInfo user;
 
     @Override
     public void onAttach(Activity activity) {
@@ -83,8 +78,8 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
         ry_manage_list = (ListView) view.findViewById(R.id.ry_manage_list);
 
         mContext = getActivity();
-        mData = new LinkedList<Data>();
-        mAdapter = new MyRyAdapter((LinkedList<Data>) mData, mContext);
+        mData = new LinkedList<EmployeeViewModel>();
+        mAdapter = new MyEmployeeAdapter((LinkedList<EmployeeViewModel>) mData, mContext);
         ry_manage_list.setAdapter(mAdapter);
 
         rymanage_btnback.setOnClickListener(this);
@@ -105,7 +100,7 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Data ry = mData.get(position);
+        EmployeeViewModel ry = mData.get(position);
 
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         hideAllFragment(fTransaction);
@@ -126,24 +121,25 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("UserID",GetInstance().User.getGUID())
-                .add("CompanyID", String.valueOf(GetInstance2().data.getID()))
+                .add("CompanyID", String.valueOf(GetInstance().CompanyView.getID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
                 Gson gson = new Gson();
-                user = gson.fromJson(responseText, ResultViewModel.class);
+                user = gson.fromJson(responseText, EmployeeInfo.class);
+
                 if (!user.IsError) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             DialogMethod.MyProgressDialog(getContext(),"",false);
                             mData.clear();
-                            for(Data data : user.Data){
-                                mData.add(new Data(data.getC_Name(),data.getEmployeeCount(),data.getNickName(),data.getDepartmentName()));
+                            for(EmployeeViewModel employee : user.Data){
+                                mData.add(new EmployeeViewModel(employee.getNickName(),employee.getDepartmentName()));
                             }
-                            mAdapter = new MyRyAdapter((LinkedList<Data>) mData, mContext);
+                            mAdapter = new MyEmployeeAdapter((LinkedList<EmployeeViewModel>) mData, mContext);
                             ry_manage_list.setAdapter(mAdapter);
                         }
                     });

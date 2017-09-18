@@ -30,13 +30,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
-import static com.example.visitorandroid.Model.objData.GetInstance2;
-import static com.example.visitorandroid.R.id.order_result_btn_accept;
-import static com.example.visitorandroid.R.id.order_result_btn_back;
-import static com.example.visitorandroid.R.id.order_result_btn_refuse;
-import static com.example.visitorandroid.R.id.order_result_interviewee;
-import static com.example.visitorandroid.R.id.order_result_time;
-import static com.example.visitorandroid.R.id.order_result_visitor;
 
 public class MyFragmentOrderResult extends Fragment implements View.OnClickListener {
 
@@ -74,7 +67,7 @@ public class MyFragmentOrderResult extends Fragment implements View.OnClickListe
 
     private void bindViews(View view) {
 
-        orderresult_btnback = (Button) view.findViewById(order_result_btn_back);
+        orderresult_btnback = (Button) view.findViewById(R.id.order_result_btn_back);
         orderresult_visitor = (TextView) view.findViewById(R.id.order_result_visitor);
         orderresult_interviewee = (TextView) view.findViewById(R.id.order_result_interviewee);
         orderresult_time = (TextView) view.findViewById(R.id.order_result_time);

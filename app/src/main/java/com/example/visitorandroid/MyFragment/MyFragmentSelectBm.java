@@ -2,32 +2,25 @@ package com.example.visitorandroid.MyFragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.visitorandroid.Adapter.MyBmAdapter;
 import com.example.visitorandroid.Adapter.MySelectBmAdapter;
-import com.example.visitorandroid.Model.BmViewModel;
-import com.example.visitorandroid.Model.Data;
+import com.example.visitorandroid.Model.BaseViewModel;
+import com.example.visitorandroid.Model.DepartmentViewModel;
 import com.example.visitorandroid.Model.DialogMethod;
-import com.example.visitorandroid.Model.ResultViewModel;
+import com.example.visitorandroid.Model.DepartmentInfo;
 import com.example.visitorandroid.Model.UserInfo;
-import com.example.visitorandroid.Model.objData;
 import com.example.visitorandroid.R;
 import com.example.visitorandroid.util.HttpUtil;
 import com.google.gson.Gson;
@@ -42,8 +35,8 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.R.attr.data;
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
-import static com.example.visitorandroid.Model.objData.GetInstance2;
 
 public class MyFragmentSelectBm extends Fragment implements View.OnClickListener, AdapterView
         .OnItemClickListener {
@@ -54,12 +47,12 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
     private Button selectbm_btnback;
     private ListView selectbm_list;
 
-    private List<Data> mData = null;
+    private List<DepartmentViewModel> mData = null;
     private Context mContext;
     private MySelectBmAdapter mAdapter = null;
 
     private EditText bmname;
-    private ResultViewModel user;
+    private DepartmentInfo user;
     private UserInfo users;
     private String revisebm;
 
@@ -92,7 +85,7 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
 
         mContext = getActivity();
 
-        mData = new LinkedList<Data>();
+        mData = new LinkedList<DepartmentViewModel>();
 
         selectbm_btnback.setOnClickListener(this);
         selectbm_list.setOnItemClickListener(this);
@@ -122,24 +115,24 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
     private void queryBm(String address) {
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
         RequestBody requestBody = new FormBody.Builder()
-                .add("ID", String.valueOf(GetInstance2().data.getID()))
+                .add("ID", String.valueOf(GetInstance().Department.getID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
                 Gson gson = new Gson();
-                user = gson.fromJson(responseText, ResultViewModel.class);
+                user = gson.fromJson(responseText, DepartmentInfo.class);
                 if (!user.IsError) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             DialogMethod.MyProgressDialog(getContext(),"",false);
                             mData.clear();
-                            for(Data data : user.Data){
-                                mData.add(new Data(data.getC_Name(),data.getEmployeeCount(),data.getNickName(),data.getDepartmentName()));
+                            for(DepartmentViewModel department : user.Data){
+                                mData.add(new DepartmentViewModel(department.getC_Name(),department.getEmployeeCount()));
                             }
-                            mAdapter = new MySelectBmAdapter((LinkedList<Data>) mData, mContext);
+                            mAdapter = new MySelectBmAdapter((LinkedList<DepartmentViewModel>) mData, mContext);
                             selectbm_list.setAdapter(mAdapter);
                         }
                     });
@@ -165,8 +158,8 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("CID",GetInstance().User.getGUID())
-                .add("UID", String.valueOf(GetInstance2().data.getID()))
-                .add("DID",String.valueOf(GetInstance2().data.getPID()))
+                .add("UID", String.valueOf(GetInstance().CompanyView.getID()))
+                .add("DID",String.valueOf(GetInstance().Department.getID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -175,7 +168,7 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
                 Gson gson = new Gson();
                 users = gson.fromJson(responseText, UserInfo.class);
                 if (!users.IsError) {
-                    //objData.GetInstance2().data.DepartmentName = bmstring;
+//                    BaseViewModel.GetInstance().Department.C_Name = bmstring;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

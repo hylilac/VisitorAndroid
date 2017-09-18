@@ -13,17 +13,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.visitorandroid.Adapter.MyRyAdapter;
-import com.example.visitorandroid.Model.Data;
-import com.example.visitorandroid.Model.RyData;
-import com.example.visitorandroid.Model.RyViewModel;
+import com.example.visitorandroid.Adapter.MyEmployeeAdapter;
+import com.example.visitorandroid.Model.EmployeeViewModel;
 import com.example.visitorandroid.R;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.example.visitorandroid.R.id.nav_sub_sex;
-import static com.example.visitorandroid.R.id.ry_manage_list;
 
 public class MyFragmentAuthorityManage extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -33,9 +28,9 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
     private Button authoritymanage_btnback;
     private ListView authoritymanage_list;
 
-    private List<Data> mData = null;
+    private List<EmployeeViewModel> mData = null;
     private Context mContext;
-    private MyRyAdapter mAdapter = null;
+    private MyEmployeeAdapter mAdapter = null;
 
     @Override
     public void onAttach(Activity activity) {
@@ -64,11 +59,11 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
         authoritymanage_list = (ListView) view.findViewById(R.id.authority_manage_list);
 
         mContext = getActivity();
-        mData = new LinkedList<Data>();
+        mData = new LinkedList<EmployeeViewModel>();
 //        mData.add(new RyViewModel("testhy","普通员工"));
 //        mData.add(new RyViewModel("","子管理员"));
 //        mData.add(new RyViewModel("milou","管理员"));
-        mAdapter = new MyRyAdapter((LinkedList<Data>) mData, mContext);
+        mAdapter = new MyEmployeeAdapter((LinkedList<EmployeeViewModel>) mData, mContext);
         authoritymanage_list.setAdapter(mAdapter);
 
         authoritymanage_btnback.setOnClickListener(this);

@@ -28,8 +28,6 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.example.visitorandroid.Model.objData.GetInstance2;
-
 public class MyFragmentOrderManage extends Fragment implements View.OnClickListener {
 
     private String content;

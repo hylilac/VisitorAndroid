@@ -7,17 +7,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.visitorandroid.Model.Data;
+import com.example.visitorandroid.Model.DepartmentViewModel;
 import com.example.visitorandroid.R;
 
 import java.util.LinkedList;
 
 public class MySelectBmAdapter extends BaseAdapter {
 
-    private LinkedList<Data> mData;
+    private LinkedList<DepartmentViewModel> mData;
     private Context mContext;
 
-    public MySelectBmAdapter(LinkedList<Data> mData, Context mContext) {
+    public MySelectBmAdapter(LinkedList<DepartmentViewModel> mData, Context mContext) {
         this.mData = mData;
         this.mContext = mContext;
     }

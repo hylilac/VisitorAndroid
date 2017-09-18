@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.example.visitorandroid.Model.BaseViewModel;
 import com.example.visitorandroid.Model.DialogMethod;
 import com.example.visitorandroid.Model.MobileInfo;
-import com.example.visitorandroid.Model.ResultViewModel;
+import com.example.visitorandroid.Model.DepartmentInfo;
 import com.example.visitorandroid.Model.UserInfo;
 import com.example.visitorandroid.Model.UserViewModel;
 import com.example.visitorandroid.util.HttpUtil;

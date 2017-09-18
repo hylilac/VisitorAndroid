@@ -15,17 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.visitorandroid.Model.Data;
 import com.example.visitorandroid.R;
-import com.squareup.picasso.Picasso;
-
-import static android.R.attr.data;
-import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
-import static com.example.visitorandroid.Model.objData.GetInstance2;
-import static com.example.visitorandroid.R.id.nav_sub_headericon;
-import static com.example.visitorandroid.R.id.nav_sub_nickname;
-import static com.example.visitorandroid.R.id.nav_sub_tel;
-import static com.example.visitorandroid.R.id.order_result_btn_back;
 
 public class MyFragmentRyManageResult extends Fragment implements View.OnClickListener {
 
@@ -38,8 +28,6 @@ public class MyFragmentRyManageResult extends Fragment implements View.OnClickLi
     private TextView ryresult_bm;
 
     private MyFragmentSelectBm fgSelectBm;
-
-    private Data data = new Data();
 
     @Override
     public void onAttach(Activity activity) {

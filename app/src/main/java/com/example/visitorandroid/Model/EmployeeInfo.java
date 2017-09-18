@@ -1,20 +1,18 @@
 package com.example.visitorandroid.Model;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 /**
  * Created by hy on 2017/9/11.
  */
 
-public class ResultViewModel {
+public class EmployeeInfo {
 
     public Boolean IsError;
 
     public String Message;
 
-    public List<Data> Data;
+    public List<EmployeeViewModel> Data;
 
     public Boolean getIsError(){
         return IsError;
@@ -36,7 +34,7 @@ public class ResultViewModel {
         return Data;
     }
 
-    public void setData(List Data){
+    public void setData(List EmployeeViewModel){
         this.Data = Data;
     }
 }

@@ -12,13 +12,29 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.visitorandroid.Adapter.MyEmployeeAdapter;
+import com.example.visitorandroid.Model.BaseViewModel;
+import com.example.visitorandroid.Model.DialogMethod;
+import com.example.visitorandroid.Model.EmployeeInfo;
 import com.example.visitorandroid.Model.EmployeeViewModel;
 import com.example.visitorandroid.R;
+import com.example.visitorandroid.util.HttpUtil;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
+import static com.example.visitorandroid.R.id.ry_manage_list;
 
 public class MyFragmentAuthorityManage extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -60,14 +76,15 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
 
         mContext = getActivity();
         mData = new LinkedList<EmployeeViewModel>();
-//        mData.add(new RyViewModel("testhy","普通员工"));
-//        mData.add(new RyViewModel("","子管理员"));
-//        mData.add(new RyViewModel("milou","管理员"));
+
         mAdapter = new MyEmployeeAdapter((LinkedList<EmployeeViewModel>) mData, mContext);
         authoritymanage_list.setAdapter(mAdapter);
 
         authoritymanage_btnback.setOnClickListener(this);
         authoritymanage_list.setOnItemClickListener(this);
+
+        String address_authority="http://www.tytechkj.com/App/Permission/GetDepartmentEmployeePermission";
+        queryAuthority(address_authority);
     }
 
     @Override
@@ -97,4 +114,55 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
 
         builder.show();
     }
+
+    /**
+     * UserID 当前用户ID
+     */
+
+    private void queryAuthority(String address) {
+        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        String ss = GetInstance().User.getGUID();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("UserID",GetInstance().User.getGUID())
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+
+                Gson gson = new Gson();
+//                user = gson.fromJson(responseText, EmployeeInfo.class);
+//
+//                if (!user.IsError) {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            DialogMethod.MyProgressDialog(getContext(),"",false);
+//                            mData.clear();
+//                            for(EmployeeViewModel employee : user.Data){
+//                                GetInstance().setEmployee(employee);
+//                                mData.add(new EmployeeViewModel(employee.getGUID(),employee.getNickName(),employee.getDepartmentName()));
+//                            }
+//                            mAdapter = new MyEmployeeAdapter((LinkedList<EmployeeViewModel>) mData, mContext);
+//                            ry_manage_list.setAdapter(mAdapter);
+//                        }
+//                    });
+//                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        Toast.makeText(getContext(),"获取部门失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.visitorandroid.MyFragment;
 
 import android.app.Activity;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -30,7 +31,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
-import static com.example.visitorandroid.R.id.manage_top_bar;
 
 public class MyFragmentManage extends Fragment implements View.OnClickListener {
 
@@ -48,7 +48,6 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
     private Button join_company;
     private Button create_company;
 
-    private Button managekey_btnback;
     private TextView bm_manage;
     private TextView ry_manage;
     private TextView order_list_manage;
@@ -66,6 +65,9 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
     private LinearLayout mange1;
     private LinearLayout mange2;
     private TextView manage_topbar;
+    private TextView txtcontent;
+
+    private View view;
 
     @Override
     public void onAttach(Activity activity) {
@@ -80,7 +82,79 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fg_manage,container,false);
+        if (BaseViewModel.GetInstance().getCompanyView() == null){
+            String address_company="http://www.tytechkj.com/App/Permission/GetCompanyInfo";
+            queryCompany(address_company);
+
+            view = inflater.inflate(R.layout.fg_manage,container,false);
+            manage_btnback = (Button) view.findViewById(R.id.manage_btn_back);
+            manage_topbar = (TextView) view.findViewById(R.id.manage_top_bar);
+
+            manage_btnback.setOnClickListener(this);
+
+
+            txtcontent = (TextView) view.findViewById(R.id.txt_content);
+            txtcontent.setText("您当前尚未加入企业");
+
+            join_company = (Button) view.findViewById(R.id.join_company);
+            create_company = (Button) view.findViewById(R.id.create_company);
+
+            join_company.setOnClickListener(this);
+            create_company.setOnClickListener(this);
+
+        }else {
+            view = inflater.inflate(R.layout.fg_managekey,container,false);
+
+            String address_Pid="http://www.tytechkj.com/App/Permission/GetCurrentPid";
+            queryPid(address_Pid);
+
+            manage_topbar.setText(BaseViewModel.GetInstance().CompanyView.getC_Name());
+
+            bm_manage = (TextView) view.findViewById(R.id.bm_manage);
+            ry_manage = (TextView) view.findViewById(R.id.ry_manage);
+            order_list_manage = (TextView) view.findViewById(R.id.order_list_manage);
+            check_manage = (TextView) view.findViewById(R.id.check_manage);
+            authority_manage = (TextView) view.findViewById(R.id.authority_manage);
+            order_manage = (TextView) view.findViewById(R.id.order_manage);
+
+            bm_manage.setOnClickListener(this);
+            ry_manage.setOnClickListener(this);
+            order_list_manage.setOnClickListener(this);
+            check_manage.setOnClickListener(this);
+            authority_manage.setOnClickListener(this);
+            order_manage.setOnClickListener(this);
+
+            bm_manage.setVisibility(View.GONE);
+            ry_manage.setVisibility(View.GONE);
+            order_list_manage.setVisibility(View.GONE);
+            check_manage.setVisibility(View.GONE);
+            authority_manage.setVisibility(View.GONE);
+            order_manage.setVisibility(View.VISIBLE);
+
+            if (GetInstance().CompanyView.getPID()<3){
+                if (GetInstance().CompanyView.getPID()<2){
+                    bm_manage.setVisibility(View.VISIBLE);
+                    ry_manage.setVisibility(View.VISIBLE);
+                    order_list_manage.setVisibility(View.VISIBLE);
+                    check_manage.setVisibility(View.GONE);
+                    authority_manage.setVisibility(View.GONE);
+                }
+                bm_manage.setVisibility(View.GONE);
+                ry_manage.setVisibility(View.GONE);
+                order_list_manage.setVisibility(View.GONE);
+                check_manage.setVisibility(View.VISIBLE);
+                authority_manage.setVisibility(View.GONE);
+
+                if (GetInstance().CompanyView.getPID() == 0){
+                    bm_manage.setVisibility(View.GONE);
+                    ry_manage.setVisibility(View.GONE);
+                    order_list_manage.setVisibility(View.GONE);
+                    check_manage.setVisibility(View.VISIBLE);
+                    authority_manage.setVisibility(View.VISIBLE);
+                }
+            }
+
+        }
 
         txtTopbar = activity.findViewById(R.id.txt_topbar);
         txtTopbar.setVisibility(View.GONE);
@@ -91,59 +165,7 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
         radios = activity.findViewById(R.id.rg_tab_bar);
         radios.setVisibility(View.GONE);
 
-        bindViews(view);
-
-        if (BaseViewModel.GetInstance().getCompanyView() == null){
-            String address_company="http://www.tytechkj.com/App/Permission/GetCompanyInfo";
-            queryCompany(address_company);
-            mange1 = view.findViewById(R.id.mange1);
-            mange1.setVisibility(View.VISIBLE);
-            mange2 = view.findViewById(R.id.mange2);
-            mange2.setVisibility(View.GONE);
-            manage_topbar.setText("公司管理");
-
-        }else {
-            mange1 = view.findViewById(R.id.mange1);
-            mange1.setVisibility(View.GONE);
-            mange2 = view.findViewById(R.id.mange2);
-            mange2.setVisibility(View.VISIBLE);
-            manage_topbar.setText(BaseViewModel.GetInstance().CompanyView.getC_Name());
-        }
-
         return view;
-    }
-
-    private void bindViews(View view) {
-
-        manage_btnback = (Button) view.findViewById(R.id.manage_btn_back);
-        manage_topbar = (TextView) view.findViewById(R.id.manage_top_bar);
-
-        manage_btnback.setOnClickListener(this);
-
-        //manage1
-        TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
-        txt_content.setText("您当前尚未加入企业");
-
-        join_company = (Button) view.findViewById(R.id.join_company);
-        create_company = (Button) view.findViewById(R.id.create_company);
-
-        join_company.setOnClickListener(this);
-        create_company.setOnClickListener(this);
-
-        //manage2
-        bm_manage = (TextView) view.findViewById(R.id.bm_manage);
-        ry_manage = (TextView) view.findViewById(R.id.ry_manage);
-        order_list_manage = (TextView) view.findViewById(R.id.order_list_manage);
-        check_manage = (TextView) view.findViewById(R.id.check_manage);
-        authority_manage = (TextView) view.findViewById(R.id.authority_manage);
-        order_manage = (TextView) view.findViewById(R.id.order_manage);
-
-        bm_manage.setOnClickListener(this);
-        ry_manage.setOnClickListener(this);
-        order_list_manage.setOnClickListener(this);
-        check_manage.setOnClickListener(this);
-        authority_manage.setOnClickListener(this);
-        order_manage.setOnClickListener(this);
     }
 
     @Override
@@ -249,7 +271,7 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
                 break;
         }
         fTransaction.commit();
-    }
+}
 
     //隐藏所有Fragment
     private void hideAllFragment(FragmentTransaction fragmentTransaction){
@@ -305,4 +327,47 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
             }
         });
     }
+
+    /**
+     * UID 当前用户ID
+     * CID 当前公司ID
+     */
+
+    private void queryPid(String address) {
+        DialogMethod.MyProgressDialog(getContext(),"正在获取公司信息中...",true);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("UID", GetInstance().User.getGUID())
+                .add("CID", String.valueOf(GetInstance().CompanyView.getID()))
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                CompanyViewModel lll= new Gson().fromJson( responseText,CompanyViewModel.class);
+                BaseViewModel.GetInstance().setCompanyView(lll);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        Toast.makeText(getContext(),"获取公司信息失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
 }

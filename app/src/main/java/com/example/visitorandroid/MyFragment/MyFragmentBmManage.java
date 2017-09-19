@@ -146,6 +146,9 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
         builder.show();
     }
 
+    /**
+     * ID 公司ID
+     */
     private void queryBm(String address) {
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
         RequestBody requestBody = new FormBody.Builder()
@@ -157,9 +160,7 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, DepartmentInfo.class);
-                String s= new Gson().toJson(user.Data);
-                DepartmentViewModel lll= new Gson().fromJson( s,DepartmentViewModel.class);
-                BaseViewModel.GetInstance().setDepartment(lll);
+
                 if (!user.IsError) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -167,7 +168,8 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                             DialogMethod.MyProgressDialog(getContext(),"",false);
                             mData.clear();
                             for(DepartmentViewModel department : user.Data){
-                                mData.add(new DepartmentViewModel(department.getC_Name(),department.getEmployeeCount()));
+                                BaseViewModel.GetInstance().setDepartment(department);
+                                mData.add(new DepartmentViewModel(department.getC_Name(),department.getID(),department.getEmployeeCount()));
                             }
                             mAdapter = new MyDepartmentAdapter((LinkedList<DepartmentViewModel>) mData, mContext);
                             bmmanage_list.setAdapter(mAdapter);
@@ -190,6 +192,11 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
             }
         });
     }
+
+    /**
+     * name 增加的部门名字
+     * ID 公司ID
+     */
 
     private void queryAddBm(String address,String bmname) {
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
@@ -229,6 +236,12 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
             }
         });
     }
+
+    /**
+     * unchangename 修改之前的部门名称
+     * ID 公司ID
+     * changename 修改之后的部门名称
+     */
 
     private void queryReviseBm(String address,String unchangename,String changename) {
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);

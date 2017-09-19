@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.visitorandroid.Adapter.MyEmployeeAdapter;
+import com.example.visitorandroid.Model.BaseViewModel;
 import com.example.visitorandroid.Model.DialogMethod;
 import com.example.visitorandroid.Model.DepartmentInfo;
 import com.example.visitorandroid.Model.EmployeeInfo;
@@ -101,11 +102,12 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         EmployeeViewModel ry = mData.get(position);
+        String ryGUID = ry.getGUID();
 
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         hideAllFragment(fTransaction);
 
-        fgRmManageResult = new MyFragmentRyManageResult(ry.getNickName(),ry.getDepartmentName());
+        fgRmManageResult = new MyFragmentRyManageResult(ryGUID,ry.getNickName(),ry.getDepartmentName());
         fTransaction.add(R.id.fb_ry_manage, fgRmManageResult);
         fTransaction.addToBackStack(null);
 
@@ -116,6 +118,11 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
     private void hideAllFragment(FragmentTransaction fragmentTransaction){
         if(fgRmManageResult != null)fragmentTransaction.hide(fgRmManageResult);
     }
+
+    /**
+     * UserID 当前用户ID
+     * CompanyID 公司ID
+     */
 
     private void queryRy(String address) {
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
@@ -137,7 +144,8 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
                             DialogMethod.MyProgressDialog(getContext(),"",false);
                             mData.clear();
                             for(EmployeeViewModel employee : user.Data){
-                                mData.add(new EmployeeViewModel(employee.getNickName(),employee.getDepartmentName()));
+                                BaseViewModel.GetInstance().setEmployee(employee);
+                                mData.add(new EmployeeViewModel(employee.getGUID(),employee.getNickName(),employee.getDepartmentName()));
                             }
                             mAdapter = new MyEmployeeAdapter((LinkedList<EmployeeViewModel>) mData, mContext);
                             ry_manage_list.setAdapter(mAdapter);

@@ -1,25 +1,24 @@
 package com.example.visitorandroid.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.visitorandroid.Model.CheckOrderViewModel;
 import com.example.visitorandroid.Model.OrderListViewModel;
 import com.example.visitorandroid.R;
 
 import java.util.LinkedList;
 
-public class MyOrderListAdapter extends BaseAdapter {
+public class MyCheckOrderAdapter extends BaseAdapter {
 
-    private LinkedList<OrderListViewModel> mData;
+    private LinkedList<CheckOrderViewModel> mData;
     private Context mContext;
 
-    public MyOrderListAdapter(LinkedList<OrderListViewModel> mData, Context mContext) {
+    public MyCheckOrderAdapter(LinkedList<CheckOrderViewModel> mData, Context mContext) {
         this.mData = mData;
         this.mContext = mContext;
     }
@@ -50,8 +49,7 @@ public class MyOrderListAdapter extends BaseAdapter {
         String time = mData.get(position).getVisitorTime();
         txt_order_time.setText(time.substring(0,4)+ "年" + time.substring(5,7)
                 + "月" + time.substring(8,10) + "日");
-        txt_order_result.setTextColor(Color.RED);
-
+        txt_order_result.setText("待审核");
 
         return convertView;
     }

@@ -32,11 +32,11 @@ public class DepartmentInfo {
         this.Message = Message;
     }
 
-    public List getData(){
+    public List<DepartmentViewModel> getData() {
         return Data;
     }
 
-    public void setData(List DepartmentViewModel){
-        this.Data = Data;
+    public void setData(List<DepartmentViewModel> data) {
+        Data = data;
     }
 }

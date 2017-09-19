@@ -1,11 +1,11 @@
 package com.example.visitorandroid.Model;
 
-public class OrderListViewModel {
+public class CheckUserViewModel {
 
-    public OrderListViewModel() {
+    public CheckUserViewModel() {
     }
 
-    public OrderListViewModel(String v_name, String bv_name, String VisitorTime) {
+    public CheckUserViewModel(String v_name, String bv_name, String VisitorTime) {
         this.v_name = v_name;
         this.bv_name = bv_name;
         this.VisitorTime = VisitorTime;
@@ -41,6 +41,16 @@ public class OrderListViewModel {
         return bv_name;
     }
 
+    public String c_card;
+
+    public void setC_card(String c_card) {
+        this.c_card = c_card;
+    }
+
+    public String getC_card() {
+        return c_card;
+    }
+
     public String Area;
 
     public void setArea(String area) {
@@ -49,6 +59,16 @@ public class OrderListViewModel {
 
     public String getArea() {
         return Area;
+    }
+
+    public String v_content;
+
+    public void setV_content(String v_content) {
+        this.v_content = v_content;
+    }
+
+    public String getV_content() {
+        return v_content;
     }
 
     public String Mobile;

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
+import static com.example.visitorandroid.R.id.manage_top_bar;
 
 public class MyFragmentManage extends Fragment implements View.OnClickListener {
 
@@ -61,6 +63,9 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
     private MyFragmentAuthorityManage fgauthoritymanage;
     private MyFragmentOrderManage fgordermanage;
     private UserInfo user;
+    private LinearLayout mange1;
+    private LinearLayout mange2;
+    private TextView manage_topbar;
 
     @Override
     public void onAttach(Activity activity) {
@@ -75,7 +80,7 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fg_managekey,container,false);
+        View view = inflater.inflate(R.layout.fg_manage,container,false);
 
         txtTopbar = activity.findViewById(R.id.txt_topbar);
         txtTopbar.setVisibility(View.GONE);
@@ -86,17 +91,46 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
         radios = activity.findViewById(R.id.rg_tab_bar);
         radios.setVisibility(View.GONE);
 
-        bindViewsKey(view);
+        bindViews(view);
 
-//        bindViews(view);
+        if (BaseViewModel.GetInstance().getCompanyView() == null){
+            String address_company="http://www.tytechkj.com/App/Permission/GetCompanyInfo";
+            queryCompany(address_company);
+            mange1 = view.findViewById(R.id.mange1);
+            mange1.setVisibility(View.VISIBLE);
+            mange2 = view.findViewById(R.id.mange2);
+            mange2.setVisibility(View.GONE);
+            manage_topbar.setText("公司管理");
 
+        }else {
+            mange1 = view.findViewById(R.id.mange1);
+            mange1.setVisibility(View.GONE);
+            mange2 = view.findViewById(R.id.mange2);
+            mange2.setVisibility(View.VISIBLE);
+            manage_topbar.setText(BaseViewModel.GetInstance().CompanyView.getC_Name());
+        }
 
         return view;
     }
 
-    private void bindViewsKey(View view) {
+    private void bindViews(View view) {
 
-        managekey_btnback = (Button) view.findViewById(R.id.manage_key_btn_back);
+        manage_btnback = (Button) view.findViewById(R.id.manage_btn_back);
+        manage_topbar = (TextView) view.findViewById(R.id.manage_top_bar);
+
+        manage_btnback.setOnClickListener(this);
+
+        //manage1
+        TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
+        txt_content.setText("您当前尚未加入企业");
+
+        join_company = (Button) view.findViewById(R.id.join_company);
+        create_company = (Button) view.findViewById(R.id.create_company);
+
+        join_company.setOnClickListener(this);
+        create_company.setOnClickListener(this);
+
+        //manage2
         bm_manage = (TextView) view.findViewById(R.id.bm_manage);
         ry_manage = (TextView) view.findViewById(R.id.ry_manage);
         order_list_manage = (TextView) view.findViewById(R.id.order_list_manage);
@@ -104,10 +138,6 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
         authority_manage = (TextView) view.findViewById(R.id.authority_manage);
         order_manage = (TextView) view.findViewById(R.id.order_manage);
 
-        String address_company="http://www.tytechkj.com/App/Permission/GetCompanyInfo";
-        queryCompany(address_company);
-
-        managekey_btnback.setOnClickListener(this);
         bm_manage.setOnClickListener(this);
         ry_manage.setOnClickListener(this);
         order_list_manage.setOnClickListener(this);
@@ -121,12 +151,36 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         hideAllFragment(fTransaction);
         switch (view.getId()){
-            case R.id.manage_key_btn_back:
+            case R.id.manage_btn_back:
                 txtTopbar.setVisibility(View.VISIBLE);
                 div_tabbar.setVisibility(View.VISIBLE);
                 radios.setVisibility(View.VISIBLE);
                 activity.onBackPressed();
                 break;
+
+            case R.id.join_company:
+                if(fgjoin == null){
+                    fgjoin = new MyFragmentJoinCompany("加入公司");
+                    fTransaction.add(R.id.fb_company,fgjoin);
+                    fTransaction.addToBackStack(null);
+                }else{
+                    fTransaction.add(R.id.fb_company,fgjoin);
+                    fTransaction.addToBackStack(null);
+                    fTransaction.show(fgjoin);
+                }
+                break;
+            case R.id.create_company:
+                if(fgjoin == null){
+                    fgcreate = new MyFragmentCreateCompany("创建公司");
+                    fTransaction.add(R.id.fb_company,fgcreate);
+                    fTransaction.addToBackStack(null);
+                }else{
+                    fTransaction.add(R.id.fb_company,fgcreate);
+                    fTransaction.addToBackStack(null);
+                    fTransaction.show(fgcreate);
+                }
+                break;
+
             case R.id.bm_manage:
                 if(fgmanage == null){
                     fgmanage = new MyFragmentBmManage("部门管理");
@@ -205,10 +259,16 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
         if(fgcheckmanage != null)fragmentTransaction.hide(fgcheckmanage);
         if(fgauthoritymanage != null)fragmentTransaction.hide(fgauthoritymanage);
         if(fgordermanage != null)fragmentTransaction.hide(fgordermanage);
+        if(fgjoin != null)fragmentTransaction.hide(fgjoin);
+        if(fgcreate != null)fragmentTransaction.hide(fgcreate);
     }
 
+    /**
+     * ID 当前用户ID
+     */
+
     private void queryCompany(String address) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在获取公司信息中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("ID", GetInstance().User.getGUID())
                 .build();
@@ -238,69 +298,11 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"上传性别失败",
+                        Toast.makeText(getContext(),"获取公司信息失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
     }
-
-
-//    private void bindViews(View view) {
-//
-//        TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
-//        txt_content.setText("您当前尚未加入企业");
-//
-//        manage_btnback = (Button) view.findViewById(R.id.manage_btn_back);
-//        join_company = (Button) view.findViewById(R.id.join_company);
-//        create_company = (Button) view.findViewById(R.id.create_company);
-//
-//        manage_btnback.setOnClickListener(this);
-//        join_company.setOnClickListener(this);
-//        create_company.setOnClickListener(this);
-//    }
-//
-//    @Override
-//    public void onClick(View view) {
-//        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
-//        hideAllFragment(fTransaction);
-//        switch (view.getId()){
-//            case R.id.manage_btn_back:
-//                txtTopbar.setVisibility(View.VISIBLE);
-//                div_tabbar.setVisibility(View.VISIBLE);
-//                radios.setVisibility(View.VISIBLE);
-//                activity.onBackPressed();
-//                break;
-//            case R.id.join_company:
-//                if(fgjoin == null){
-//                    fgjoin = new MyFragmentJoinCompany("加入公司");
-//                    fTransaction.add(R.id.fb_company,fgjoin);
-//                    fTransaction.addToBackStack(null);
-//                }else{
-//                    fTransaction.add(R.id.fb_company,fgjoin);
-//                    fTransaction.addToBackStack(null);
-//                    fTransaction.show(fgjoin);
-//                }
-//                break;
-//            case R.id.create_company:
-//                if(fgjoin == null){
-//                    fgcreate = new MyFragmentCreateCompany("创建公司");
-//                    fTransaction.add(R.id.fb_company,fgcreate);
-//                    fTransaction.addToBackStack(null);
-//                }else{
-//                    fTransaction.add(R.id.fb_company,fgcreate);
-//                    fTransaction.addToBackStack(null);
-//                    fTransaction.show(fgcreate);
-//                }
-//                break;
-//        }
-//        fTransaction.commit();
-//    }
-//
-//    //隐藏所有Fragment
-//    private void hideAllFragment(FragmentTransaction fragmentTransaction){
-//        if(fgjoin != null)fragmentTransaction.hide(fgjoin);
-//        if(fgcreate != null)fragmentTransaction.hide(fgcreate);
-//    }
 }

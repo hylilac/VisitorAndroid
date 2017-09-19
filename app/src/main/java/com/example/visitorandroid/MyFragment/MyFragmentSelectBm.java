@@ -107,15 +107,20 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
         revisebm = mData.get(position).getC_Name();
+        int revisebmid = mData.get(position).getID();
 
         String address_revisebm="http://www.tytechkj.com/App/Permission/ChangePersonalDepartment";
-        queryReviseBm(address_revisebm,revisebm);
+        queryReviseBm(address_revisebm,revisebmid);
     }
+
+    /**
+     * ID 公司ID
+     */
 
     private void queryBm(String address) {
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
         RequestBody requestBody = new FormBody.Builder()
-                .add("ID", String.valueOf(GetInstance().Department.getID()))
+                .add("ID", String.valueOf(GetInstance().CompanyView.getID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -130,7 +135,7 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
                             DialogMethod.MyProgressDialog(getContext(),"",false);
                             mData.clear();
                             for(DepartmentViewModel department : user.Data){
-                                mData.add(new DepartmentViewModel(department.getC_Name(),department.getEmployeeCount()));
+                                mData.add(new DepartmentViewModel(department.getC_Name(),department.getID(),department.getEmployeeCount()));
                             }
                             mAdapter = new MySelectBmAdapter((LinkedList<DepartmentViewModel>) mData, mContext);
                             selectbm_list.setAdapter(mAdapter);
@@ -154,12 +159,19 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
         });
     }
 
-    private void queryReviseBm(String address,final String bmstring) {
+    /**
+     * CID 选中用户ID
+     * UID 公司ID
+     * DID 选中部门ID
+     */
+
+    private void queryReviseBm(String address,final int bmstring) {
+
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
         RequestBody requestBody = new FormBody.Builder()
-                .add("CID",GetInstance().User.getGUID())
+                .add("CID",content)
                 .add("UID", String.valueOf(GetInstance().CompanyView.getID()))
-                .add("DID",String.valueOf(GetInstance().Department.getID()))
+                .add("DID",String.valueOf(bmstring))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -168,7 +180,6 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
                 Gson gson = new Gson();
                 users = gson.fromJson(responseText, UserInfo.class);
                 if (!users.IsError) {
-//                    BaseViewModel.GetInstance().Department.C_Name = bmstring;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

@@ -21,6 +21,7 @@ public class MyFragmentRyManageResult extends Fragment implements View.OnClickLi
 
     private String content1;
     private String content2;
+    private String content3;
     private Activity activity;
 
     private Button ryresult_btnback;
@@ -35,9 +36,10 @@ public class MyFragmentRyManageResult extends Fragment implements View.OnClickLi
         this.activity = activity;
     }
 
-    public MyFragmentRyManageResult(String content1,String content2) {
+    public MyFragmentRyManageResult(String content1,String content2,String content3) {
         this.content1 = content1;
         this.content2 = content2;
+        this.content3 = content3;
     }
 
     @Override
@@ -55,8 +57,8 @@ public class MyFragmentRyManageResult extends Fragment implements View.OnClickLi
         ryresult_btnback = (Button) view.findViewById(R.id.ry_result_btn_back);
         ryresult_username = (TextView) view.findViewById(R.id.ry_result_username);
         ryresult_bm = (TextView) view.findViewById(R.id.ry_result_bm);
-        String account = ryresult_username.getText().toString() + content1;
-        String bm = ryresult_bm.getText().toString() + content2;
+        String account = ryresult_username.getText().toString() + content2;
+        String bm = ryresult_bm.getText().toString() + content3;
         ryresult_username.setText(account);
         ryresult_bm.setText(bm);
 
@@ -74,7 +76,7 @@ public class MyFragmentRyManageResult extends Fragment implements View.OnClickLi
                 FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
                 hideAllFragment(fTransaction);
                 if (fgSelectBm == null) {
-                    fgSelectBm = new MyFragmentSelectBm("");
+                    fgSelectBm = new MyFragmentSelectBm(content1);
                     fTransaction.add(R.id.fb_ry_result, fgSelectBm);
                     fTransaction.addToBackStack(null);
                 } else {

@@ -134,4 +134,14 @@ public class UserViewModel {
     public Bitmap getHeaderPic() {
         return HeaderPic;
     }
+
+    public int PID;
+
+    public void setPID(int PID) {
+        this.PID = PID;
+    }
+
+    public int getPID() {
+        return PID;
+    }
 }

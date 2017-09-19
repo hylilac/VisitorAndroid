@@ -13,10 +13,14 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.visitorandroid.Model.BaseViewModel;
+import com.example.visitorandroid.Model.DialogMethod;
 import com.example.visitorandroid.R;
 
 import static com.example.visitorandroid.R.id.et_messageText;
+import static com.example.visitorandroid.R.id.et_receiver;
 import static com.example.visitorandroid.R.id.et_sender;
+import static com.example.visitorandroid.R.id.et_titleText;
 import static com.example.visitorandroid.R.id.nav_sub_nickname;
 import static com.example.visitorandroid.R.id.txt_topbar;
 
@@ -33,6 +37,8 @@ public class MyFragmentInMessage extends Fragment implements View.OnClickListene
     private EditText etMessageText;
     private Button btn_cancel;
     private Button btn_send;
+    private EditText etReceiver;
+    private EditText etTitleText;
 
     @Override
     public void onAttach(Activity activity) {
@@ -67,9 +73,13 @@ public class MyFragmentInMessage extends Fragment implements View.OnClickListene
 
     private void bindViews(View view) {
         etSender = (TextView) view.findViewById(R.id.et_sender);
+        etReceiver = (EditText) view.findViewById(R.id.et_receiver);
+        etTitleText = (EditText) view.findViewById(R.id.et_titleText);
         etMessageText = (EditText) view.findViewById(R.id.et_messageText);
         btn_cancel = (Button) view.findViewById(R.id.btn_cancel);
         btn_send = (Button) view.findViewById(R.id.btn_send);
+
+        etSender.setText(BaseViewModel.GetInstance().User.getNickName());
 
         btn_cancel.setOnClickListener(this);
         btn_send.setOnClickListener(this);
@@ -83,7 +93,10 @@ public class MyFragmentInMessage extends Fragment implements View.OnClickListene
                 etMessageText.setText("这里填写消息");
                 break;
             case R.id.btn_send:
-                isCancel();
+                Boolean kk = isSend();
+                if (kk){
+
+                }
                 break;
         }
     }
@@ -94,5 +107,13 @@ public class MyFragmentInMessage extends Fragment implements View.OnClickListene
         radios.setVisibility(View.VISIBLE);
         activity.onBackPressed();
         getActivity().onBackPressed();
+    }
+
+    private Boolean isSend() {
+        if (etReceiver.getText().toString().isEmpty()){
+            DialogMethod.MyDialog(getContext(),"接收人不能为空");
+            return false;
+        }
+        return true;
     }
 }

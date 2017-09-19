@@ -6,8 +6,9 @@ package com.example.visitorandroid.Model;
 
 public class EmployeeViewModel {
 
-    public EmployeeViewModel(String nickName,String departmentName)
+    public EmployeeViewModel(String GUID,String nickName,String departmentName)
     {
+        this.GUID = GUID;
         this.NickName = nickName;
         this.DepartmentName = departmentName;
     }

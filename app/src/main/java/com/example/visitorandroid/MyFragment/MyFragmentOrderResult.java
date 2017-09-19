@@ -33,7 +33,9 @@ import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 
 public class MyFragmentOrderResult extends Fragment implements View.OnClickListener {
 
-    private String content;
+    private String content1;
+    private String content2;
+    private String content3;
     private Activity activity;
 
     private Button orderresult_btnback;
@@ -42,6 +44,7 @@ public class MyFragmentOrderResult extends Fragment implements View.OnClickListe
     private TextView orderresult_time;
     private Button orderresult_btnaccept;
     private Button orderresult_btnrefuse;
+    private UserInfo user;
 
     @Override
     public void onAttach(Activity activity) {
@@ -51,8 +54,10 @@ public class MyFragmentOrderResult extends Fragment implements View.OnClickListe
 
 
 
-    public MyFragmentOrderResult(String content) {
-        this.content = content;
+    public MyFragmentOrderResult(String content1,String content2,String content3) {
+        this.content1 = content1;
+        this.content2 = content2;
+        this.content3 = content3;
     }
 
     @Override
@@ -74,9 +79,10 @@ public class MyFragmentOrderResult extends Fragment implements View.OnClickListe
         orderresult_btnaccept = (Button) view.findViewById(R.id.order_result_btn_accept);
         orderresult_btnrefuse = (Button) view.findViewById(R.id.order_result_btn_refuse);
 
-        orderresult_visitor.setText(content.substring(0,1));
-        orderresult_interviewee.setText(content.substring(6,8));
-        orderresult_time.setText(content.substring(9));
+        orderresult_visitor.setText(content1);
+        orderresult_interviewee.setText(content2);
+        orderresult_time.setText(content3.substring(0,4)+ "年" + content3.substring(5,7)
+                + "月" + content3.substring(8,10) + "日");
 
         orderresult_btnback.setOnClickListener(this);
         orderresult_btnaccept.setOnClickListener(this);
@@ -90,11 +96,11 @@ public class MyFragmentOrderResult extends Fragment implements View.OnClickListe
                 activity.onBackPressed();
                 break;
             case R.id.order_result_btn_accept:
-                String address_acceptorder="http://www.tytechkj.com/App/Permission/";
+//                String address_acceptorder="http://www.tytechkj.com/App/Permission/GetVerifyOrder";
 //                queryAcceptOrder(address_acceptorder);
                 break;
             case R.id.order_result_btn_refuse:
-                String address_refuseorder="http://www.tytechkj.com/App/Permission/";
+//                String address_refuseorder="http://www.tytechkj.com/App/Permission/GetVerifyUser";
 //                queryRefuseOrder(address_refuseorder);
                 break;
         }
@@ -103,17 +109,15 @@ public class MyFragmentOrderResult extends Fragment implements View.OnClickListe
 //    private void queryAcceptOrder(String address) {
 //        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
 //        RequestBody requestBody = new FormBody.Builder()
-//                .add("CID",GetInstance().User.getGUID())
-//                .add("UID", String.valueOf(GetInstance2().data.getID()))
-//                .add("DID",String.valueOf(GetInstance2().data.getPID()))
+//                .add("CID",String.valueOf(GetInstance().CompanyView.getID()))
 //                .build();
 //        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
 //            @Override
 //            public void onResponse(Call call, Response response) throws IOException {
 //                String responseText = response.body().string();
 //                Gson gson = new Gson();
-//                users = gson.fromJson(responseText, UserInfo.class);
-//                if (!users.IsError) {
+//                user = gson.fromJson(responseText, UserInfo.class);
+//                if (!user.IsError) {
 //                    getActivity().runOnUiThread(new Runnable() {
 //                        @Override
 //                        public void run() {
@@ -138,21 +142,19 @@ public class MyFragmentOrderResult extends Fragment implements View.OnClickListe
 //            }
 //        });
 //    }
-
+//
 //    private void queryRefuseOrder(String address) {
 //        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
 //        RequestBody requestBody = new FormBody.Builder()
-//                .add("CID",GetInstance().User.getGUID())
-//                .add("UID", String.valueOf(GetInstance2().data.getID()))
-//                .add("DID",String.valueOf(GetInstance2().data.getPID()))
+//                .add("CID",String.valueOf(GetInstance().CompanyView.getID()))
 //                .build();
 //        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
 //            @Override
 //            public void onResponse(Call call, Response response) throws IOException {
 //                String responseText = response.body().string();
 //                Gson gson = new Gson();
-//                users = gson.fromJson(responseText, UserInfo.class);
-//                if (!users.IsError) {
+//                user = gson.fromJson(responseText, UserInfo.class);
+//                if (!user.IsError) {
 //                    getActivity().runOnUiThread(new Runnable() {
 //                        @Override
 //                        public void run() {

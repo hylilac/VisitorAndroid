@@ -46,4 +46,44 @@ public class BaseViewModel {
     public DepartmentViewModel getDepartment() {
         return Department;
     }
+
+    public EmployeeViewModel Employee;
+
+    public void setEmployee(EmployeeViewModel employee) {
+        Employee = employee;
+    }
+
+    public EmployeeViewModel getEmployee() {
+        return Employee;
+    }
+
+    public OrderListViewModel OrderList;
+
+    public void setOrderList(OrderListViewModel orderList) {
+        OrderList = orderList;
+    }
+
+    public OrderListViewModel getOrderList() {
+        return OrderList;
+    }
+
+    public CheckOrderViewModel CheckOrder;
+
+    public void setCheckOrder(CheckOrderViewModel checkOrder) {
+        CheckOrder = checkOrder;
+    }
+
+    public CheckOrderViewModel getCheckOrder() {
+        return CheckOrder;
+    }
+
+    public CheckUserViewModel CheckUser;
+
+    public void setCheckUser(CheckUserViewModel checkUser) {
+        CheckUser = checkUser;
+    }
+
+    public CheckUserViewModel getCheckUser() {
+        return CheckUser;
+    }
 }

@@ -6,15 +6,20 @@ package com.example.visitorandroid.Model;
 
 public class BaseViewModel {
 
-    public BaseViewModel(){}
-    public static BaseViewModel uniqueStance;
+    private BaseViewModel(){}
+        private static BaseViewModel uniqueStance;
 
 
     public static BaseViewModel GetInstance()
     {
-        if(uniqueStance ==null)
-            uniqueStance=new BaseViewModel();
-        return uniqueStance;
+        if (uniqueStance == null) {
+            synchronized (BaseViewModel.class) {
+                if (uniqueStance == null) {
+                    uniqueStance = new BaseViewModel();
+                }
+            }
+        }
+        return  uniqueStance;
     }
 
     public UserViewModel User;
@@ -86,4 +91,5 @@ public class BaseViewModel {
     public CheckUserViewModel getCheckUser() {
         return CheckUser;
     }
+
 }

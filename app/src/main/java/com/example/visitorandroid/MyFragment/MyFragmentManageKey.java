@@ -2,9 +2,10 @@ package com.example.visitorandroid.MyFragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,28 +37,34 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 
 
-public class MyFragmentManage extends Fragment implements View.OnClickListener {
+public class MyFragmentManageKey extends Fragment implements View.OnClickListener, AdapterView
+        .OnItemClickListener {
 
     private String content;
-
     private Activity activity;
 
     private TextView txtTopbar;
     private View div_tabbar;
     private RadioGroup radios;
 
-    private MyFragmentJoinCompany fgjoin;
-    private MyFragmentCreateCompany fgcreate;
-
-    private Button manage_btnback;
-    private Button join_company;
-    private Button create_company;
-
+    private MyFragmentBmManage fgmanage;
+    private MyFragmentRyManage fgrymanage;
+    private MyFragmentOrderListManage fgorderlist;
+    private MyFragmentCheckManage fgcheckmanage;
+    private MyFragmentAuthorityManage fgauthoritymanage;
+    private MyFragmentOrderManage fgordermanage;
     private UserInfo user;
+
+    private List<ManageName> mData  = null;
+    private MyManageAdapter mAdapter = null;
+    private ListView managekey_list;
+    private Context mContext;
+    private Button managekey_btnback;
+
+    private TextView managekey_topbar;
 
     @Override
     public void onAttach(Activity activity) {
@@ -65,14 +72,23 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
         this.activity = activity;
     }
 
-    public MyFragmentManage(String content) {
+    public MyFragmentManageKey(String content) {
         this.content = content;
     }
+
+//    @Override
+//    public void onCreate( Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        String address_Pid="http://www.tytechkj.com/App/Permission/GetCurrentPid";
+//        queryPid(address_Pid);
+//
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fg_manage,container,false);
+        View view = inflater.inflate(R.layout.fg_managekey,container,false);
 
         bindViews(view);
 
@@ -90,62 +106,129 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
 
     private void bindViews(View view) {
 
-        manage_btnback = (Button) view.findViewById(R.id.manage_btn_back);
+        managekey_btnback = (Button) view.findViewById(R.id.manage_key_btn_back);
+        managekey_topbar = (TextView) view.findViewById(R.id.manage_key_top_bar);
+        managekey_list = (ListView) view.findViewById(R.id.manage_key_list);
 
-        manage_btnback.setOnClickListener(this);
+        managekey_topbar.setText(GetInstance().CompanyView.getC_Name());
 
-        join_company = (Button) view.findViewById(R.id.join_company);
-        create_company = (Button) view.findViewById(R.id.create_company);
+        mContext = getActivity();
 
-        join_company.setOnClickListener(this);
-        create_company.setOnClickListener(this);
+        mData = new LinkedList<ManageName>();
+        mData.clear();
 
-        String address_company="http://www.tytechkj.com/App/Permission/GetCompanyInfo";
-        queryCompany(address_company);
+        int ss = BaseViewModel.GetInstance().CompanyView.getPID();
+//        int ss = 3;
+        if (ss<3){
+            if (ss<2){
+                mData.add(new ManageName("部门管理"));
+                mData.add(new ManageName("人员管理"));
+                mData.add(new ManageName("预约列表"));
+            }
+            mData.add(new ManageName("审核"));
+            if (ss == 0){
+                mData.add(new ManageName("权限分配"));
+            }
+        }
+
+        mData.add(new ManageName("预约单"));
+        mAdapter = new MyManageAdapter((LinkedList<ManageName>) mData, mContext);
+        managekey_list.setAdapter(mAdapter);
+
+        managekey_btnback.setOnClickListener(this);
+        managekey_list.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        ManageName manageList = mData.get(position);
+        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
+        hideAllFragment(fTransaction);
+        if (manageList.getManagename().equals("部门管理")){
+            if(fgmanage == null){
+                fgmanage = new MyFragmentBmManage("部门管理");
+                fTransaction.add(R.id.fb_manage_key,fgmanage);
+                fTransaction.addToBackStack(null);
+            }else{
+                fTransaction.add(R.id.fb_manage_key,fgmanage);
+                fTransaction.addToBackStack(null);
+                fTransaction.show(fgmanage);
+            }
+        } else if (manageList.getManagename().equals("人员管理")){
+            if(fgrymanage == null){
+                fgrymanage = new MyFragmentRyManage("人员管理");
+                fTransaction.add(R.id.fb_manage_key,fgrymanage);
+                fTransaction.addToBackStack(null);
+            }else{
+                fTransaction.add(R.id.fb_manage_key,fgrymanage);
+                fTransaction.addToBackStack(null);
+                fTransaction.show(fgrymanage);
+            }
+        } else if (manageList.getManagename().equals("预约列表")){
+            if(fgorderlist == null){
+                fgorderlist = new MyFragmentOrderListManage("预约列表");
+                fTransaction.add(R.id.fb_manage_key,fgorderlist);
+                fTransaction.addToBackStack(null);
+            }else{
+                fTransaction.add(R.id.fb_manage_key,fgorderlist);
+                fTransaction.addToBackStack(null);
+                fTransaction.show(fgorderlist);
+            }
+        } else if (manageList.getManagename().equals("审核")){
+            if(fgcheckmanage == null){
+                fgcheckmanage = new MyFragmentCheckManage("审核");
+                fTransaction.add(R.id.fb_manage_key,fgcheckmanage);
+                fTransaction.addToBackStack(null);
+            }else{
+                fTransaction.add(R.id.fb_manage_key,fgcheckmanage);
+                fTransaction.addToBackStack(null);
+                fTransaction.show(fgcheckmanage);
+            }
+        } else if (manageList.getManagename().equals("权限分配")){
+            if(fgauthoritymanage == null){
+                fgauthoritymanage = new MyFragmentAuthorityManage("权限分配");
+                fTransaction.add(R.id.fb_manage_key,fgauthoritymanage);
+                fTransaction.addToBackStack(null);
+            }else{
+                fTransaction.add(R.id.fb_manage_key,fgauthoritymanage);
+                fTransaction.addToBackStack(null);
+                fTransaction.show(fgauthoritymanage);
+            }
+        } else if (manageList.getManagename().equals("预约单")){
+            if(fgordermanage == null){
+                fgordermanage = new MyFragmentOrderManage("预约单");
+                fTransaction.add(R.id.fb_manage_key,fgordermanage);
+                fTransaction.addToBackStack(null);
+            }else{
+                fTransaction.add(R.id.fb_manage_key,fgordermanage);
+                fTransaction.addToBackStack(null);
+                fTransaction.show(fgordermanage);
+            }
+        }
+        fTransaction.commit();
     }
 
     @Override
     public void onClick(View view) {
-        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
-        hideAllFragment(fTransaction);
+
         switch (view.getId()){
-            case R.id.manage_btn_back:
+            case R.id.manage_key_btn_back:
                 txtTopbar.setVisibility(View.VISIBLE);
                 div_tabbar.setVisibility(View.VISIBLE);
                 radios.setVisibility(View.VISIBLE);
                 activity.onBackPressed();
                 break;
-
-            case R.id.join_company:
-                if(fgjoin == null){
-                    fgjoin = new MyFragmentJoinCompany("加入公司");
-                    fTransaction.add(R.id.fb_company,fgjoin);
-                    fTransaction.addToBackStack(null);
-                }else{
-                    fTransaction.add(R.id.fb_company,fgjoin);
-                    fTransaction.addToBackStack(null);
-                    fTransaction.show(fgjoin);
-                }
-                break;
-            case R.id.create_company:
-                if(fgjoin == null){
-                    fgcreate = new MyFragmentCreateCompany("创建公司");
-                    fTransaction.add(R.id.fb_company,fgcreate);
-                    fTransaction.addToBackStack(null);
-                }else{
-                    fTransaction.add(R.id.fb_company,fgcreate);
-                    fTransaction.addToBackStack(null);
-                    fTransaction.show(fgcreate);
-                }
-                break;
         }
-        fTransaction.commit();
-}
+    }
 
     //隐藏所有Fragment
     private void hideAllFragment(FragmentTransaction fragmentTransaction){
-        if(fgjoin != null)fragmentTransaction.hide(fgjoin);
-        if(fgcreate != null)fragmentTransaction.hide(fgcreate);
+        if(fgmanage != null)fragmentTransaction.hide(fgmanage);
+        if(fgrymanage != null)fragmentTransaction.hide(fgrymanage);
+        if(fgorderlist != null)fragmentTransaction.hide(fgorderlist);
+        if(fgcheckmanage != null)fragmentTransaction.hide(fgcheckmanage);
+        if(fgauthoritymanage != null)fragmentTransaction.hide(fgauthoritymanage);
+        if(fgordermanage != null)fragmentTransaction.hide(fgordermanage);
     }
 
     /**

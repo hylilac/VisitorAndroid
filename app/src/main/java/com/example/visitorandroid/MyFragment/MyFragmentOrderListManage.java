@@ -121,7 +121,7 @@ public class MyFragmentOrderListManage extends Fragment implements View.OnClickL
     private void queryOrder(String address) {
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
         RequestBody requestBody = new FormBody.Builder()
-                .add("ID",String.valueOf(GetInstance().CompanyView.getID()))
+                .add("ID",String.valueOf(GetInstance().CompanyView.getC_ID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -155,7 +155,7 @@ public class MyFragmentOrderListManage extends Fragment implements View.OnClickL
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取部门失败",
+                        Toast.makeText(getContext(),"获取预约订单失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

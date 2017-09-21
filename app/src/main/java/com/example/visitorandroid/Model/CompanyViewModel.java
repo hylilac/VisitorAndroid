@@ -22,6 +22,26 @@ public class CompanyViewModel {
         return ID;
     }
 
+    public int C_ID;
+
+    public void setC_ID(int c_ID) {
+        C_ID = c_ID;
+    }
+
+    public int getC_ID() {
+        return C_ID;
+    }
+
+    public String U_ID;
+
+    public void setU_ID(String u_ID) {
+        U_ID = u_ID;
+    }
+
+    public String getU_ID() {
+        return U_ID;
+    }
+
     public String C_Name;
 
     public void setC_Name(String c_Name) {

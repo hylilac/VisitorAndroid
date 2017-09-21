@@ -83,15 +83,18 @@ public class MyFragmentCreateCompany extends Fragment implements View.OnClickLis
                 activity.onBackPressed();
                 break;
             case R.id.btn_create_company:
-                String address_createcompany="http://www.tytechkj.com/App/Permission/CreateCompany";
-                queryCreateCompany(address_createcompany,createcompany.getText().toString());
+                if (createcompany.getText().toString().isEmpty()){
+                    DialogMethod.MyDialog(getContext(),"公司名称不能为空");
+                }else{
+                    String address_createcompany="http://www.tytechkj.com/App/Permission/CreatCompany";
+                    queryCreateCompany(address_createcompany,createcompany.getText().toString());
+                }
                 break;
         }
     }
 
     private void queryCreateCompany(String address,String companyname) {
-        String aa = BaseViewModel.GetInstance().User.getGUID();
-        DialogMethod.MyProgressDialog(getActivity(),"正在获取公司信息中...",true);
+        DialogMethod.MyProgressDialog(getActivity(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("ID",BaseViewModel.GetInstance().User.getGUID())
                 .add("CategoryID",companyname)
@@ -107,18 +110,11 @@ public class MyFragmentCreateCompany extends Fragment implements View.OnClickLis
                         @Override
                         public void run() {
                             DialogMethod.MyProgressDialog(getContext(), "", false);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setMessage("加入企业成功，请等待企业审核！");
-                            builder.setCancelable(false);
-                            builder.setPositiveButton("确认", new DialogInterface.OnClickListener(){
-                                @Override
-                                public void onClick(DialogInterface dialog,int which){
-                                    activity.onBackPressed();
-                                }
-                            });
-                            builder.show();
+                            activity.onBackPressed();
                         }
                     });
+                }else{
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 
@@ -129,7 +125,7 @@ public class MyFragmentCreateCompany extends Fragment implements View.OnClickLis
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取公司信息失败",
+                        Toast.makeText(getContext(),"创建公司失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

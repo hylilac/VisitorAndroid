@@ -217,7 +217,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
     }
 
     private void querySex(String address, final String sexstring) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("ID", GetInstance().User.getGUID())
                 .add("Sex",sexstring)
@@ -237,6 +237,8 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
                             DialogMethod.MyProgressDialog(getContext(), "", false);
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 
@@ -247,7 +249,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"上传性别失败",
+                        Toast.makeText(getContext(),"更改性别失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

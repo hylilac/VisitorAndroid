@@ -178,6 +178,8 @@ public class MyFragmentTel extends Fragment implements View.OnClickListener, Tex
                             et_navcode.setText("");
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 

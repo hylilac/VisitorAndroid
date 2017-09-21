@@ -40,7 +40,7 @@ import okhttp3.Response;
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 
 public class MyFragmentBmManage extends Fragment implements View.OnClickListener, AdapterView
-        .OnItemClickListener, TextWatcher {
+        .OnItemClickListener {
 
     private String content;
     private Activity activity;
@@ -150,9 +150,9 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
      * ID 公司ID
      */
     private void queryBm(String address) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
-                .add("ID", String.valueOf(GetInstance().CompanyView.getID()))
+                .add("ID", String.valueOf(GetInstance().CompanyView.getC_ID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -175,6 +175,8 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                             bmmanage_list.setAdapter(mAdapter);
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 
@@ -199,10 +201,10 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
      */
 
     private void queryAddBm(String address,String bmname) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("name",bmname)
-                .add("ID", String.valueOf(GetInstance().CompanyView.getID()))
+                .add("ID", String.valueOf(GetInstance().CompanyView.getC_ID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -219,6 +221,8 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                             queryBm(address_bm);
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),users.Message);
                 }
             }
 
@@ -244,10 +248,10 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
      */
 
     private void queryReviseBm(String address,String unchangename,String changename) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("UnChangeName",unchangename)
-                .add("ID", String.valueOf(GetInstance().CompanyView.getID()))
+                .add("ID", String.valueOf(GetInstance().CompanyView.getC_ID()))
                 .add("Changename",changename)
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
@@ -265,6 +269,8 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                             queryBm(address_bm);
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),users.Message);
                 }
             }
 
@@ -275,26 +281,11 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取部门失败",
+                        Toast.makeText(getContext(),"修改部门失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-
     }
 }

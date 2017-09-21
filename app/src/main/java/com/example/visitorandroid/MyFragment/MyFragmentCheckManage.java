@@ -176,9 +176,9 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
      */
 
     private void queryCheckOrder(String address) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
-                .add("CID",String.valueOf(GetInstance().CompanyView.getID()))
+                .add("CID",String.valueOf(GetInstance().CompanyView.getC_ID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -209,7 +209,7 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取部门失败",
+                        Toast.makeText(getContext(),"获取审核预约订单失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -222,9 +222,9 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
      */
 
     private void queryCheckUser(String address) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
-                .add("CID",String.valueOf(GetInstance().CompanyView.getID()))
+                .add("CID",String.valueOf(GetInstance().CompanyView.getC_ID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -255,7 +255,7 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取部门失败",
+                        Toast.makeText(getContext(),"获取审核用户订单失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -269,7 +269,7 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
      */
 
     private void queryPassOrder(String address,int orderid,String visitorid) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("ID",String.valueOf(orderid))
                 .add("visitorID",visitorid)
@@ -289,6 +289,8 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                             queryCheckOrder(address_checkorder);
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 
@@ -299,7 +301,7 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取部门失败",
+                        Toast.makeText(getContext(),"审核预约订单失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -312,7 +314,7 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
      */
 
     private void queryPassUser(String address,int userid) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("ID",String.valueOf(userid))
                 .build();
@@ -331,6 +333,8 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                             queryCheckUser(address_checkuser);
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 
@@ -341,12 +345,11 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取部门失败",
+                        Toast.makeText(getContext(),"审核用户订单失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
     }
-
 }

@@ -120,7 +120,7 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
     private void queryBm(String address) {
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
         RequestBody requestBody = new FormBody.Builder()
-                .add("ID", String.valueOf(GetInstance().CompanyView.getID()))
+                .add("ID", String.valueOf(GetInstance().CompanyView.getC_ID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -141,6 +141,8 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
                             selectbm_list.setAdapter(mAdapter);
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 
@@ -170,7 +172,7 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("CID",content)
-                .add("UID", String.valueOf(GetInstance().CompanyView.getID()))
+                .add("UID", String.valueOf(GetInstance().CompanyView.getC_ID()))
                 .add("DID",String.valueOf(bmstring))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
@@ -187,6 +189,8 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
                             BackMethod();
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),users.Message);
                 }
             }
 
@@ -197,7 +201,7 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取部门失败",
+                        Toast.makeText(getContext(),"修改部门失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

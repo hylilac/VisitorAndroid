@@ -1,14 +1,14 @@
 package com.example.visitorandroid.Model;
 
-public class RyData{
+public class AuthorityViewModel {
 
-    public RyData(){
-
+    public AuthorityViewModel() {
     }
 
-    public RyData(String nickName,String departmentName){
+    public AuthorityViewModel(String GUID,String nickName,int PID) {
+        this.GUID = GUID;
         this.NickName = nickName;
-        DepartmentName = departmentName;
+        this.PID = PID;
     }
 
     public String GUID;
@@ -51,13 +51,33 @@ public class RyData{
         return NickName;
     }
 
-    public String DepartmentName;
+    public int PID;
 
-    public void setDepartmentName(String departmentName) {
-        DepartmentName = departmentName;
+    public void setPID(int PID) {
+        this.PID = PID;
     }
 
-    public String getDepartmentName() {
-        return DepartmentName;
+    public int getPID() {
+        return PID;
+    }
+
+    public int CompanyID;
+
+    public void setCompanyID(int companyID) {
+        CompanyID = companyID;
+    }
+
+    public int getCompanyID() {
+        return CompanyID;
+    }
+
+    public String UID;
+
+    public void setUID(String UID) {
+        this.UID = UID;
+    }
+
+    public String getUID() {
+        return UID;
     }
 }

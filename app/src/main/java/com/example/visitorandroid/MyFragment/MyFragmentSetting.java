@@ -19,10 +19,12 @@ import android.widget.TextView;
 import com.example.visitorandroid.LoginActivity;
 import com.example.visitorandroid.Model.DialogMethod;
 import com.example.visitorandroid.R;
+import com.tencent.android.tpush.XGPushManager;
 
 import static com.example.visitorandroid.R.id.create_company;
 import static com.example.visitorandroid.R.id.join_company;
 import static com.example.visitorandroid.R.id.txt_topbar;
+import static com.tencent.android.tpush.XGPushManager.registerPush;
 
 public class MyFragmentSetting extends Fragment implements View.OnClickListener {
 
@@ -90,8 +92,10 @@ public class MyFragmentSetting extends Fragment implements View.OnClickListener 
                 activity.onBackPressed();
                 break;
             case R.id.nav_fun:
+                DialogMethod.MyDialog(getContext(),"该功能仍在测试中，请期待！");
                 break;
             case R.id.nav_password:
+                DialogMethod.MyDialog(getContext(),"该功能仍在测试中，请期待！");
                 break;
             case R.id.nav_quit:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -100,6 +104,7 @@ public class MyFragmentSetting extends Fragment implements View.OnClickListener 
                 builder.setPositiveButton("确认", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog,int which){
+                        XGPushManager.registerPush(getContext(), "*");
                         SharedPreferences.Editor editor = PreferenceManager.
                                 getDefaultSharedPreferences(getActivity()).edit();
                         editor.clear();

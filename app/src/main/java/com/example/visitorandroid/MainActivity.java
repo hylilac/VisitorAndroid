@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -24,6 +25,8 @@ import com.example.visitorandroid.MyFragment.MyFragmentPagerAdapter;
 import com.example.visitorandroid.util.HttpUtil;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.tencent.android.tpush.XGPushConfig;
+import com.tencent.android.tpush.XGPushManager;
 
 import java.io.IOException;
 
@@ -33,7 +36,6 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.os.Build.VERSION_CODES.M;
 import static org.litepal.LitePalApplication.getContext;
 
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,
@@ -75,6 +77,15 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         bindViews();
         rb_model.setChecked(true);
+
+        //开启信鸽日志输出
+
+        XGPushConfig.enableDebug(this, true);
+
+        //信鸽注册代码
+
+        XGPushManager.registerPush(this, BaseViewModel.GetInstance().User.getMobile());
+
     }
 
     private void bindViews() {

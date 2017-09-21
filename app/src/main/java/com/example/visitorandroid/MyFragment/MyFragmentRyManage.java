@@ -128,7 +128,7 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
         DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("UserID",GetInstance().User.getGUID())
-                .add("CompanyID", String.valueOf(GetInstance().CompanyView.getID()))
+                .add("CompanyID", String.valueOf(GetInstance().CompanyView.getC_ID()))
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -151,6 +151,8 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
                             ry_manage_list.setAdapter(mAdapter);
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 
@@ -161,7 +163,7 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取部门失败",
+                        Toast.makeText(getContext(),"获取员工失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

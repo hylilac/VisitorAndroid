@@ -116,7 +116,7 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
     }
 
     private void queryCompanyList(String address) {
-        DialogMethod.MyProgressDialog(getActivity(),"正在获取公司信息中...",true);
+        DialogMethod.MyProgressDialog(getActivity(),"正在处理中...",true);
         HttpUtil.sendOkHttpRequestNoParams(address,new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -145,7 +145,7 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取公司信息失败",
+                        Toast.makeText(getContext(),"获取公司列表失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -156,7 +156,7 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
     private void queryJoinCompany(String address,int companyId) {
         String aa = BaseViewModel.GetInstance().User.getGUID();
         int ss = companyId;
-        DialogMethod.MyProgressDialog(getActivity(),"正在获取公司信息中...",true);
+        DialogMethod.MyProgressDialog(getActivity(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("UserID",BaseViewModel.GetInstance().User.getGUID())
                 .add("CategoryID",String.valueOf(companyId))
@@ -184,6 +184,8 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
                             builder.show();
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 
@@ -194,7 +196,7 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取公司信息失败",
+                        Toast.makeText(getContext(),"加入公司失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

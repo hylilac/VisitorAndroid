@@ -52,8 +52,6 @@ public class MyFragmentOrderResult extends Fragment implements View.OnClickListe
         this.activity = activity;
     }
 
-
-
     public MyFragmentOrderResult(String content1,String content2,String content3) {
         this.content1 = content1;
         this.content2 = content2;

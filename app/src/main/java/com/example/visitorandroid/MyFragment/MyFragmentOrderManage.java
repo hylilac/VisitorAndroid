@@ -190,6 +190,8 @@ public class MyFragmentOrderManage extends Fragment implements View.OnClickListe
                             v_name.requestFocus(); //请求获取焦点
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 
@@ -200,7 +202,7 @@ public class MyFragmentOrderManage extends Fragment implements View.OnClickListe
                     @Override
                     public void run() {
                         DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取部门失败",
+                        Toast.makeText(getContext(),"提交预约单失败",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -118,6 +118,8 @@ public class MyFragmentNickname extends Fragment implements View.OnClickListener
                             BackMethod();
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 

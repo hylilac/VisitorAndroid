@@ -94,8 +94,6 @@ public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListen
         usericon_btphoto = (Button) view.findViewById(R.id.usericon_btn_photo);
         navHeaderPhoto = (ImageView) view.findViewById(R.id.nav_headerphoto);
 
-
-
         String picstring = GetInstance().User.getHeadPicUrl();
         Picasso.with(getContext())
                 .load(picstring)
@@ -179,7 +177,7 @@ public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListen
     }
 
     private void queryHeader(String address, final String picstring) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("ID", GetInstance().User.getGUID())
                 .add("desccode",picstring)
@@ -194,7 +192,6 @@ public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListen
                 if (!user.IsError) {
                     UserViewModel lll = new Gson().fromJson(s, UserViewModel.class);
                     BaseViewModel.GetInstance().User.HeadPicUrl = lll.HeadPicUrl;
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -202,6 +199,8 @@ public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListen
                             DialogMethod.MyProgressDialog(getContext(), "", false);
                         }
                     });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
                 }
             }
 

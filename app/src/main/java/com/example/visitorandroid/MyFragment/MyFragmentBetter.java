@@ -16,10 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.visitorandroid.Model.BaseViewModel;
+import com.example.visitorandroid.Model.CompanyViewModel;
+import com.example.visitorandroid.Model.DialogMethod;
+import com.example.visitorandroid.Model.UserInfo;
 import com.example.visitorandroid.Model.UserViewModel;
 import com.example.visitorandroid.R;
+import com.example.visitorandroid.util.HttpUtil;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
@@ -30,7 +36,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
+import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 import static com.example.visitorandroid.R.id.nav_sub_headericon;
 import static com.squareup.picasso.Picasso.with;
 import static java.lang.System.load;
@@ -51,6 +63,8 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
     private TextView nav_message;
     private TextView nav_history;
     private TextView nav_setting;
+    private UserInfo user;
+    private MyFragmentManageKey fgManageKey;
 
     public MyFragmentBetter(String content) {
         this.content = content;
@@ -86,11 +100,14 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
         nav_message.setOnClickListener(this);
         nav_history.setOnClickListener(this);
         nav_setting.setOnClickListener(this);
+
+        String address_company="http://www.tytechkj.com/App/Permission/GetCompanyInfo";
+        queryCompany(address_company);
     }
 
     @Override
     public void onClick(View view) {
-        FragmentTransaction fTransaction =  getFragmentManager().beginTransaction();
+        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         hideAllFragment(fTransaction);
         switch (view.getId()){
             case R.id.icon_image:
@@ -105,28 +122,30 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.nav_manage:
-                if(fgManage == null){
+                if (BaseViewModel.GetInstance().CompanyView != null){
+                    fgManageKey = new MyFragmentManageKey("公司管理");
+                    fTransaction.add(R.id.fb_content,fgManageKey);
+                    fTransaction.addToBackStack(null);
+                }else if (BaseViewModel.GetInstance().CompanyView == null){
                     fgManage = new MyFragmentManage("公司管理");
                     fTransaction.add(R.id.fb_content,fgManage);
                     fTransaction.addToBackStack(null);
-                }else{
-                    fTransaction.add(R.id.fb_content,fgManage);
-                    fTransaction.addToBackStack(null);
-                    fTransaction.show(fgManage);
                 }
                 break;
             case R.id.nav_message:
-                if(fgInManage == null){
-                    fgInManage = new MyFragmentInMessage("发送站内信");
-                    fTransaction.add(R.id.fb_content,fgInManage);
-                    fTransaction.addToBackStack(null);
-                }else{
-                    fTransaction.add(R.id.fb_content,fgInManage);
-                    fTransaction.addToBackStack(null);
-                    fTransaction.show(fgInManage);
-                }
+                DialogMethod.MyDialog(getContext(),"该功能仍在测试中，请期待！");
+//                if(fgInManage == null){
+//                    fgInManage = new MyFragmentInMessage("发送站内信");
+//                    fTransaction.add(R.id.fb_content,fgInManage);
+//                    fTransaction.addToBackStack(null);
+//                }else{
+//                    fTransaction.add(R.id.fb_content,fgInManage);
+//                    fTransaction.addToBackStack(null);
+//                    fTransaction.show(fgInManage);
+//                }
                 break;
             case R.id.nav_history:
+                DialogMethod.MyDialog(getContext(),"该功能仍在测试中，请期待！");
                 break;
             case R.id.nav_setting:
                 if(fgSetting == null){
@@ -143,10 +162,100 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
         fTransaction.commit();
     }
 
+    /**
+     * ID 当前用户ID
+     */
+
+    private void queryCompany(String address) {
+        DialogMethod.MyProgressDialog(getActivity(),"正在处理中...",true);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("ID", GetInstance().User.getGUID())
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                user = gson.fromJson(responseText,UserInfo.class);
+                String s= new Gson().toJson(user.Data);
+                CompanyViewModel lll= new Gson().fromJson( s,CompanyViewModel.class);
+                BaseViewModel.GetInstance().setCompanyView(lll);
+                if (!user.IsError) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogMethod.MyProgressDialog(getContext(), "", false);
+                            String address_Pid="http://www.tytechkj.com/App/Permission/GetCurrentPid";
+                            queryPid(address_Pid);
+                        }
+                    });
+                }else {
+                    DialogMethod.MyDialog(getContext(),user.Message);
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        Toast.makeText(getContext(),"获取公司信息失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * UID 当前用户ID
+     * CID 当前公司ID
+     */
+
+    private void queryPid(String address) {
+        DialogMethod.MyProgressDialog(getActivity(),"正在获处理...",true);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("UID", GetInstance().User.getGUID())
+                .add("CID", String.valueOf(GetInstance().CompanyView.getID()))
+                .build();
+        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Gson gson = new Gson();
+                CompanyViewModel lll= gson.fromJson(responseText,CompanyViewModel.class);
+                BaseViewModel.GetInstance().setCompanyView(lll);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        Toast.makeText(getContext(),"获取公司PID失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+
     //隐藏所有Fragment
     private void hideAllFragment(FragmentTransaction fragmentTransaction){
         if(fgHeader != null)fragmentTransaction.hide(fgHeader);
         if(fgManage != null)fragmentTransaction.hide(fgManage);
+        if(fgManageKey != null)fragmentTransaction.hide(fgManageKey);
         if(fgInManage != null)fragmentTransaction.hide(fgInManage);
         if(fgSetting != null)fragmentTransaction.hide(fgSetting);
     }

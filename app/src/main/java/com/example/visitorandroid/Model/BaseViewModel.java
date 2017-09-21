@@ -92,4 +92,13 @@ public class BaseViewModel {
         return CheckUser;
     }
 
+    public AuthorityViewModel Authority;
+
+    public void setAuthority(AuthorityViewModel authority) {
+        Authority = authority;
+    }
+
+    public AuthorityViewModel getAuthority() {
+        return Authority;
+    }
 }

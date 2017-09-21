@@ -7,11 +7,24 @@
     android:layout_height="match_parent"
     android:background="#f0eff5">
 
-    <com.jude.rollviewpager.RollPagerView
-        android:id="@+id/roll_view_pager"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        app:rollviewpager_play_delay="3000"/>
+        android:layout_height="match_parent">
 
+        <com.jude.rollviewpager.RollPagerView
+            android:id="@+id/roll_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            app:rollviewpager_play_delay="3000"/>
 
+        <GridView
+            android:id="@+id/grid_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:layout_marginTop="15dp"
+            android:numColumns="4" />
+
+    </LinearLayout>
 </FrameLayout>

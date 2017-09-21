@@ -1,16 +1,26 @@
 package com.example.visitorandroid.MyFragment;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.visitorandroid.Adapter.MyAdapter;
+import com.example.visitorandroid.MainActivity;
 import com.example.visitorandroid.R;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.hintview.ColorPointHintView;
+
+import java.util.ArrayList;
 
 public class MyFragmentModel extends Fragment {
 
@@ -19,6 +29,10 @@ public class MyFragmentModel extends Fragment {
     private RollPagerView mRollViewPager;
     private TextView txtTopbar;
     private View div_tabbar;
+    private GridView grid_photo;
+    private Context mContext;
+    private ArrayList<Icon> mData;
+    private MyAdapter<Icon> mAdapter = null;
 
 
     @Override
@@ -41,7 +55,16 @@ public class MyFragmentModel extends Fragment {
         div_tabbar = activity.findViewById(R.id.div_tab_bar);
         div_tabbar.setVisibility(View.GONE);
 
+        bindViews(view);
+
+        return view;
+    }
+
+    private void bindViews(View view) {
         mRollViewPager = (RollPagerView) view.findViewById(R.id.roll_view_pager);
+        grid_photo = (GridView) view.findViewById(R.id.grid_photo);
+
+        mContext = getActivity();
 
         //设置播放时间间隔
         mRollViewPager.setPlayDelay(1000);
@@ -60,6 +83,30 @@ public class MyFragmentModel extends Fragment {
         //mRollViewPager.setHintView(new TextHintView(this));
         //mRollViewPager.setHintView(null);
 
-        return view;
+        mData = new ArrayList<Icon>();
+        mData.add(new Icon(R.mipmap.iv_icon_1, "消息列表"));
+        mData.add(new Icon(R.mipmap.iv_icon_2, "预约单"));
+        mData.add(new Icon(R.mipmap.iv_icon_3, "位置"));
+        mData.add(new Icon(R.mipmap.iv_icon_4, "快递"));
+        mData.add(new Icon(R.mipmap.iv_icon_5, "车牌识别"));
+        mData.add(new Icon(R.mipmap.iv_icon_6, "企业管理"));
+        mAdapter = new MyAdapter<Icon>(mData, R.layout.item_grid_icon) {
+            @Override
+            public void bindView(ViewHolder holder, Icon obj) {
+                holder.setImageResource(R.id.img_icon, obj.getiId());
+                holder.setText(R.id.txt_icon, obj.getiName());
+            }
+        };
+
+        grid_photo.setAdapter(mAdapter);
+
+        grid_photo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(mContext, "你点击了~" + position + "~项", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
+
 }

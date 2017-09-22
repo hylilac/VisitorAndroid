@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visitorandroid.Adapter.MyAdapter;
-import com.example.visitorandroid.MainActivity;
+import com.example.visitorandroid.Adapter.MyManageAdapter;
+import com.example.visitorandroid.Model.Icon;
 import com.example.visitorandroid.R;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.hintview.ColorPointHintView;
@@ -71,7 +70,7 @@ public class MyFragmentModel extends Fragment {
         //设置透明度
         mRollViewPager.setAnimationDurtion(500);
         //设置适配器
-        mRollViewPager.setAdapter(new ImagePagerAdapter());
+        mRollViewPager.setAdapter(new MyManageAdapter.ImagePagerAdapter());
 
         //设置指示器（顺序依次）
         //自定义指示器图片

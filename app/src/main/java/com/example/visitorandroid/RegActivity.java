@@ -58,7 +58,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getWindow().setStatusBarColor(Color.rgb(56,143,249));
         }
 
         setContentView(R.layout.activity_reg);

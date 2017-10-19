@@ -41,8 +41,8 @@ import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 public class MyFragmentSelectBm extends Fragment implements View.OnClickListener, AdapterView
         .OnItemClickListener {
 
-    private String content;
     private Activity activity;
+    public String content;
 
     private Button selectbm_btnback;
     private ListView selectbm_list;
@@ -128,22 +128,26 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, DepartmentInfo.class);
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(),"",false);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+
+                        if (!user.IsError) {
+
                             mData.clear();
                             for(DepartmentViewModel department : user.Data){
                                 mData.add(new DepartmentViewModel(department.getC_Name(),department.getID(),department.getEmployeeCount()));
                             }
                             mAdapter = new MySelectBmAdapter((LinkedList<DepartmentViewModel>) mData, mContext);
                             selectbm_list.setAdapter(mAdapter);
+                        }else {
+                            Toast.makeText(getContext(),user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -152,6 +156,7 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取部门失败",
                                 Toast.LENGTH_SHORT).show();
@@ -181,17 +186,21 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 users = gson.fromJson(responseText, UserInfo.class);
-                if (!users.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(),"",false);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+
+                        if (!users.IsError) {
                             BackMethod();
+                        }else {
+                            Toast.makeText(getContext(),users.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),users.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -200,6 +209,7 @@ public class MyFragmentSelectBm extends Fragment implements View.OnClickListener
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"修改部门失败",
                                 Toast.LENGTH_SHORT).show();

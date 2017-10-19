@@ -33,10 +33,10 @@ import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 
 public class MyFragmentOrderResult extends Fragment implements View.OnClickListener {
 
-    private String content1;
-    private String content2;
-    private String content3;
     private Activity activity;
+    public String content1;
+    public String content2;
+    public String content3;
 
     private Button orderresult_btnback;
     private TextView orderresult_visitor;
@@ -44,7 +44,6 @@ public class MyFragmentOrderResult extends Fragment implements View.OnClickListe
     private TextView orderresult_time;
     private Button orderresult_btnaccept;
     private Button orderresult_btnrefuse;
-    private UserInfo user;
 
     @Override
     public void onAttach(Activity activity) {

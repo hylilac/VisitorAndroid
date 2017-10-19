@@ -43,13 +43,14 @@ import okhttp3.Response;
 
 import static android.R.attr.order;
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
+import static com.example.visitorandroid.Model.DialogMethod.MyDialog;
 import static com.example.visitorandroid.R.id.et_joincompany;
 import static com.example.visitorandroid.R.id.order_list;
 
 public class MyFragmentJoinCompany extends Fragment implements View.OnClickListener, AdapterView
         .OnItemClickListener {
 
-    private String content;
+    public String content;
     private Activity activity;
 
     private UserInfo user;
@@ -127,7 +128,9 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(), "", false);
+
                         mData.clear();
                         for (CompanyViewModel company : companyList){
                             mData.add(new CompanyViewModel(company.getID(),company.getC_Name()));
@@ -144,6 +147,7 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取公司列表失败",
                                 Toast.LENGTH_SHORT).show();
@@ -154,8 +158,6 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
     }
 
     private void queryJoinCompany(String address,int companyId) {
-        String aa = BaseViewModel.GetInstance().User.getGUID();
-        int ss = companyId;
         DialogMethod.MyProgressDialog(getActivity(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("UserID",BaseViewModel.GetInstance().User.getGUID())
@@ -167,11 +169,15 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, UserInfo.class);
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                        if (!user.IsError) {
+
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                             builder.setMessage("加入企业成功，请等待企业审核！");
                             builder.setCancelable(false);
@@ -182,11 +188,12 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
                                 }
                             });
                             builder.show();
+                        }else {
+                            Toast.makeText(getContext(),user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -195,6 +202,7 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"加入公司失败",
                                 Toast.LENGTH_SHORT).show();
@@ -203,5 +211,4 @@ public class MyFragmentJoinCompany extends Fragment implements View.OnClickListe
             }
         });
     }
-
 }

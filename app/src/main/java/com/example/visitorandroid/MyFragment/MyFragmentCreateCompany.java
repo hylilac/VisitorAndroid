@@ -39,7 +39,7 @@ import static com.example.visitorandroid.R.id.et_createcompany;
 
 public class MyFragmentCreateCompany extends Fragment implements View.OnClickListener {
 
-    private String content;
+    public String content;
     private Activity activity;
     private Button createcompany_btnback;
     private EditText createcompany;
@@ -105,17 +105,21 @@ public class MyFragmentCreateCompany extends Fragment implements View.OnClickLis
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, UserInfo.class);
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                        if (!user.IsError) {
                             activity.onBackPressed();
+                        }else{
+                            Toast.makeText(getContext(),user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else{
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -124,6 +128,7 @@ public class MyFragmentCreateCompany extends Fragment implements View.OnClickLis
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"创建公司失败",
                                 Toast.LENGTH_SHORT).show();
@@ -132,5 +137,4 @@ public class MyFragmentCreateCompany extends Fragment implements View.OnClickLis
             }
         });
     }
-
 }

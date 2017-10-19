@@ -52,7 +52,7 @@ import static com.example.visitorandroid.R.id.rg_tab_bar;
 public class MyFragmentCheckManage extends Fragment implements View.OnClickListener, RadioGroup
         .OnCheckedChangeListener, AdapterView.OnItemClickListener {
 
-    private String content;
+    public String content;
     private Activity activity;
 
     private Button checkmanage_btnback;
@@ -190,7 +190,9 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
+
                         mDataOrder.clear();
                         for (CheckOrderViewModel checkOrder : checkOrderList){
                             BaseViewModel.GetInstance().setCheckOrder(checkOrder);
@@ -208,6 +210,7 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取审核预约订单失败",
                                 Toast.LENGTH_SHORT).show();
@@ -236,7 +239,9 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
+
                         mDataUser.clear();
                         for (CheckUserViewModel checkUser : checkUserList){
                             BaseViewModel.GetInstance().setCheckUser(checkUser);
@@ -254,6 +259,7 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取审核用户订单失败",
                                 Toast.LENGTH_SHORT).show();
@@ -280,18 +286,21 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, UserInfo.class);
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                        if (!user.IsError) {
                             String address_checkorder="http://www.tytechkj.com/App/Permission/GetVerifyOrder";
                             queryCheckOrder(address_checkorder);
+                        }else {
+                            Toast.makeText(getContext(), user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -300,6 +309,7 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"审核预约订单失败",
                                 Toast.LENGTH_SHORT).show();
@@ -324,18 +334,22 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, UserInfo.class);
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                        if (!user.IsError) {
                             String address_checkuser="http://www.tytechkj.com/App/Permission/GetVerifyUser";
                             queryCheckUser(address_checkuser);
+                        }else {
+                            Toast.makeText(getContext(), user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -344,6 +358,7 @@ public class MyFragmentCheckManage extends Fragment implements View.OnClickListe
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"审核用户订单失败",
                                 Toast.LENGTH_SHORT).show();

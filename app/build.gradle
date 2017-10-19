@@ -4,8 +4,9 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.visitorandroid"
-        minSdkVersion 21
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -22,8 +23,17 @@ android {
                 XG_ACCESS_KEY : "AA6A699ARJ5G",
         ]
     }
+    signingConfigs { //签名配置表
+        release {
+            keyAlias 'visitor_app'
+            keyPassword '123456'
+            storeFile file('./app.keystore')
+            storePassword '123456'
+        }
+    }
     buildTypes {
         release {
+            debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -54,4 +64,12 @@ dependencies {
     compile 'com.tencent.mid:mid:3.72.4-alpha'
 
     compile 'com.jude:rollviewpager:1.2.9'
+
+    //微信接入
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+
+    compile 'com.android.support:multidex:1.0.1'
+
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.ansen.http:okhttpencapsulation:1.0.1'
 }

@@ -144,6 +144,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void queryMobile(String address) {
+        DialogMethod.MyProgressDialog(RegActivity.this,"正在处理中...",true);
         String account = regUsername.getText().toString();
         RequestBody requestBody = new FormBody.Builder()
                 .add("mobile",account)
@@ -154,6 +155,13 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 mobile = gson.fromJson(responseText,MobileModel.class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(RegActivity.this,"",false);
+                    }
+                });
             }
 
             @Override
@@ -162,6 +170,8 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        DialogMethod.MyProgressDialog(RegActivity.this,"",false);
                         Toast.makeText(RegActivity.this,"获取验证码失败",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -189,19 +199,24 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         if (!user.IsError){
                             DialogMethod.MyProgressDialog(RegActivity.this,"",false);
                             SharedPreferences.Editor editor = PreferenceManager.
                                     getDefaultSharedPreferences(RegActivity.this).edit();
+
                             editor.putString("regUsername",regUsername.getText().toString());
                             editor.putString("regPassword",regPassword.getText().toString());
                             editor.putString("regNickname",regNickname.getText().toString());
                             editor.apply();
+
                             Intent intent_reg = new Intent(RegActivity.this,LoginActivity.class);
                             startActivity(intent_reg);
                             finish();
                         }else{
-                            DialogMethod.MyDialog(RegActivity.this, user.Message);
+
+                            Toast.makeText(RegActivity.this,user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -213,6 +228,8 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        DialogMethod.MyProgressDialog(RegActivity.this,"",false);
                         Toast.makeText(RegActivity.this,"注册请求失败",
                                 Toast.LENGTH_SHORT).show();
                     }

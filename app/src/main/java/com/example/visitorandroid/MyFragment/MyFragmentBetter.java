@@ -49,7 +49,7 @@ import static java.lang.System.load;
 
 public class MyFragmentBetter extends Fragment implements View.OnClickListener {
 
-    private String content;
+    public String content;
 
     //Fragment Object
     private MyFragmentHeader fgHeader;
@@ -89,9 +89,13 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
         nav_setting = (TextView) view.findViewById(R.id.nav_setting);
 
         String picstring = BaseViewModel.GetInstance().User.getHeadPicUrl();
-        Picasso.with(getContext())
-                .load(picstring)
-                .into(icon_image);
+        if (picstring != null) {
+            Picasso.with(getContext())
+                    .load(picstring)
+                    .into(icon_image);
+        }
+
+        String name = BaseViewModel.GetInstance().User.getNickName();
 
         nav_username.setText(BaseViewModel.GetInstance().User.getNickName());
 
@@ -100,9 +104,6 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
         nav_message.setOnClickListener(this);
         nav_history.setOnClickListener(this);
         nav_setting.setOnClickListener(this);
-
-        String address_company="http://www.tytechkj.com/App/Permission/GetCompanyInfo";
-        queryCompany(address_company);
     }
 
     @Override
@@ -112,7 +113,7 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             case R.id.icon_image:
                 if(fgHeader == null){
-                    fgHeader = new MyFragmentHeader("个人信息");
+                    fgHeader = new MyFragmentHeader("个人头像");
                     fTransaction.add(R.id.fb_content,fgHeader);
                     fTransaction.addToBackStack(null);
                 }else{
@@ -122,6 +123,8 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.nav_manage:
+                String address_company="http://www.tytechkj.com/App/Permission/GetCompanyInfo";
+                queryCompany(address_company);
                 if (BaseViewModel.GetInstance().CompanyView != null){
                     fgManageKey = new MyFragmentManageKey("公司管理");
                     fTransaction.add(R.id.fb_content,fgManageKey);
@@ -177,21 +180,25 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText,UserInfo.class);
-                String s= new Gson().toJson(user.Data);
-                CompanyViewModel lll= new Gson().fromJson( s,CompanyViewModel.class);
-                BaseViewModel.GetInstance().setCompanyView(lll);
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+                        if (!user.IsError){
+
+                            String s= new Gson().toJson(user.Data);
+                            CompanyViewModel lll= new Gson().fromJson( s,CompanyViewModel.class);
+                            BaseViewModel.GetInstance().setCompanyView(lll);
+
                             String address_Pid="http://www.tytechkj.com/App/Permission/GetCurrentPid";
                             queryPid(address_Pid);
+                        }else {
+                            Toast.makeText(getContext(),user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -200,6 +207,7 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取公司信息失败",
                                 Toast.LENGTH_SHORT).show();
@@ -230,6 +238,7 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(), "", false);
                     }
                 });
@@ -241,6 +250,7 @@ public class MyFragmentBetter extends Fragment implements View.OnClickListener {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取公司PID失败",
                                 Toast.LENGTH_SHORT).show();

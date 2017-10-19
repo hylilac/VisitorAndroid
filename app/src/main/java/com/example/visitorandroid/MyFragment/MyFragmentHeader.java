@@ -51,7 +51,7 @@ import static org.litepal.LitePalApplication.getContext;
 
 public class MyFragmentHeader extends Fragment implements View.OnClickListener {
 
-    private String content;
+    public String content;
     private Activity activity;
 
     private TextView txtTopbar;
@@ -124,9 +124,11 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
         nav_sub_sex = (TextView) view.findViewById(R.id.nav_sub_sex);
 
         String picstring = GetInstance().User.getHeadPicUrl();
-        Picasso.with(getContext())
-                .load(picstring)
-                .into(nav_sub_headericon);
+        if (picstring != null){
+            Picasso.with(getContext())
+                    .load(picstring)
+                    .into(nav_sub_headericon);
+        }
 
         nav_sub_nickname.setText(GetInstance().User.getNickName());
         nav_sub_account.setText(GetInstance().User.getUserName());
@@ -228,18 +230,23 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, UserInfo.class);
-                if (!user.IsError) {
-                    GetInstance().User.Sex = sexstring;
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                        if (!user.IsError) {
+                            GetInstance().User.Sex = sexstring;
                             nav_sub_sex.setText(sexstring);
-                            DialogMethod.MyProgressDialog(getContext(), "", false);
+                        }else {
+                            Toast.makeText(getContext(),user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+
+                    }
+                });
             }
 
             @Override
@@ -248,6 +255,7 @@ public class MyFragmentHeader extends Fragment implements View.OnClickListener {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"更改性别失败",
                                 Toast.LENGTH_SHORT).show();

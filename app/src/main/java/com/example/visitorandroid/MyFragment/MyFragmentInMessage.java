@@ -26,7 +26,7 @@ import static com.example.visitorandroid.R.id.txt_topbar;
 
 public class MyFragmentInMessage extends Fragment implements View.OnClickListener {
 
-    private String content;
+    public String content;
     private Activity activity;
 
     private TextView txtTopbar;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,8 @@ import java.util.ArrayList;
 
 public class MyFragmentModel extends Fragment {
 
-    private String content;
+    public String content;
+
     private Activity activity;
     private RollPagerView mRollViewPager;
     private TextView txtTopbar;
@@ -32,6 +34,7 @@ public class MyFragmentModel extends Fragment {
     private Context mContext;
     private ArrayList<Icon> mData;
     private MyAdapter<Icon> mAdapter = null;
+    private MyFragmentOrderManage fgordermanage;
 
 
     @Override
@@ -102,10 +105,41 @@ public class MyFragmentModel extends Fragment {
         grid_photo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(mContext, "你点击了~" + position + "~项", Toast.LENGTH_SHORT).show();
+                FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
+                hideAllFragment(fTransaction);
+                switch (position){
+                    case 0:
+                        break;
+                    case 1:
+                        if(fgordermanage == null){
+                            fgordermanage = new MyFragmentOrderManage("预约单");
+                            fTransaction.add(R.id.fb_manage_key,fgordermanage);
+                            fTransaction.addToBackStack(null);
+                        }else{
+                            fTransaction.add(R.id.fb_manage_key,fgordermanage);
+                            fTransaction.addToBackStack(null);
+                            fTransaction.show(fgordermanage);
+                        }
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    default:
+                        break;
+                }
+                fTransaction.commit();
             }
         });
 
     }
 
+    //隐藏所有Fragment
+    private void hideAllFragment(FragmentTransaction fragmentTransaction){
+        if(fgordermanage != null)fragmentTransaction.hide(fgordermanage);
+    }
 }

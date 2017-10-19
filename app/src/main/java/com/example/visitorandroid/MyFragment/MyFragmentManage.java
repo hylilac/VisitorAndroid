@@ -42,7 +42,7 @@ import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 
 public class MyFragmentManage extends Fragment implements View.OnClickListener {
 
-    private String content;
+    public String content;
 
     private Activity activity;
 
@@ -99,9 +99,6 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
 
         join_company.setOnClickListener(this);
         create_company.setOnClickListener(this);
-
-        String address_company="http://www.tytechkj.com/App/Permission/GetCompanyInfo";
-        queryCompany(address_company);
     }
 
     @Override
@@ -146,93 +143,5 @@ public class MyFragmentManage extends Fragment implements View.OnClickListener {
     private void hideAllFragment(FragmentTransaction fragmentTransaction){
         if(fgjoin != null)fragmentTransaction.hide(fgjoin);
         if(fgcreate != null)fragmentTransaction.hide(fgcreate);
-    }
-
-    /**
-     * ID 当前用户ID
-     */
-
-    private void queryCompany(String address) {
-        DialogMethod.MyProgressDialog(getActivity(),"正在处理中...",true);
-        RequestBody requestBody = new FormBody.Builder()
-                .add("ID", GetInstance().User.getGUID())
-                .build();
-        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseText = response.body().string();
-                Gson gson = new Gson();
-                user = gson.fromJson(responseText,UserInfo.class);
-                String s= new Gson().toJson(user.Data);
-                CompanyViewModel lll= new Gson().fromJson( s,CompanyViewModel.class);
-                BaseViewModel.GetInstance().setCompanyView(lll);
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(), "", false);
-                            String address_Pid="http://www.tytechkj.com/App/Permission/GetCurrentPid";
-                            queryPid(address_Pid);
-                        }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取公司信息失败",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-    }
-
-    /**
-     * UID 当前用户ID
-     * CID 当前公司ID
-     */
-
-    private void queryPid(String address) {
-        DialogMethod.MyProgressDialog(getActivity(),"正在获处理...",true);
-        RequestBody requestBody = new FormBody.Builder()
-                .add("UID", GetInstance().User.getGUID())
-                .add("CID", String.valueOf(GetInstance().CompanyView.getID()))
-                .build();
-        HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseText = response.body().string();
-                Gson gson = new Gson();
-                CompanyViewModel lll= gson.fromJson(responseText,CompanyViewModel.class);
-                BaseViewModel.GetInstance().setCompanyView(lll);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DialogMethod.MyProgressDialog(getContext(), "", false);
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DialogMethod.MyProgressDialog(getContext(),"",false);
-                        Toast.makeText(getContext(),"获取公司PID失败",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
     }
 }

@@ -104,6 +104,30 @@
                 android:textColor="#fff"
                 android:textSize="18sp"/>
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="其他登录"
+                    android:textSize="16sp"/>
+
+                <Button
+                    android:id="@+id/btn_weChat"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@mipmap/icon_wechat"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_gravity="center_horizontal"/>
+
+            </LinearLayout>
+
         </RelativeLayout>
 
 </LinearLayout>

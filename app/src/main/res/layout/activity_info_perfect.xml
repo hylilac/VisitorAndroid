@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0eff5">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@color/colorPrimary"
+        android:fitsSystemWindows="true">
+
+        <TextView
+            android:id="@+id/info_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="信息完善"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_info_tel"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/shapedrawable"
+        android:gravity="center_vertical"
+        android:layout_margin="15dp"
+        android:hint="手机号"
+        android:textColorHint="#c4c4c6"
+        android:textColor="#000000"
+        android:textSize="18sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/et_info_code"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="2"
+            android:background="@drawable/shapedrawable"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:hint="获取验证码"
+            android:textColorHint="#c4c4c6"
+            android:textColor="#000000"
+            android:textSize="18sp"/>
+
+        <Button
+            android:id="@+id/btn_info_code"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="#fe9544"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:text="发送验证码"
+            android:textColor="#fff"
+            android:textSize="10sp"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_info_reg"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#007aff"
+        android:gravity="center"
+        android:layout_margin="15dp"
+        android:text="注册"
+        android:textColor="#fff"
+        android:textSize="20sp"/>
+
+</LinearLayout>

@@ -12,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -38,10 +39,11 @@ import okhttp3.Response;
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 
 
-public class MyFragmentOrderListManage extends Fragment implements View.OnClickListener {
+public class MyFragmentOrderListManage extends Fragment implements View.OnClickListener,
+        AdapterView.OnItemClickListener {
 
-    private String content;
     private Activity activity;
+    public String content;
 
     private Button orderlist_btnback;
     private ListView order_list;
@@ -50,7 +52,6 @@ public class MyFragmentOrderListManage extends Fragment implements View.OnClickL
     private Context mContext;
     private MyOrderListAdapter mAdapter = null;
     private MyFragmentOrderResult fgOrderResult;
-    private OrderListViewModel user;
 
     private List<OrderListViewModel> orderList = null;
 
@@ -82,7 +83,7 @@ public class MyFragmentOrderListManage extends Fragment implements View.OnClickL
         mData = new LinkedList<OrderListViewModel>();
 
         orderlist_btnback.setOnClickListener(this);
-//        order_list.setOnItemClickListener(this);
+        order_list.setOnItemClickListener(this);
 
         String address_order="http://www.tytechkj.com/App/Permission/getallvisitorOrder";
         queryOrder(address_order);
@@ -97,18 +98,18 @@ public class MyFragmentOrderListManage extends Fragment implements View.OnClickL
         }
     }
 
-//    @Override
-//    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-//
-//        OrderListViewModel orderList = mData.get(position);
-//
-//        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
-//        hideAllFragment(fTransaction);
-//        fgOrderResult = new MyFragmentOrderResult(orderList.getV_name(),orderList.getBv_name(),orderList.getVisitorTime());
-//        fTransaction.add(R.id.fb_order_list, fgOrderResult);
-//        fTransaction.addToBackStack(null);
-//        fTransaction.commit();
-//    }
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+        OrderListViewModel orderList = mData.get(position);
+
+        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
+        hideAllFragment(fTransaction);
+        fgOrderResult = new MyFragmentOrderResult(orderList.getV_name(),orderList.getBv_name(),orderList.getVisitorTime());
+        fTransaction.add(R.id.fb_order_list, fgOrderResult);
+        fTransaction.addToBackStack(null);
+        fTransaction.commit();
+    }
 
     //隐藏所有Fragment
     private void hideAllFragment(FragmentTransaction fragmentTransaction){
@@ -133,7 +134,9 @@ public class MyFragmentOrderListManage extends Fragment implements View.OnClickL
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
+
                         mData.clear();
                         for (OrderListViewModel order : orderList){
                             BaseViewModel.GetInstance().setOrderList(order);
@@ -154,6 +157,7 @@ public class MyFragmentOrderListManage extends Fragment implements View.OnClickL
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取预约订单失败",
                                 Toast.LENGTH_SHORT).show();

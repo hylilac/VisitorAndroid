@@ -34,12 +34,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 
 public class MyFragmentNickname extends Fragment implements View.OnClickListener, TextWatcher {
 
-    private String content;
     private Activity activity;
+    public String content;
 
     private EditText et_nav_nickname;
     private Button nickname_btnback;
@@ -108,19 +109,22 @@ public class MyFragmentNickname extends Fragment implements View.OnClickListener
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, UserInfo.class);
-                if (!user.IsError) {
-                    BaseViewModel.GetInstance().User.NickName = nicknamestring;
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                        if (!user.IsError) {
+                            BaseViewModel.GetInstance().User.NickName = nicknamestring;
                             et_nav_nickname.setText(nicknamestring);
-                            DialogMethod.MyProgressDialog(getContext(), "", false);
                             BackMethod();
+                        }else {
+                            Toast.makeText(getContext(),user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -129,6 +133,7 @@ public class MyFragmentNickname extends Fragment implements View.OnClickListener
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"上传昵称失败",
                                 Toast.LENGTH_SHORT).show();

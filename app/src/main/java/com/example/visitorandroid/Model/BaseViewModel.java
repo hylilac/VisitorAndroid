@@ -1,5 +1,8 @@
 package com.example.visitorandroid.Model;
 
+import com.example.visitorandroid.bean.WeiXinInfo;
+import com.example.visitorandroid.bean.WeiXinToken;
+
 /**
  * 单例
  */
@@ -100,5 +103,25 @@ public class BaseViewModel {
 
     public AuthorityViewModel getAuthority() {
         return Authority;
+    }
+
+    public WeiXinInfo weiXinInfo;
+
+    public void setWeiXinInfo(WeiXinInfo weiXinInfo) {
+        this.weiXinInfo = weiXinInfo;
+    }
+
+    public WeiXinInfo getWeiXinInfo() {
+        return weiXinInfo;
+    }
+
+    public WeiXinToken weiXinToken;
+
+    public void setWeiXinToken(WeiXinToken weiXinToken) {
+        this.weiXinToken = weiXinToken;
+    }
+
+    public WeiXinToken getWeiXinToken() {
+        return weiXinToken;
     }
 }

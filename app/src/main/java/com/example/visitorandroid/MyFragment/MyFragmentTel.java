@@ -40,7 +40,7 @@ import static com.example.visitorandroid.R.id.et_nav_nickname;
 
 public class MyFragmentTel extends Fragment implements View.OnClickListener, TextWatcher {
 
-    private String content;
+    public String content;
     private Activity activity;
 
     private EditText et_navtel;
@@ -130,6 +130,7 @@ public class MyFragmentTel extends Fragment implements View.OnClickListener, Tex
     }
 
     private void queryCode(String address,String codestring) {
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("mobile",codestring)
                 .build();
@@ -139,6 +140,13 @@ public class MyFragmentTel extends Fragment implements View.OnClickListener, Tex
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 mobile = gson.fromJson(responseText,MobileModel.class);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+                    }
+                });
             }
 
             @Override
@@ -147,6 +155,8 @@ public class MyFragmentTel extends Fragment implements View.OnClickListener, Tex
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
                         Toast.makeText(getActivity(),"获取验证码失败",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -156,7 +166,7 @@ public class MyFragmentTel extends Fragment implements View.OnClickListener, Tex
     }
 
     private void queryTel(String address, final String telstring) {
-        DialogMethod.MyProgressDialog(getContext(),"正在上传中...",true);
+        DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
         RequestBody requestBody = new FormBody.Builder()
                 .add("ID", GetInstance().User.getGUID())
                 .add("Mobile",telstring)
@@ -167,20 +177,24 @@ public class MyFragmentTel extends Fragment implements View.OnClickListener, Tex
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, UserInfo.class);
-                if (!user.IsError) {
-                    GetInstance().User.Mobile = telstring;
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                        if (!user.IsError) {
+
+                            GetInstance().User.Mobile = telstring;
                             et_navtel.setText(telstring);
-                            DialogMethod.MyProgressDialog(getContext(), "", false);
-                            BackMethod();
                             et_navcode.setText("");
+                            BackMethod();
+                        }else {
+                            Toast.makeText(getContext(),user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -189,6 +203,7 @@ public class MyFragmentTel extends Fragment implements View.OnClickListener, Tex
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"上传手机号失败",
                                 Toast.LENGTH_SHORT).show();

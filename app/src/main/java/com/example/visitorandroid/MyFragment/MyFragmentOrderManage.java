@@ -38,8 +38,8 @@ import static com.example.visitorandroid.R.id.order_manage_reason;
 
 public class MyFragmentOrderManage extends Fragment implements View.OnClickListener{
 
-    private String content;
     private Activity activity;
+    public String content;
 
     private Button ordermanager_btnback;
     private EditText v_name;
@@ -175,11 +175,14 @@ public class MyFragmentOrderManage extends Fragment implements View.OnClickListe
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, UserInfo.class);
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(),"",false);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+
+                        if (!user.IsError) {
+
                             v_name.setText("");
                             carNum.setText("");
                             bv_name.setText("");
@@ -188,11 +191,12 @@ public class MyFragmentOrderManage extends Fragment implements View.OnClickListe
                             reason.setText("");
                             visitortime.setText("");
                             v_name.requestFocus(); //请求获取焦点
+                        }else {
+                            Toast.makeText(getContext(),user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -201,6 +205,7 @@ public class MyFragmentOrderManage extends Fragment implements View.OnClickListe
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"提交预约单失败",
                                 Toast.LENGTH_SHORT).show();

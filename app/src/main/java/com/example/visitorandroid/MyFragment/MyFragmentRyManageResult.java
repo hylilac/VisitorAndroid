@@ -19,10 +19,10 @@ import com.example.visitorandroid.R;
 
 public class MyFragmentRyManageResult extends Fragment implements View.OnClickListener {
 
-    private String content1;
-    private String content2;
-    private String content3;
     private Activity activity;
+    public String content1;
+    public String content2;
+    public String content3;
 
     private Button ryresult_btnback;
     private TextView ryresult_username;

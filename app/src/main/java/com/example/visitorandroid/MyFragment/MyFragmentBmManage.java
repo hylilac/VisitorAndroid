@@ -42,7 +42,7 @@ import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 public class MyFragmentBmManage extends Fragment implements View.OnClickListener, AdapterView
         .OnItemClickListener {
 
-    private String content;
+    public String content;
     private Activity activity;
 
     private Button bmmanage_btnback;
@@ -161,11 +161,13 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, DepartmentInfo.class);
 
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(),"",false);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+
+                        if (!user.IsError) {
+
                             mData.clear();
                             for(DepartmentViewModel department : user.Data){
                                 BaseViewModel.GetInstance().setDepartment(department);
@@ -173,11 +175,13 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                             }
                             mAdapter = new MyDepartmentAdapter((LinkedList<DepartmentViewModel>) mData, mContext);
                             bmmanage_list.setAdapter(mAdapter);
+                        }else {
+
+                            Toast.makeText(getContext(), user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -186,6 +190,7 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取部门失败",
                                 Toast.LENGTH_SHORT).show();
@@ -212,18 +217,21 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 users = gson.fromJson(responseText, UserInfo.class);
-                if (!users.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(),"",false);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        if (!users.IsError) {
                             String address_bm="http://www.tytechkj.com/App/Permission/GetCurrentDepartment";
                             queryBm(address_bm);
+                        }else {
+                            Toast.makeText(getContext(), users.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),users.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -232,6 +240,7 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取部门失败",
                                 Toast.LENGTH_SHORT).show();
@@ -260,18 +269,22 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 users = gson.fromJson(responseText, UserInfo.class);
-                if (!users.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(),"",false);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+
+                        if (!users.IsError) {
                             String address_bm="http://www.tytechkj.com/App/Permission/GetCurrentDepartment";
                             queryBm(address_bm);
+                        }else {
+                            Toast.makeText(getContext(),users.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),users.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -280,6 +293,7 @@ public class MyFragmentBmManage extends Fragment implements View.OnClickListener
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"修改部门失败",
                                 Toast.LENGTH_SHORT).show();

@@ -11,17 +11,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Jay on 2015/9/22 0022.
- */
 public abstract class MyAdapter<T> extends BaseAdapter {
 
     private ArrayList<T> mData;
     private int mLayoutRes;           //布局id
-
-
-    public MyAdapter() {
-    }
 
     public MyAdapter(ArrayList<T> mData, int mLayoutRes) {
         this.mData = mData;

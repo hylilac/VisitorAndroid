@@ -51,7 +51,7 @@ import static com.example.visitorandroid.Model.DialogMethod.bitmapToBase64;
 
 public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListener {
 
-    private String content;
+    public String content;
     private Activity activity;
     private Uri imageUri;
     private Bitmap bitmap;
@@ -188,20 +188,23 @@ public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListen
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, UserInfo.class);
-                String s = new Gson().toJson(user.Data);
-                if (!user.IsError) {
-                    UserViewModel lll = new Gson().fromJson(s, UserViewModel.class);
-                    BaseViewModel.GetInstance().User.HeadPicUrl = lll.HeadPicUrl;
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(), "", false);
+
+                        if (!user.IsError) {
+
+                            String s = new Gson().toJson(user.Data);
+                            UserViewModel lll = new Gson().fromJson(s, UserViewModel.class);
+                            BaseViewModel.GetInstance().User.HeadPicUrl = lll.HeadPicUrl;
                             navHeaderPhoto.setImageBitmap(DialogMethod.base64ToBitmap(picstring));
-                            DialogMethod.MyProgressDialog(getContext(), "", false);
+                        }else {
+                            Toast.makeText(getContext(),user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -210,6 +213,7 @@ public class MyFragmentHeaderIcon extends Fragment implements View.OnClickListen
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"上传图片失败",
                                 Toast.LENGTH_SHORT).show();

@@ -42,8 +42,8 @@ import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
 public class MyFragmentRyManage extends Fragment implements View.OnClickListener, AdapterView
         .OnItemClickListener {
 
-    private String content;
     private Activity activity;
+    public String content;
 
     private Button rymanage_btnback;
     private ListView ry_manage_list;
@@ -136,12 +136,14 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, EmployeeInfo.class);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(),"",false);
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+
+                        if (!user.IsError) {
+
                             mData.clear();
                             for(EmployeeViewModel employee : user.Data){
                                 BaseViewModel.GetInstance().setEmployee(employee);
@@ -149,11 +151,12 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
                             }
                             mAdapter = new MyEmployeeAdapter((LinkedList<EmployeeViewModel>) mData, mContext);
                             ry_manage_list.setAdapter(mAdapter);
+                        }else {
+                            Toast.makeText(getContext(),user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -162,6 +165,7 @@ public class MyFragmentRyManage extends Fragment implements View.OnClickListener
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取员工失败",
                                 Toast.LENGTH_SHORT).show();

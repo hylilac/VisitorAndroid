@@ -42,21 +42,18 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.os.Build.VERSION_CODES.M;
-import static com.example.visitorandroid.Model.BaseViewModel.GetInstance;
-import static com.example.visitorandroid.R.id.ry_manage_list;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class MyFragmentAuthorityManage extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    private String content;
+    public String content;
     private Activity activity;
 
-    private Button authoritymanage_btnback;
-    private ListView authoritymanage_list;
-
+    private ListView authorityManage_list;
     private List<AuthorityViewModel> mData = null;
     private Context mContext;
     private MyAuthorityAdapter mAdapter = null;
+
     private AuthorityInfo user;
     private UserInfo users;
     private int authorityPID;
@@ -83,17 +80,17 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
 
     private void bindViews(View view) {
 
-        authoritymanage_btnback = (Button) view.findViewById(R.id.authority_manage_btn_back);
-        authoritymanage_list = (ListView) view.findViewById(R.id.authority_manage_list);
+        Button authorityManage_btnBack = (Button) view.findViewById(R.id.authority_manage_btn_back);
+        authorityManage_list = (ListView) view.findViewById(R.id.authority_manage_list);
 
         mContext = getActivity();
         mData = new LinkedList<AuthorityViewModel>();
 
         mAdapter = new MyAuthorityAdapter((LinkedList<AuthorityViewModel>) mData, mContext);
-        authoritymanage_list.setAdapter(mAdapter);
+        authorityManage_list.setAdapter(mAdapter);
 
-        authoritymanage_btnback.setOnClickListener(this);
-        authoritymanage_list.setOnItemClickListener(this);
+        authorityManage_btnBack.setOnClickListener(this);
+        authorityManage_list.setOnItemClickListener(this);
 
         String address_authority="http://www.tytechkj.com/App/Permission/GetDepartmentEmployeePermission";
         queryAuthority(address_authority);
@@ -144,9 +141,8 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
 
     private void queryAuthority(String address) {
         DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
-        String ss = GetInstance().User.getGUID();
         RequestBody requestBody = new FormBody.Builder()
-                .add("UserID",GetInstance().User.getGUID())
+                .add("UserID", BaseViewModel.GetInstance().User.getGUID())
                 .build();
         HttpUtil.sendOkHttpRequest(address, requestBody, new Callback() {
             @Override
@@ -154,23 +150,27 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 user = gson.fromJson(responseText, AuthorityInfo.class);
-                if (!user.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(),"",false);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        if (!user.IsError) {
+
                             mData.clear();
+
                             for(AuthorityViewModel authority : user.Data){
+
                                 BaseViewModel.GetInstance().setAuthority(authority);
                                 mData.add(new AuthorityViewModel(authority.getGUID(),authority.getNickName(),authority.getPID()));
                             }
                             mAdapter = new MyAuthorityAdapter((LinkedList<AuthorityViewModel>) mData, mContext);
-                            authoritymanage_list.setAdapter(mAdapter);
+                            authorityManage_list.setAdapter(mAdapter);
+                        }else {
+                            Toast.makeText(getContext(), user.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),user.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -179,6 +179,7 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"获取权限失败",
                                 Toast.LENGTH_SHORT).show();
@@ -196,9 +197,6 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
 
     private void queryChangeAuthority(String address,String authorityUID, int authorityPID) {
         DialogMethod.MyProgressDialog(getContext(),"正在处理中...",true);
-        int ss = BaseViewModel.GetInstance().CompanyView.getC_ID();
-        String xx = authorityUID;
-        int aa = authorityPID;
         RequestBody requestBody = new FormBody.Builder()
                 .add("CID",String.valueOf(BaseViewModel.GetInstance().CompanyView.getC_ID()))
                 .add("UID",authorityUID)
@@ -210,18 +208,22 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
                 String responseText = response.body().string();
                 Gson gson = new Gson();
                 users = gson.fromJson(responseText, UserInfo.class);
-                if (!users.IsError) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DialogMethod.MyProgressDialog(getContext(),"",false);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogMethod.MyProgressDialog(getContext(),"",false);
+                        if (!users.IsError) {
+
                             String address_authority="http://www.tytechkj.com/App/Permission/GetDepartmentEmployeePermission";
                             queryAuthority(address_authority);
+                        }else {
+
+                            Toast.makeText(getContext(),users.Message,
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else {
-                    DialogMethod.MyDialog(getContext(),users.Message);
-                }
+                    }
+                });
             }
 
             @Override
@@ -230,6 +232,7 @@ public class MyFragmentAuthorityManage extends Fragment implements View.OnClickL
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         DialogMethod.MyProgressDialog(getContext(),"",false);
                         Toast.makeText(getContext(),"更改权限失败",
                                 Toast.LENGTH_SHORT).show();

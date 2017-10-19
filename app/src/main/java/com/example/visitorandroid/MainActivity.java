@@ -2,6 +2,7 @@ package com.example.visitorandroid;
 
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visitorandroid.Adapter.MyEmployeeAdapter;
+import com.example.visitorandroid.Adapter.MyFragmentPagerAdapter;
 import com.example.visitorandroid.Model.BaseViewModel;
 import com.example.visitorandroid.Model.UserViewModel;
 import com.tencent.android.tpush.XGPushConfig;
@@ -28,20 +30,17 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     private RadioButton rb_better;
     private ViewPager vpager;
 
-    private MyEmployeeAdapter.MyFragmentPagerAdapter mAdapter;
+    private MyFragmentPagerAdapter mAdapter;
 
     //几个代表页面的常量
     public static final int PAGE_ONE = 0;
     public static final int PAGE_TWO = 1;
     public static final int PAGE_THREE = 2;
-    public  static UserViewModel Model;
     private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-         Model = BaseViewModel.GetInstance().getUser();
 
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
         setContentView(R.layout.activity_main);
 
-        mAdapter = new MyEmployeeAdapter.MyFragmentPagerAdapter(getSupportFragmentManager());
+        mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         bindViews();
         rb_model.setChecked(true);
 
@@ -83,8 +82,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-        switch (checkedId){
+        switch (checkedId) {
             case R.id.rb_model:
                 vpager.setCurrentItem(PAGE_ONE);
                 break;

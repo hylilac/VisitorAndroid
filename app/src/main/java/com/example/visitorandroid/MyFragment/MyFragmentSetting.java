@@ -28,8 +28,8 @@ import static com.tencent.android.tpush.XGPushManager.registerPush;
 
 public class MyFragmentSetting extends Fragment implements View.OnClickListener {
 
-    private String content;
     private Activity activity;
+    public String content;
 
     private TextView txtTopbar;
     private View div_tabbar;

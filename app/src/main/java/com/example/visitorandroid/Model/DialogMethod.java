@@ -74,7 +74,7 @@ public class DialogMethod {
         return result;
     }
     /*
-     *bitmap转base64
+     *base64转bitmap
      */
     public static Bitmap base64ToBitmap(String base64String){
         byte[] bytes = Base64.decode(base64String, Base64.DEFAULT);
